@@ -38,7 +38,9 @@ public class Startup {
 		Startup startup = new Startup();
 		startup.mainPane.setOpaque(true); // content panes must be opaque
 		frame.setContentPane(startup.mainPane);
-
+		
+		frame.setJMenuBar(new MenuBar());
+		frame.setPreferredSize(new Dimension(800, 800));
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);
