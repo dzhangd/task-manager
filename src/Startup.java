@@ -31,7 +31,7 @@ public class Startup {
 		initLookAndFeel();
 
 		// Create and set up the window.
-		frame = new JFrame("Pine Sushi Square");
+		frame = new JFrame("The Dream Tasker");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Create and set up the content pane.
