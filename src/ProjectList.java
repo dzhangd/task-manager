@@ -8,7 +8,6 @@ public class ProjectList extends JPanel {
 	public ProjectList()
 	{
 		this.setBackground(Color.GREEN);
-		this.setPreferredSize(new Dimension(300, 300));
 	}
 	
 }

@@ -29,6 +29,9 @@ public class Startup {
 	}
 
 	protected static void createAndShowGUI() {
+		
+		GridBagConstraints gbc = new GridBagConstraints();
+		
 		// Set the look and feel.
 		initLookAndFeel();
 
@@ -48,8 +51,18 @@ public class Startup {
 		frame.setLayout(new GridBagLayout());
 		
 		// Add panels
-		frame.add(projectPanel);
-		frame.add(taskPanel);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 0.5;
+		gbc.weighty = 1;
+		frame.add(projectPanel, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.weightx = 0.5;
+		gbc.weighty = 1;
+		frame.add(taskPanel, gbc);
 		
 		// Start maximized
 		frame.setExtendedState( frame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
