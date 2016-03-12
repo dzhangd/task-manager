@@ -12,6 +12,8 @@ public class Startup {
 	static JFrame frame;
 	final static String LOOKANDFEEL = null;
 	JPanel mainPane = new JPanel();
+	static ProjectList projectPanel = new ProjectList();
+	static TaskList taskPanel = new TaskList();
 
 	public Startup() {
 		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -40,7 +42,18 @@ public class Startup {
 		frame.setContentPane(startup.mainPane);
 		
 		frame.setJMenuBar(new MenuBar());
-		frame.setPreferredSize(new Dimension(800, 800));
+		frame.setPreferredSize(new Dimension(1200, 800));
+		
+		// Set layout
+		frame.setLayout(new GridBagLayout());
+		
+		// Add panels
+		frame.add(projectPanel);
+		frame.add(taskPanel);
+		
+		// Start maximized
+		frame.setExtendedState( frame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+		
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);
