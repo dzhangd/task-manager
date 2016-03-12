@@ -54,13 +54,13 @@ public class Startup {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.weightx = 0.5;
+		gbc.weightx = 0.2;
 		gbc.weighty = 1;
 		frame.add(projectPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
-		gbc.weightx = 0.5;
+		gbc.weightx = 0.8;
 		gbc.weighty = 1;
 		frame.add(taskPanel, gbc);
 		
