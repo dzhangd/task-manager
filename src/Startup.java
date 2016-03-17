@@ -12,8 +12,9 @@ public class Startup {
 	static JFrame frame;
 	final static String LOOKANDFEEL = null;
 	JPanel mainPane = new JPanel();
-	static ProjectList projectPanel = new ProjectList();
-	static TaskList taskPanel = new TaskList();
+	static ProjectList projectListPanel = new ProjectList();
+	static TaskList taskListPanel = new TaskList();
+	static TaskPanel taskPanel = new TaskPanel();
 
 	public Startup() {
 		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -54,11 +55,17 @@ public class Startup {
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.weightx = 0.2;
+		gbc.weightx = 0.1;
 		gbc.weighty = 1;
-		frame.add(projectPanel, gbc);
+		frame.add(projectListPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 1;
+		gbc.gridy = 0;
+		gbc.weightx = 0.1;
+		gbc.weighty = 1;
+		frame.add(taskListPanel, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.weightx = 0.8;
 		gbc.weighty = 1;
