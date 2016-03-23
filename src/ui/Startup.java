@@ -1,9 +1,7 @@
+package ui;
 
 import java.awt.*;
-import java.awt.print.PrinterException;
-import java.io.File;
 
-import javax.print.*;
 import javax.swing.*;
 
 public class Startup {
@@ -45,7 +43,7 @@ public class Startup {
 		startup.mainPane.setOpaque(true); // content panes must be opaque
 		frame.setContentPane(startup.mainPane);
 		
-		frame.setJMenuBar(new MenuBar());
+		frame.setJMenuBar(new ui.MenuBar());
 		frame.setPreferredSize(new Dimension(1200, 800));
 		
 		// Set layout
