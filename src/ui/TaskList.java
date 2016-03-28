@@ -91,7 +91,11 @@ public class TaskList extends JPanel {
 				    "Type:", typeCombo,
 				    "Priority:", priorityCombo
 				};
-				JOptionPane.showMessageDialog(null, message, "Add Task", JOptionPane.PLAIN_MESSAGE);
+				int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+				if(addTaskSelection != 0)
+				{
+					return;
+				}
 				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
 			}
 		});

@@ -86,7 +86,11 @@ public class ProjectList extends JPanel {
 				    "Project name:", projectName,
 				    "Project Description:", projectDescription
 				};
-				JOptionPane.showMessageDialog(null, message, "Add Project", JOptionPane.PLAIN_MESSAGE);
+				int addProjectSelection = JOptionPane.showConfirmDialog(null, message, "Add Project", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+				if(addProjectSelection != 0)
+				{
+					return;
+				}
 				System.out.println("Project name is " + projectName.getText() + " Project description is " + projectDescription.getText());
 			}
 		});
