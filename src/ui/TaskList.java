@@ -8,11 +8,18 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -59,7 +66,12 @@ public class TaskList extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Rename Task Button Clicked");
-				
+				JTextField newNameField = new JTextField();
+				Object[] message = {
+				    "New name:", newNameField,
+				};
+				String s = (String)JOptionPane.showInputDialog(null, "Type new name", "Rename", JOptionPane.PLAIN_MESSAGE, null, null, null);
+				System.out.println("Rename task to " + s);
 			}
 		});
 		addTaskButton.addActionListener(new ActionListener()
@@ -67,7 +79,20 @@ public class TaskList extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Add Task Button Clicked");
-				
+				JTextField taskName = new JTextField();
+				JTextField taskDescription = new JTextField();
+				Object[] type = {"Bug", "Feature"};
+				JComboBox typeCombo = new JComboBox(type);
+		        Object[] priority = {"1", "2", "3", "4", "5"};
+		        JComboBox priorityCombo = new JComboBox(priority);
+				Object[] message = {
+				    "Task name:", taskName,
+				    "Task Description:", taskDescription,
+				    "Type:", typeCombo,
+				    "Priority:", priorityCombo
+				};
+				JOptionPane.showMessageDialog(null, message, "Add Task", JOptionPane.PLAIN_MESSAGE);
+				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
 			}
 		});
 		removeTaskButton.addActionListener(new ActionListener()
@@ -75,7 +100,18 @@ public class TaskList extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Remove Task Button Clicked");
-				
+				Object[] options = {"Yes",
+	                    "No",
+	                    };
+				int optionChosen = JOptionPane.showOptionDialog(null,
+					    "Are you sure you want to remove this task",
+					    "Remove Task",
+					    JOptionPane.YES_NO_CANCEL_OPTION,
+					    JOptionPane.QUESTION_MESSAGE,
+					    null,
+					    options,
+					    options[1]);
+				System.out.println("Remove task option " + optionChosen);
 			}
 		});
 		
