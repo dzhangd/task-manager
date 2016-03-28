@@ -11,23 +11,24 @@ import java.util.ArrayList;
  */
 public class Project {
     private Connection con;
-    public String[] project;
+    public Object[] project;
 
     public Project() {
     }
 
     public ArrayList getProjects() {
         con = DatabaseConnection.getConnection();
-        ArrayList<String[]> projects = new ArrayList<String[]>();
+        ArrayList<Object[]> projects = new ArrayList<Object[]>();
         try {
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM Project");
             while(rs.next()) {
-                project = new String[3];
-                setProject(rs.getString(1), rs.getString(2), rs.getString(3));
+                project = new Object[3];
+                setProject(rs.getInt(1), rs.getString(2), rs.getString(3));
                 projects.add(project);
             }
             project = null;
+            s.close();
             return projects;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -35,7 +36,7 @@ public class Project {
         return null;
     }
 
-    public void setProject(String pid, String name, String description) {
+    public void setProject(int pid, String name, String description) {
         project[0] = pid;
         project[1] = name;
         project[2] = description;
