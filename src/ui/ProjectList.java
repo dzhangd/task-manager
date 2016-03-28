@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -49,6 +51,31 @@ public class ProjectList extends JPanel {
 		JButton renameProjectButton = new JButton("Rename Project");
 		JButton addProjectButton = new JButton("Create Project");
 		JButton removeProjectButton = new JButton("Delete Project");
+		
+		renameProjectButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Rename Project Button Clicked");
+				
+			}
+		});
+		addProjectButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Add Project Button Clicked");
+				
+			}
+		});
+		removeProjectButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Remove Project Button Clicked");
+				
+			}
+		});
 		
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;

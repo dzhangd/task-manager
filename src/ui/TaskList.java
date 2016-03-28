@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -49,8 +51,34 @@ public class TaskList extends JPanel {
 		this.add(taskScrollPane, gbc);
 		
 		JButton renameTaskButton = new JButton("Rename Task");
-		JButton addTaskButton = new JButton("Create Task");
-		JButton removeTaskButton = new JButton("Delete Task");
+		JButton addTaskButton = new JButton("Add Task");
+		JButton removeTaskButton = new JButton("Remove Task");
+			
+		renameTaskButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Rename Task Button Clicked");
+				
+			}
+		});
+		addTaskButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Add Task Button Clicked");
+				
+			}
+		});
+		removeTaskButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Remove Task Button Clicked");
+				
+			}
+		});
+		
 		
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
