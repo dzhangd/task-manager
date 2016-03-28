@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,9 +19,10 @@ public class ProjectList extends JPanel {
 
 	public ProjectList()
 	{
+		GridBagConstraints gbc = new GridBagConstraints();
 		this.setBackground(Color.GREEN);
 		
-		this.setLayout(new BorderLayout());
+		this.setLayout(new GridBagLayout());
 		
 		DefaultListModel listModel = new DefaultListModel();
         listModel.addElement("304 project");
@@ -36,7 +38,36 @@ public class ProjectList extends JPanel {
 		projectJList.setSelectedIndex(0);
         
 		JScrollPane projectScrollPane = new JScrollPane(projectJList);
-		this.add(projectScrollPane, BorderLayout.CENTER);
+		
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 1;
+		gbc.weighty = 0.85;
+		this.add(projectScrollPane, gbc);
+		
+		JButton renameProjectButton = new JButton("Rename Project");
+		JButton addProjectButton = new JButton("Create Project");
+		JButton removeProjectButton = new JButton("Delete Project");
+		
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(renameProjectButton, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(addProjectButton, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(removeProjectButton, gbc);
 	}
 	
 	class ProjectListListener implements ListSelectionListener

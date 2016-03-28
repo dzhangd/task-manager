@@ -3,8 +3,11 @@ package ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,9 +21,10 @@ public class TaskList extends JPanel {
 
 	public TaskList()
 	{
+		GridBagConstraints gbc = new GridBagConstraints();
 		this.setBackground(Color.CYAN);
 		
-		this.setLayout(new BorderLayout());
+		this.setLayout(new GridBagLayout());
 		
 		DefaultListModel listModel = new DefaultListModel();
         listModel.addElement("Make Database");
@@ -36,7 +40,36 @@ public class TaskList extends JPanel {
 		taskJList.setSelectedIndex(0);
         
 		JScrollPane taskScrollPane = new JScrollPane(taskJList);
-		this.add(taskScrollPane, BorderLayout.CENTER);
+		
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.weightx = 1;
+		gbc.weighty = 0.85;
+		this.add(taskScrollPane, gbc);
+		
+		JButton renameTaskButton = new JButton("Rename Task");
+		JButton addTaskButton = new JButton("Create Task");
+		JButton removeTaskButton = new JButton("Delete Task");
+		
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(renameTaskButton, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(addTaskButton, gbc);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(removeTaskButton, gbc);
 	}
 	
 	class TaskListListener implements ListSelectionListener
