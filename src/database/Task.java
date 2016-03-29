@@ -2,8 +2,10 @@ package database;
 
 import connection.DatabaseConnection;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
+import java.sql.Date;
 
 /**
  * Created by Kwangsoo on 2016-03-27.
@@ -11,19 +13,20 @@ import java.util.ArrayList;
 public class Task {
     Connection con;
     Object[] task;
+    ArrayList<Object[]> tasks;
 
     public Task() {
     }
 
     public ArrayList getTasks() {
         con = DatabaseConnection.getConnection();
-        ArrayList<Object[]> tasks = new ArrayList<Object[]>();
+        tasks = new ArrayList<Object[]>();
         try {
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM Task");
             while (rs.next()) {
                 task = new Object[10];
-                setTask(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
+                setTask(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5),
                         rs.getBoolean(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10));
                 tasks.add(task);
             }
@@ -36,7 +39,7 @@ public class Task {
         return null;
     }
 
-    public void setTask(int tid, String title, String description, String submittedDate, String estimatedDate,
+    public void setTask(int tid, String title, String description, Date submittedDate, Date estimatedDate,
                         Boolean completed, int priority, int d_id, int m_id, int pid) {
         task[0] = tid;
         task[1] = title;
@@ -50,17 +53,49 @@ public class Task {
         task[9] = pid;
     }
 
-    public void addTask(int tid, String title, String description, String submittedDate, String estimatedDate,
+    public void renameTask(int tid, String title) {
+        con = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ? WHERE tid = ?");
+            ps.setString(1, title);
+            ps.setInt(2, tid);
+
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public int getMaxTid() {
+        con = DatabaseConnection.getConnection();
+        int maxTid = 0;
+        try {
+            Statement s = con.createStatement();
+            ResultSet rs = s.executeQuery("SELECT MAX(tid) FROM Task");
+
+            if (rs.next()) {
+                maxTid = rs.getInt(1);
+            }
+
+            s.close();
+            return maxTid;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public void addTask(int tid, String title, String description, Date submittedDate, Date estimatedDate,
                         Boolean completed, int priority, int d_id, int m_id, int pid) {
         con = DatabaseConnection.getConnection();
         try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO Task (tid, title, description, submittedDate, " +
-                    "estimatedDate, completed, priority, d_id, m_id, pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO Task (tid, title, description, submitted_date, estimated_date, completed, priority, d_id, m_id, pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, tid);
             ps.setString(2, title);
             ps.setString(3, description);
-            ps.setString(4, submittedDate);
-            ps.setString(5, estimatedDate);
+            ps.setDate(4, submittedDate);
+            ps.setDate(5, estimatedDate);
             ps.setBoolean(6, completed);
             ps.setInt(7, priority);
             ps.setInt(8, d_id);
@@ -71,6 +106,28 @@ public class Task {
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        task = new Object[10];
+        setTask(tid, title, description, submittedDate, estimatedDate, completed, priority, d_id, m_id, pid);
+        tasks.add(task);
+    }
+
+    public void deleteTask(int tid) {
+        con = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement ps = con.prepareStatement("DELETE FROM Task WHERE tid = ?");
+            ps.setInt(1, tid);
+
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        for (int i=0; i<tasks.size(); i++) {
+            if ((Integer) tasks.get(i)[0] == tid) {
+                tasks.remove(i);
+                return;
+            }
         }
     }
 }

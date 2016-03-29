@@ -89,9 +89,7 @@ public class Project {
             e.printStackTrace();
         }
         project = new Object[3];
-        project[0] = pid;
-        project[1] = name;
-        project[2] = description;
+        setProject(pid,name,description);
         projects.add(project);
     }
 
@@ -106,7 +104,7 @@ public class Project {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        for (int i=0; i<projects.size();i++) {
+        for (int i=0; i<projects.size(); i++) {
             if ((Integer) projects.get(i)[0] == pid) {
                 projects.remove(i);
                 return;
