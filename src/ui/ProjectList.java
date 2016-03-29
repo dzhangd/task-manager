@@ -41,7 +41,7 @@ public class ProjectList extends JPanel {
 
         this.setLayout(new GridBagLayout());
 
-        DefaultListModel listModel = new DefaultListModel();
+        final DefaultListModel listModel = new DefaultListModel();
         for (int i=0; i<projects.size(); i++) {
             String temp = (String) projects.get(i)[1];
             listModel.addElement(temp.trim());
@@ -83,6 +83,12 @@ public class ProjectList extends JPanel {
                 };
                 String s = (String)JOptionPane.showInputDialog(null, "Type new name", "Rename", JOptionPane.PLAIN_MESSAGE, null, null, null);
                 System.out.println("Rename project to " + s);
+
+                if (s != null) {
+                    int pid = (Integer) projects.get(selectedIndex)[0];
+                    project.renameProject(pid, s);
+                    listModel.set(selectedIndex,s);
+                }
             }
         });
         addProjectButton.addActionListener(new ActionListener()
@@ -102,6 +108,11 @@ public class ProjectList extends JPanel {
                     return;
                 }
                 System.out.println("Project name is " + projectName.getText() + " Project description is " + projectDescription.getText());
+                int maxPid = project.getMaxPid() + 1;
+                System.out.println("pid is " + maxPid);
+                project.addProject(maxPid, projectName.getText(), projectDescription.getText());
+                String name = (String) projects.get(projects.size() - 1)[1];
+                listModel.addElement(name.trim());
             }
         });
         removeProjectButton.addActionListener(new ActionListener()
@@ -121,6 +132,9 @@ public class ProjectList extends JPanel {
                         options,
                         options[1]);
                 System.out.println("Remove project option " + optionChosen);
+                int pid = (Integer) projects.get(selectedIndex)[0];
+                project.deleteProject(pid);
+                listModel.remove(selectedIndex);
             }
         });
 
@@ -159,7 +173,6 @@ public class ProjectList extends JPanel {
             String description = (String) projects.get(selectedIndex)[2];
             projectDescription.setText(description.trim());
 
-            taskListPanel = new TaskList();
             taskListPanel.listModel.clear();
             int pid = (Integer) projects.get(selectedIndex)[0];
             for (int i=0; i<tasks.size(); i++) {
