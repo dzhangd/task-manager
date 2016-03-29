@@ -32,7 +32,7 @@ public class ProjectList extends JPanel {
     Project project = new Project();
     ArrayList<Object[]> projects = project.getProjects();
     Task task = new Task();
-    ArrayList<Object[]> tasks = task.getTasks();
+    ArrayList<Object[]> tasks;
 
     public ProjectList()
     {
@@ -162,6 +162,9 @@ public class ProjectList extends JPanel {
     }
 
     int selectedIndex = 0;
+    static int currentPid;
+
+    public static ArrayList<Object[]> newTaskList;
 
     public class ProjectListListener implements ListSelectionListener
     {
@@ -173,20 +176,23 @@ public class ProjectList extends JPanel {
             selectedIndex = lsm.getLeadSelectionIndex();
             System.out.println("Project selected is: " + selectedIndex);
 
+            currentPid = (Integer) projects.get(selectedIndex)[0];
             String description = (String) projects.get(selectedIndex)[2];
             projectDescription.setText(description.trim());
 
             taskListPanel.listModel.clear();
+            tasks = task.getTasks();
+            newTaskList = new ArrayList<Object[]>();
             int pid = (Integer) projects.get(selectedIndex)[0];
             for (int i=0; i<tasks.size(); i++) {
                 int pid2 = (Integer) tasks.get(i)[9];
                 if (pid == pid2) {
                     String title = (String) tasks.get(i)[1];
                     taskListPanel.listModel.addElement(title.trim());
+                    newTaskList.add(tasks.get(i));
                 }
             }
         }
 
     }
-
 }

@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -29,9 +30,15 @@ import database.Project;
 import database.Task;
 import ui.ProjectList.ProjectListListener;
 
+import static ui.ProjectList.currentPid;
+import static ui.ProjectList.newTaskList;
+
+
 public class TaskList extends JPanel {
 
 	static DefaultListModel listModel = new DefaultListModel();
+	Task task = new Task();
+	ArrayList<Object[]> tasks = task.getTasks();
 
 	public TaskList()
 	{
@@ -41,8 +48,8 @@ public class TaskList extends JPanel {
 
 		this.setLayout(new GridBagLayout());
 
-		JList taskJList = new JList(listModel);
-		ListSelectionModel listSelectionModel = taskJList.getSelectionModel();
+		final JList taskJList = new JList(listModel);
+		final ListSelectionModel listSelectionModel = taskJList.getSelectionModel();
 		listSelectionModel.addListSelectionListener(new TaskListListener());
 		taskJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		taskJList.setSelectedIndex(0);
@@ -71,6 +78,13 @@ public class TaskList extends JPanel {
 				};
 				String s = (String)JOptionPane.showInputDialog(null, "Type new name", "Rename", JOptionPane.PLAIN_MESSAGE, null, null, null);
 				System.out.println("Rename task to " + s);
+
+				if (s != null) {
+					int tid = (Integer) newTaskList.get(selectedIndex)[0];
+					System.out.println("Selected tid is " + tid);
+					task.renameTask(tid, s);
+					listModel.set(selectedIndex, s);
+				}
 			}
 		});
 		addTaskButton.addActionListener(new ActionListener()
@@ -95,7 +109,17 @@ public class TaskList extends JPanel {
 				{
 					return;
 				}
+
+				// TODO: change later when available!
 				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+				int tid = task.getMaxTid() + 1;
+				System.out.println("tid is " + tid);
+				int pid = currentPid;
+				java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
+				java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
+				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, priorityCombo.getSelectedIndex(), 1031, 1033, pid);
+				String title = (String) tasks.get(tasks.size()-1)[1];
+				listModel.addElement(title.trim());
 			}
 		});
 		removeTaskButton.addActionListener(new ActionListener()
@@ -115,6 +139,13 @@ public class TaskList extends JPanel {
 						options,
 						options[1]);
 				System.out.println("Remove task option " + optionChosen);
+
+				if (optionChosen != 0) {
+					return;
+				}
+				int tid = (Integer) newTaskList.get(selectedIndex)[0];
+				task.deleteTask(tid);
+				listModel.remove(selectedIndex);
 			}
 		});
 
@@ -139,6 +170,8 @@ public class TaskList extends JPanel {
 		this.add(removeTaskButton, gbc);
 	}
 
+	int selectedIndex;
+
 	class TaskListListener implements ListSelectionListener
 	{
 
@@ -147,7 +180,7 @@ public class TaskList extends JPanel {
 			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 			int firstIndex = e.getFirstIndex();
 			int lastIndex = e.getLastIndex();
-			int selectedIndex = lsm.getLeadSelectionIndex();
+			selectedIndex = lsm.getLeadSelectionIndex();
 			System.out.println("Task selected is: " + selectedIndex);
 		}
 
