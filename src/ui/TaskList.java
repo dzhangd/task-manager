@@ -182,6 +182,10 @@ public class TaskList extends JPanel {
 			int lastIndex = e.getLastIndex();
 			selectedIndex = lsm.getLeadSelectionIndex();
 			System.out.println("Task selected is: " + selectedIndex);
+
+			if (!newTaskList.contains(tasks.get(tasks.size() - 1))) {
+				newTaskList.add(tasks.get(tasks.size() - 1));
+			}
 		}
 
 	}
