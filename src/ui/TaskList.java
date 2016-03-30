@@ -44,7 +44,8 @@ public class TaskList extends JPanel {
 		taskJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		JScrollPane taskScrollPane = new JScrollPane(taskJList);
-
+		taskScrollPane.setPreferredSize(new Dimension(100, 200));
+		
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -55,6 +56,9 @@ public class TaskList extends JPanel {
 		JButton editTaskButton = new JButton("Edit Task");
 		JButton addTaskButton = new JButton("Add Task");
 		JButton removeTaskButton = new JButton("Remove Task");
+		editTaskButton.setPreferredSize(new Dimension(100, 20));
+		addTaskButton.setPreferredSize(new Dimension(100, 20));
+		removeTaskButton.setPreferredSize(new Dimension(100, 20));
 
 		editTaskButton.addActionListener(new ActionListener()
 		{

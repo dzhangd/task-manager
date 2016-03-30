@@ -19,6 +19,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -28,7 +29,7 @@ import static ui.Startup.taskListPanel;
 
 public class ProjectList extends JPanel {
 
-    JLabel projectDescription = new JLabel("Project Description");
+	JTextArea projectDescription = new JTextArea("Project Description");
     Project project = new Project();
     ArrayList<Object[]> projects = project.getProjects();
     Task task = new Task();
@@ -55,6 +56,8 @@ public class ProjectList extends JPanel {
         projectJList.setSelectedIndex(0);
 
         JScrollPane projectScrollPane = new JScrollPane(projectJList);
+        projectScrollPane.setPreferredSize(new Dimension(100, 200));
+        
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -62,6 +65,9 @@ public class ProjectList extends JPanel {
         gbc.weighty = 0.73;
         this.add(projectScrollPane, gbc);
 
+        
+        projectDescription.setPreferredSize(new Dimension(100, 50));
+        
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -72,6 +78,9 @@ public class ProjectList extends JPanel {
         JButton editProjectButton = new JButton("Edit Project");
         JButton addProjectButton = new JButton("Create Project");
         JButton removeProjectButton = new JButton("Delete Project");
+        editProjectButton.setPreferredSize(new Dimension(100, 22));
+        addProjectButton.setPreferredSize(new Dimension(100, 22));
+        removeProjectButton.setPreferredSize(new Dimension(100, 22));
 
         editProjectButton.addActionListener(new ActionListener()
         {
