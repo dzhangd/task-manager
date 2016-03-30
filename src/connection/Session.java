@@ -5,7 +5,7 @@ public class Session {
 	private String name;
 	private enum UserType
 	{
-		manager, developer, qa, client
+		superUser, manager, developer, qa, client
 	}
 	private UserType type;
 	
