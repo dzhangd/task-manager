@@ -37,6 +37,7 @@ public class ProjectList extends JPanel {
     public ProjectList()
     {
         GridBagConstraints gbc = new GridBagConstraints();
+        this.setPreferredSize(new Dimension(100, 0));
         this.setBackground(Color.WHITE);
 
         this.setLayout(new GridBagLayout());

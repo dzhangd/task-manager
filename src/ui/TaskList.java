@@ -36,7 +36,8 @@ public class TaskList extends JPanel {
 		this.setBackground(Color.CYAN);
 
 		this.setLayout(new GridBagLayout());
-
+		this.setPreferredSize(new Dimension(100, 0));
+		
 		final JList taskJList = new JList(listModel);
 		final ListSelectionModel listSelectionModel = taskJList.getSelectionModel();
 		listSelectionModel.addListSelectionListener(new TaskListListener());
