@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -24,6 +25,7 @@ public class TaskPanel extends JPanel{
 	public TaskPanel()
 	{
 		GridBagConstraints gbc = new GridBagConstraints();
+		this.setPreferredSize(new Dimension(500, 500));
 		title = new JLabel("TITLE OF TASK");
 		descriptionArea = new JTextArea("TASK DESCRIPTION");
 		descriptionArea.setEditable(false);
