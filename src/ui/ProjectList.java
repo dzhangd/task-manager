@@ -181,6 +181,9 @@ public class ProjectList extends JPanel {
             if (e.getValueIsAdjusting() && taskListPanel.lsm != null) {
                 taskListPanel.lsm.clearSelection();
             }
+            if (e.getValueIsAdjusting()) {
+                return;
+            }
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             int firstIndex = e.getFirstIndex();
             int lastIndex = e.getLastIndex();
