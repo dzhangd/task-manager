@@ -37,7 +37,6 @@ public class ProjectList extends JPanel {
     public ProjectList()
     {
         GridBagConstraints gbc = new GridBagConstraints();
-        this.setPreferredSize(new Dimension(100, 0));
         this.setBackground(Color.WHITE);
 
         this.setLayout(new GridBagLayout());
@@ -90,6 +89,11 @@ public class ProjectList extends JPanel {
                     return;
                 }
                 System.out.println("New project name is " + newProjectName.getText() + " new project description is " + newProjectDescription.getText());
+                int pid = (Integer) projects.get(selectedIndex)[0];
+                System.out.println("Project pid to edit is " + pid);
+                project.editProject(pid, newProjectName.getText(), newProjectDescription.getText());
+                listModel.set(selectedIndex, newProjectName.getText().trim());
+                projectDescription.setText(newProjectDescription.getText().trim());
             }
         });
         addProjectButton.addActionListener(new ActionListener()
@@ -109,6 +113,7 @@ public class ProjectList extends JPanel {
                     return;
                 }
                 System.out.println("Project name is " + projectName.getText() + " Project description is " + projectDescription.getText());
+
                 int maxPid = project.getMaxPid() + 1;
                 System.out.println("pid is " + maxPid);
                 project.addProject(maxPid, projectName.getText(), projectDescription.getText());
@@ -133,6 +138,7 @@ public class ProjectList extends JPanel {
                         options,
                         options[1]);
                 System.out.println("Remove project option " + optionChosen);
+
                 if (optionChosen != 0) {
                     return;
                 }
@@ -171,6 +177,9 @@ public class ProjectList extends JPanel {
     {
         @Override
         public void valueChanged(ListSelectionEvent e) {
+            if (e.getValueIsAdjusting() && taskListPanel.lsm != null) {
+                taskListPanel.lsm.clearSelection();
+            }
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             int firstIndex = e.getFirstIndex();
             int lastIndex = e.getLastIndex();

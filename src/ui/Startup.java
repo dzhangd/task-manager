@@ -11,8 +11,8 @@ public class Startup {
 	final static String LOOKANDFEEL = null;
 	JPanel mainPane = new JPanel();
 	static ProjectList projectListPanel = new ProjectList();
-	static TaskList taskListPanel = new TaskList();
 	static TaskPanel taskPanel = new TaskPanel();
+	static TaskList taskListPanel = new TaskList();
 
 	public Startup() {
 		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));

@@ -10,19 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -32,6 +20,7 @@ import ui.ProjectList.ProjectListListener;
 
 import static ui.ProjectList.currentPid;
 import static ui.ProjectList.newTaskList;
+import static ui.Startup.taskPanel;
 
 
 public class TaskList extends JPanel {
@@ -47,13 +36,11 @@ public class TaskList extends JPanel {
 		this.setBackground(Color.CYAN);
 
 		this.setLayout(new GridBagLayout());
-		this.setPreferredSize(new Dimension(100, 0));
-		
+
 		final JList taskJList = new JList(listModel);
 		final ListSelectionModel listSelectionModel = taskJList.getSelectionModel();
 		listSelectionModel.addListSelectionListener(new TaskListListener());
 		taskJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		taskJList.setSelectedIndex(0);
 
 		JScrollPane taskScrollPane = new JScrollPane(taskJList);
 
@@ -91,6 +78,15 @@ public class TaskList extends JPanel {
 					return;
 				}
 				System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
+
+				// TODO: change stuff when users are available, but for now:
+				int tid = (Integer) newTaskList.get(selectedIndex)[0];
+				System.out.println("Task tid to edit is " + tid);
+				task.editTask(tid, newTaskName.getText(), newTaskDescription.getText(), newPriorityCombo.getSelectedIndex());
+				listModel.set(selectedIndex,newTaskName.getText());
+				taskPanel.title.setText(newTaskName.getText());
+				taskPanel.descriptionArea.setText(newTaskDescription.getText());
+
 			}
 		});
 		addTaskButton.addActionListener(new ActionListener()
@@ -118,6 +114,7 @@ public class TaskList extends JPanel {
 
 				// TODO: change later when available!
 				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+
 				int tid = task.getMaxTid() + 1;
 				System.out.println("tid is " + tid);
 				int pid = currentPid;
@@ -176,14 +173,18 @@ public class TaskList extends JPanel {
 		this.add(removeTaskButton, gbc);
 	}
 
-	int selectedIndex;
+	private int selectedIndex;
+	ListSelectionModel lsm;
 
 	class TaskListListener implements ListSelectionListener
 	{
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
-			ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+			if (!e.getValueIsAdjusting()) {
+				return;
+			}
+			lsm = (ListSelectionModel)e.getSource();
 			int firstIndex = e.getFirstIndex();
 			int lastIndex = e.getLastIndex();
 			selectedIndex = lsm.getLeadSelectionIndex();
@@ -191,6 +192,26 @@ public class TaskList extends JPanel {
 
 			if (!newTaskList.contains(tasks.get(tasks.size() - 1))) {
 				newTaskList.add(tasks.get(tasks.size() - 1));
+			}
+
+			if (taskPanel != null && selectedIndex >= 0) {
+				String title = (String) newTaskList.get(selectedIndex)[1];
+				taskPanel.title.setText(title.trim());
+
+				String description = (String) newTaskList.get(selectedIndex)[2];
+				description = description.replace("’","\\'");
+				taskPanel.descriptionArea.setText(description.trim());
+				System.out.println("description is: " + description);
+
+				// TODO: CHANGE USER, ASSIGNED TO, MANAGER WHEN AVAILABLE
+
+				Date subDate = (Date) newTaskList.get(selectedIndex)[3];
+				taskPanel.createdDate.setText("CREATED: " + String.valueOf(subDate));
+
+				Date comDate = (Date) newTaskList.get(selectedIndex)[4];
+				taskPanel.estimatedDate.setText("ESTIMATED: " + String.valueOf(comDate));
+
+
 			}
 		}
 

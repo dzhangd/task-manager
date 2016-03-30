@@ -11,7 +11,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class TaskPanel extends JPanel{
-	
+
 	JLabel title;
 	JTextArea descriptionArea;
 	JScrollPane descriptionScrollPane;
@@ -20,34 +20,34 @@ public class TaskPanel extends JPanel{
 	JLabel mangedByLabel;
 	JLabel createdDate;
 	JLabel estimatedDate;
-	
+
 	public TaskPanel()
 	{
 		GridBagConstraints gbc = new GridBagConstraints();
-		title = new JLabel("TITLE OF THE TASK");
+		title = new JLabel("TITLE OF TASK");
 		descriptionArea = new JTextArea("TASK DESCRIPTION");
 		descriptionArea.setEditable(false);
 		descriptionScrollPane = new JScrollPane(descriptionArea);
-		
-		createdByLabel = new JLabel("CREATED BY: BOB");
+
+		createdByLabel = new JLabel("CREATED BY: ");
 		createdByLabel.setOpaque(true);
-		assignedToLabel = new JLabel("ASSIGNED TO: THE");
+		assignedToLabel = new JLabel("ASSIGNED TO: ");
 		assignedToLabel.setOpaque(true);
-		mangedByLabel = new JLabel("MANAGED BY: BUILDER");
+		mangedByLabel = new JLabel("MANAGED BY: ");
 		mangedByLabel.setOpaque(true);
-		createdDate = new JLabel("CREATED: 2016/3/15");
+		createdDate = new JLabel("CREATED: ");
 		createdDate.setOpaque(true);
-		estimatedDate = new JLabel("ESTIMATED: 2016/3/17");
+		estimatedDate = new JLabel("ESTIMATED: ");
 		estimatedDate.setOpaque(true);
-		
+
 		setLayout(new GridBagLayout());
-		
+
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 0.8;
 		gbc.weighty = 0.05;
-		this.add(title, gbc);
+		this.add(this.title, gbc);
 		gbc.fill = GridBagConstraints.BOTH;;
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -55,9 +55,9 @@ public class TaskPanel extends JPanel{
 		gbc.weighty = 0.95;
 		gbc.gridheight = 6;
 		this.add(descriptionScrollPane, gbc);
-		
-		
-		
+
+
+
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		gbc.weightx = 0.2;
@@ -81,5 +81,5 @@ public class TaskPanel extends JPanel{
 		gbc.weightx = 0.2;
 		this.add(estimatedDate, gbc);
 	}
-	
+
 }
