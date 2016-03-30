@@ -6,13 +6,14 @@ import javax.swing.*;
 
 public class Startup {
 
-
+	
 	static JFrame frame;
 	final static String LOOKANDFEEL = null;
 	JPanel mainPane = new JPanel();
 	static ProjectList projectListPanel = new ProjectList();
 	static TaskList taskListPanel = new TaskList();
 	static TaskPanel taskPanel = new TaskPanel();
+	static LoginDialog loginDialog;
 
 	public Startup() {
 		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -37,7 +38,10 @@ public class Startup {
 		// Create and set up the window.
 		frame = new JFrame("The Dream Tasker");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
+		// Create login dialog
+		loginDialog = new LoginDialog(frame);
+		
 		// Create and set up the content pane.
 		Startup startup = new Startup();
 		startup.mainPane.setOpaque(true); // content panes must be opaque
@@ -75,6 +79,9 @@ public class Startup {
 		// Display the window.
 		frame.pack();
 		frame.setVisible(true);
+		
+		// Display login dialog
+		loginDialog.setVisible(true);
 
 	}
 
