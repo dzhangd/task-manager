@@ -38,8 +38,8 @@ public class Startup {
 		session = new Session("PaRappa the Rapper", 42, Session.UserType.superUser);
 		
 		projectListPanel = new ProjectList();
-		taskPanel = new TaskPanel();
 		taskListPanel = new TaskList();
+		taskPanel = new TaskPanel();
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		

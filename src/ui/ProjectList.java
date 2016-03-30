@@ -25,6 +25,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import connection.Session;
+
 import static ui.Startup.taskListPanel;
 
 public class ProjectList extends JPanel {
@@ -34,6 +36,11 @@ public class ProjectList extends JPanel {
     ArrayList<Object[]> projects = project.getProjects();
     Task task = new Task();
     ArrayList<Object[]> tasks;
+    
+    JButton editProjectButton;
+    JButton addProjectButton;
+    JButton removeProjectButton;
+    
 
     public ProjectList()
     {
@@ -77,9 +84,10 @@ public class ProjectList extends JPanel {
         gbc.weighty = 0.10;
         this.add(projectDescription, gbc);
 
-        JButton editProjectButton = new JButton("Edit Project");
-        JButton addProjectButton = new JButton("Create Project");
-        JButton removeProjectButton = new JButton("Delete Project");
+        editProjectButton = new JButton("Edit Project");
+        addProjectButton = new JButton("Create Project");
+        removeProjectButton = new JButton("Delete Project");
+        
         editProjectButton.setPreferredSize(new Dimension(100, 22));
         addProjectButton.setPreferredSize(new Dimension(100, 22));
         removeProjectButton.setPreferredSize(new Dimension(100, 22));
@@ -178,6 +186,8 @@ public class ProjectList extends JPanel {
         gbc.weightx = 1;
         gbc.weighty = 0.05;
         this.add(removeProjectButton, gbc);
+        
+        UserChanged();
     }
 
     int selectedIndex = 0;
@@ -218,6 +228,40 @@ public class ProjectList extends JPanel {
                 }
             }
         }
-
     }
+    
+	public void UserChanged()
+	{
+		if(Startup.session.getType() == Session.UserType.superUser)
+		{
+		    editProjectButton.setEnabled(true);
+		    addProjectButton.setEnabled(true);
+		    removeProjectButton.setEnabled(true);
+		}
+		else if(Startup.session.getType() == Session.UserType.qa)
+		{
+		    editProjectButton.setEnabled(false);
+		    addProjectButton.setEnabled(false);
+		    removeProjectButton.setEnabled(false);
+		}
+		else if(Startup.session.getType() == Session.UserType.client)
+		{
+		    editProjectButton.setEnabled(false);
+		    addProjectButton.setEnabled(false);
+		    removeProjectButton.setEnabled(false);
+		}
+		else if(Startup.session.getType() == Session.UserType.manager)
+		{
+		    editProjectButton.setEnabled(true);
+		    addProjectButton.setEnabled(true);
+		    removeProjectButton.setEnabled(true);
+		}
+		else if(Startup.session.getType() == Session.UserType.developer)
+		{
+		    editProjectButton.setEnabled(false);
+		    addProjectButton.setEnabled(false);
+		    removeProjectButton.setEnabled(false);
+		}
+	}
+    
 }
