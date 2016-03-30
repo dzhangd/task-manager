@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -28,10 +29,26 @@ public class TaskList extends JPanel {
 	static DefaultListModel listModel = new DefaultListModel();
 	Task task = new Task();
 	ArrayList<Object[]> tasks = task.getTasks();
-
+	JScrollPane taskScrollPane;
+	JPanel taskAttributeButtonPanel;
+	JScrollPane taskAttributeScrollPane;
+	JButton editTaskButton;
+	JButton addTaskButton;
+	JButton removeTaskButton;
+	
+	JCheckBox nameAttributeBox;
+	JCheckBox descriptionAttributeBox;
+	JCheckBox typeAttributeBox;
+	JCheckBox priorityAttributeBox;
+	JCheckBox createdByAttributeBox;
+	JCheckBox assignedToByAttributeBox;
+	JCheckBox managedByAttributeBox;
+	JCheckBox createdOntributeBox;
+	JCheckBox estimatedAttributeBox;
+	JCheckBox completedAttributeBox;
+	
 	public TaskList()
 	{
-
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setBackground(Color.CYAN);
 
@@ -43,19 +60,71 @@ public class TaskList extends JPanel {
 		listSelectionModel.addListSelectionListener(new TaskListListener());
 		taskJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		JScrollPane taskScrollPane = new JScrollPane(taskJList);
+		taskScrollPane = new JScrollPane(taskJList);
 		taskScrollPane.setPreferredSize(new Dimension(100, 200));
 		
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 1;
-		gbc.weighty = 0.85;
+		gbc.weighty = 0.75;
 		this.add(taskScrollPane, gbc);
+		
+		taskAttributeButtonPanel = new JPanel();
+		taskAttributeButtonPanel.setPreferredSize(new Dimension(100, 50));
+		taskAttributeButtonPanel.setLayout(new GridLayout(5, 2));
+		taskAttributeScrollPane = new JScrollPane(taskAttributeButtonPanel);
+		
+		
+		
+		nameAttributeBox = new JCheckBox("name");
+		descriptionAttributeBox = new JCheckBox("description");
+		typeAttributeBox = new JCheckBox("type");
+		priorityAttributeBox = new JCheckBox("priority");
+		createdByAttributeBox = new JCheckBox("created by");
+		assignedToByAttributeBox = new JCheckBox("assigned");
+		managedByAttributeBox = new JCheckBox("managed");
+		createdOntributeBox = new JCheckBox("created");
+		estimatedAttributeBox = new JCheckBox("estimated");
+		completedAttributeBox = new JCheckBox("completed");
+		
+		nameAttributeBox.setSelected(true);
+		descriptionAttributeBox.setSelected(true);
+		typeAttributeBox.setSelected(true);
+		priorityAttributeBox.setSelected(true);
+		createdByAttributeBox.setSelected(true);
+		assignedToByAttributeBox.setSelected(true);
+		managedByAttributeBox.setSelected(true);
+		createdOntributeBox.setSelected(true);
+		estimatedAttributeBox.setSelected(true);
+		completedAttributeBox.setSelected(true);
+		
+		
+		taskAttributeButtonPanel.add(nameAttributeBox);
+		taskAttributeButtonPanel.add(descriptionAttributeBox);
+		taskAttributeButtonPanel.add(typeAttributeBox);
+		taskAttributeButtonPanel.add(priorityAttributeBox);
+		taskAttributeButtonPanel.add(createdByAttributeBox);
+		taskAttributeButtonPanel.add(assignedToByAttributeBox);
+		taskAttributeButtonPanel.add(managedByAttributeBox);
+		taskAttributeButtonPanel.add(createdOntributeBox);
+		taskAttributeButtonPanel.add(estimatedAttributeBox);
+		taskAttributeButtonPanel.add(completedAttributeBox);
+		
+		
+		
+		
 
-		JButton editTaskButton = new JButton("Edit Task");
-		JButton addTaskButton = new JButton("Add Task");
-		JButton removeTaskButton = new JButton("Remove Task");
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.gridx = 0;
+		gbc.gridy = 1;
+		gbc.weightx = 1;
+		gbc.weighty = 0.1;
+		this.add(taskAttributeScrollPane, gbc);
+		
+		editTaskButton = new JButton("Edit Task");
+		addTaskButton = new JButton("Add Task");
+		removeTaskButton = new JButton("Remove Task");
 		editTaskButton.setPreferredSize(new Dimension(100, 20));
 		addTaskButton.setPreferredSize(new Dimension(100, 20));
 		removeTaskButton.setPreferredSize(new Dimension(100, 20));
@@ -160,19 +229,19 @@ public class TaskList extends JPanel {
 
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 1;
+		gbc.gridy = 2;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(editTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(addTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(removeTaskButton, gbc);
@@ -193,7 +262,10 @@ public class TaskList extends JPanel {
 			int firstIndex = e.getFirstIndex();
 			int lastIndex = e.getLastIndex();
 			selectedIndex = lsm.getLeadSelectionIndex();
-			System.out.println("Task selected is: " + selectedIndex);
+			System.out.println("Task selected is: " + selectedIndex + " Attribute boxes are : " + nameAttributeBox.isSelected() + " " + descriptionAttributeBox.isSelected()
+			+ " " + typeAttributeBox.isSelected() + " " + priorityAttributeBox.isSelected() + " " + createdByAttributeBox.isSelected()
+			+ " " + assignedToByAttributeBox.isSelected() + " " + managedByAttributeBox.isSelected() + " " + createdOntributeBox.isSelected()
+			+ " " + estimatedAttributeBox.isSelected() + " " + completedAttributeBox.isSelected());
 
 			if (!newTaskList.contains(tasks.get(tasks.size() - 1))) {
 				newTaskList.add(tasks.get(tasks.size() - 1));

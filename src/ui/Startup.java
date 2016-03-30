@@ -4,6 +4,8 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import connection.Session;
+
 public class Startup {
 
 
@@ -13,7 +15,9 @@ public class Startup {
 	static ProjectList projectListPanel = new ProjectList();
 	static TaskPanel taskPanel = new TaskPanel();
 	static TaskList taskListPanel = new TaskList();
-
+	static Session session;
+	
+	
 	public Startup() {
 		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
 	}
@@ -28,6 +32,11 @@ public class Startup {
 	}
 
 	protected static void createAndShowGUI() {
+		
+		// Hacky session solution until actual login
+		// TODO Delete this later
+		session = new Session("PaRappa the Rapper", 42, Session.UserType.superUser);
+		
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		

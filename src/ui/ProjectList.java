@@ -68,6 +68,7 @@ public class ProjectList extends JPanel {
         
         projectDescription.setPreferredSize(new Dimension(100, 50));
         projectDescription.setLineWrap(true);
+        projectDescription.setEditable(false);
         
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;

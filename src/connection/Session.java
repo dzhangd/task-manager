@@ -3,7 +3,7 @@ package connection;
 public class Session {
 	private int id;
 	private String name;
-	private enum UserType
+	public enum UserType
 	{
 		superUser, manager, developer, qa, client
 	}
