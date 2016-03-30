@@ -15,6 +15,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import connection.Session;
 import database.Project;
 import database.Task;
 import ui.ProjectList.ProjectListListener;
@@ -245,6 +246,8 @@ public class TaskList extends JPanel {
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(removeTaskButton, gbc);
+		
+		UserChanged();
 	}
 
 	private int selectedIndex;
@@ -291,7 +294,40 @@ public class TaskList extends JPanel {
 
 			}
 		}
-
+	}
+	
+	public void UserChanged()
+	{
+		if(Startup.session.getType() == Session.UserType.superUser)
+		{
+			editTaskButton.setEnabled(true);
+			addTaskButton.setEnabled(true);
+			removeTaskButton.setEnabled(true);
+		}
+		else if(Startup.session.getType() == Session.UserType.qa)
+		{
+			editTaskButton.setEnabled(true);
+			addTaskButton.setEnabled(true);
+			removeTaskButton.setEnabled(false);
+		}
+		else if(Startup.session.getType() == Session.UserType.client)
+		{
+			editTaskButton.setEnabled(true);
+			addTaskButton.setEnabled(true);
+			removeTaskButton.setEnabled(false);
+		}
+		else if(Startup.session.getType() == Session.UserType.manager)
+		{
+			editTaskButton.setEnabled(true);
+			addTaskButton.setEnabled(false);
+			removeTaskButton.setEnabled(true);
+		}
+		else if(Startup.session.getType() == Session.UserType.developer)
+		{
+			editTaskButton.setEnabled(true);
+			addTaskButton.setEnabled(false);
+			removeTaskButton.setEnabled(false);
+		}
 	}
 
 }

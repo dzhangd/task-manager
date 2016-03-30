@@ -12,9 +12,9 @@ public class Startup {
 	static JFrame frame;
 	final static String LOOKANDFEEL = null;
 	JPanel mainPane = new JPanel();
-	static ProjectList projectListPanel = new ProjectList();
-	static TaskPanel taskPanel = new TaskPanel();
-	static TaskList taskListPanel = new TaskList();
+	static ProjectList projectListPanel;
+	static TaskPanel taskPanel;
+	static TaskList taskListPanel;
 	static Session session;
 	
 	
@@ -37,6 +37,9 @@ public class Startup {
 		// TODO Delete this later
 		session = new Session("PaRappa the Rapper", 42, Session.UserType.superUser);
 		
+		projectListPanel = new ProjectList();
+		taskPanel = new TaskPanel();
+		taskListPanel = new TaskList();
 		
 		GridBagConstraints gbc = new GridBagConstraints();
 		
