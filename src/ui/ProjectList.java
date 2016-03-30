@@ -69,27 +69,27 @@ public class ProjectList extends JPanel {
         gbc.weighty = 0.10;
         this.add(projectDescription, gbc);
 
-        JButton renameProjectButton = new JButton("Rename Project");
+        JButton editProjectButton = new JButton("Edit Project");
         JButton addProjectButton = new JButton("Create Project");
         JButton removeProjectButton = new JButton("Delete Project");
 
-        renameProjectButton.addActionListener(new ActionListener()
+        editProjectButton.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                System.out.println("Rename Project Button Clicked");
-                JTextField newNameField = new JTextField();
+                System.out.println("Edit Project Button Clicked");
+                JTextField newProjectName = new JTextField();
+                JTextField newProjectDescription = new JTextField();
                 Object[] message = {
-                        "New name:", newNameField,
+                        "Project name:", newProjectName,
+                        "Project Description:", newProjectDescription
                 };
-                String s = (String)JOptionPane.showInputDialog(null, "Type new name", "Rename", JOptionPane.PLAIN_MESSAGE, null, null, null);
-                System.out.println("Rename project to " + s);
-
-                if (s != null) {
-                    int pid = (Integer) projects.get(selectedIndex)[0];
-                    project.renameProject(pid, s);
-                    listModel.set(selectedIndex,s);
+                int editProjectSelection = JOptionPane.showConfirmDialog(null, message, "Edit Project", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+                if(editProjectSelection != 0)
+                {
+                    return;
                 }
+                System.out.println("New project name is " + newProjectName.getText() + " new project description is " + newProjectDescription.getText());
             }
         });
         addProjectButton.addActionListener(new ActionListener()
@@ -147,7 +147,7 @@ public class ProjectList extends JPanel {
         gbc.gridy = 2;
         gbc.weightx = 1;
         gbc.weighty = 0.05;
-        this.add(renameProjectButton, gbc);
+        this.add(editProjectButton, gbc);
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 3;

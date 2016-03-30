@@ -64,28 +64,33 @@ public class TaskList extends JPanel {
 		gbc.weighty = 0.85;
 		this.add(taskScrollPane, gbc);
 
-		JButton renameTaskButton = new JButton("Rename Task");
+		JButton editTaskButton = new JButton("Edit Task");
 		JButton addTaskButton = new JButton("Add Task");
 		JButton removeTaskButton = new JButton("Remove Task");
 
-		renameTaskButton.addActionListener(new ActionListener()
+		editTaskButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Rename Task Button Clicked");
-				JTextField newNameField = new JTextField();
+				System.out.println("Edit Task Button Clicked");
+				JTextField newTaskName = new JTextField();
+				JTextField newTaskDescription = new JTextField();
+				Object[] type = {"Bug", "Feature"};
+				JComboBox newTypeCombo = new JComboBox(type);
+				Object[] priority = {"1", "2", "3", "4", "5"};
+				JComboBox newPriorityCombo = new JComboBox(priority);
 				Object[] message = {
-						"New name:", newNameField,
+						"Task name:", newTaskName,
+						"Task Description:", newTaskDescription,
+						"Type:", newTypeCombo,
+						"Priority:", newPriorityCombo
 				};
-				String s = (String)JOptionPane.showInputDialog(null, "Type new name", "Rename", JOptionPane.PLAIN_MESSAGE, null, null, null);
-				System.out.println("Rename task to " + s);
-
-				if (s != null) {
-					int tid = (Integer) newTaskList.get(selectedIndex)[0];
-					System.out.println("Selected tid is " + tid);
-					task.renameTask(tid, s);
-					listModel.set(selectedIndex, s);
+				int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+				if(editTaskSelection != 0)
+				{
+					return;
 				}
+				System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
 			}
 		});
 		addTaskButton.addActionListener(new ActionListener()
@@ -156,7 +161,7 @@ public class TaskList extends JPanel {
 		gbc.gridy = 1;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
-		this.add(renameTaskButton, gbc);
+		this.add(editTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 2;
