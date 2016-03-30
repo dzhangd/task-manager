@@ -53,12 +53,14 @@ public class Task {
         task[9] = pid;
     }
 
-    public void renameTask(int tid, String title) {
+    public void editTask(int tid, String title, String description, int priority) {
         con = DatabaseConnection.getConnection();
         try {
-            PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ? WHERE tid = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ?, description = ?, priority = ? WHERE tid = ?");
             ps.setString(1, title);
-            ps.setInt(2, tid);
+            ps.setString(2, description);
+            ps.setInt(3, priority);
+            ps.setInt(4, tid);
 
             ps.executeUpdate();
             ps.close();

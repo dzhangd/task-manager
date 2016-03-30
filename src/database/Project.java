@@ -43,12 +43,13 @@ public class Project {
         project[2] = description;
     }
 
-    public void renameProject(int pid, String name) {
+    public void editProject(int pid, String name, String description) {
         con = DatabaseConnection.getConnection();
         try {
-            PreparedStatement ps = con.prepareStatement("UPDATE Project SET name = ? WHERE pid = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE Project SET name = ?, description = ? WHERE pid = ?");
             ps.setString(1, name);
-            ps.setInt(2,pid);
+            ps.setString(2, description);
+            ps.setInt(3,pid);
 
             ps.executeUpdate();
             ps.close();
