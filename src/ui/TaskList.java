@@ -145,7 +145,7 @@ public class TaskList extends JPanel {
 				JComboBox newPriorityCombo = new JComboBox(priority);
 				JLabel newestimatedDate=new JLabel("DATE :");
                                 newestimatedDate.setBounds(100,350,100,20);
-                                taskPanel.add(l22);
+                                taskPanel.add(newestimatedDate);
 
                                 UtilDateModel model=new UtilDateModel();
                                 JDatePanelImpl datePanel = new JDatePanelImpl(model);
@@ -157,7 +157,7 @@ public class TaskList extends JPanel {
 						"Task Description:", newTaskDescription,
 						"Type:", newTypeCombo,
 						"Priority:", newPriorityCombo,
-						"Estimated Date", newestimatedDate
+						"Estimated Date", datePicker
 				};
 				// edit date later
 				int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
@@ -199,7 +199,7 @@ public class TaskList extends JPanel {
 				JComboBox priorityCombo = new JComboBox(priority);
 				JLabel estimatedDate=new JLabel("DATE :");
                                 estimatedDate.setBounds(100,350,100,20);
-                                
+                                taskPanel.add(estimatedDate);
                                 UtilDateModel model=new UtilDateModel();
                                 JDatePanelImpl datePanel = new JDatePanelImpl(model);
                                 datePicker = new JDatePickerImpl(datePanel);
