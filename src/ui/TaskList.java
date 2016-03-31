@@ -143,12 +143,23 @@ public class TaskList extends JPanel {
 				JComboBox newTypeCombo = new JComboBox(type);
 				Object[] priority = {"1", "2", "3", "4", "5"};
 				JComboBox newPriorityCombo = new JComboBox(priority);
+				JLabel newestimatedDate=new JLabel("DATE :");
+                                newestimatedDate.setBounds(100,350,100,20);
+                                taskPanel.add(l22);
+
+                                UtilDateModel model=new UtilDateModel();
+                                JDatePanelImpl datePanel = new JDatePanelImpl(model);
+                                datePicker = new JDatePickerImpl(datePanel);
+                                datePicker.setBounds(220,350,120,30);
+                                taskPanel.add(datePicker);
 				Object[] message = {
 						"Task name:", newTaskName,
 						"Task Description:", newTaskDescription,
 						"Type:", newTypeCombo,
-						"Priority:", newPriorityCombo
+						"Priority:", newPriorityCombo,
+						"Estimated Date", newestimatedDate
 				};
+				// edit date later
 				int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 				if(editTaskSelection != 0)
 				{
@@ -165,6 +176,7 @@ public class TaskList extends JPanel {
 				}
 				listModel.set(selectedIndex,newTaskName.getText());
 				taskPanel.title.setText(newTaskName.getText());
+				
 				if (newTaskDescription.getText().isEmpty()) {
 					taskPanel.descriptionArea.setText("");
 				} else {
@@ -187,11 +199,21 @@ public class TaskList extends JPanel {
 				JComboBox priorityCombo = new JComboBox(priority);
 				JLabel estimatedDate=new JLabel("DATE :");
                                 estimatedDate.setBounds(100,350,100,20);
+                                
+                                UtilDateModel model=new UtilDateModel();
+                                JDatePanelImpl datePanel = new JDatePanelImpl(model);
+                                datePicker = new JDatePickerImpl(datePanel);
+                                datePicker.setBounds(220,350,120,30);
+                                taskPanel.add(datePicker);
+                                Date selectedDate = (Date) datePicker.getModel().getValue();
+                                DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                                String reportDate = df.format(selectedDate);
 				Object[] message = {
 						"Task name:", taskName,
 						"Task Description:", taskDescription,
 						"Type:", typeCombo,
-						"Priority:", priorityCombo
+						"Priority:", priorityCombo,
+						"Estimated Date:", datePicker
 				};
 				int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 				if(addTaskSelection != 0)
@@ -200,14 +222,14 @@ public class TaskList extends JPanel {
 				}
 
 				// TODO: change later when available!
-				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex()+"Estimated date is"+ reportDate);
 
 				int tid = task.getMaxTid() + 1;
 				System.out.println("tid is " + tid);
 				java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
 				java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
 				
-				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, estimatedDate,false, priorityCombo.getSelectedIndex(), 1031, 1033, currentPid);
+				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, reportDate,false, priorityCombo.getSelectedIndex(), 1031, 1033, currentPid);
 
 				tasks = task.getTasks();
 				ArrayList<Object[]> temp = new ArrayList<Object[]>();
