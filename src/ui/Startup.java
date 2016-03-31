@@ -4,54 +4,46 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class Startup {
+import connection.Session;
 
-	
-	static JFrame frame;
-	final static String LOOKANDFEEL = null;
-	JPanel mainPane = new JPanel();
-	static ProjectList projectListPanel = new ProjectList();
-	static TaskList taskListPanel = new TaskList();
-	static TaskPanel taskPanel = new TaskPanel();
-	static LoginDialog loginDialog;
+public class Startup extends JFrame {
 
-	public Startup() {
-		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3909146540187316216L;
+	private final static String LOOKANDFEEL = null;
+	private JPanel mainPane;
+	private ProjectList projectListPanel;
+	private TaskList taskListPanel;
+	private TaskPanel taskPanel;
+	private LoginDialog loginDialog;
+	private Session currentSession;
 
-	public static void main(String args[]) {
-
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
-			}
-		});
-	}
-
-	protected static void createAndShowGUI() {
-		
+	public Startup(String name) {
+		super(name);
 		GridBagConstraints gbc = new GridBagConstraints();
 		
 		// Set the look and feel.
 		initLookAndFeel();
 
 		// Create and set up the window.
-		frame = new JFrame("The Dream Tasker");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		// Create login dialog
-		loginDialog = new LoginDialog(frame);
+		loginDialog = new LoginDialog(this);
 		
 		// Create and set up the content pane.
-		Startup startup = new Startup();
-		startup.mainPane.setOpaque(true); // content panes must be opaque
-		frame.setContentPane(startup.mainPane);
+		mainPane = new JPanel();
+		mainPane.setOpaque(true); // content panes must be opaque
+		setContentPane(mainPane);
+		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
 		
-		frame.setJMenuBar(new ui.MenuBar());
-		frame.setPreferredSize(new Dimension(1200, 800));
+		setJMenuBar(new ui.MenuBar());
+		setPreferredSize(new Dimension(1200, 800));
 		
 		// Set layout
-		frame.setLayout(new GridBagLayout());
+		setLayout(new GridBagLayout());
 		
 		// Add panels
 		gbc.fill = GridBagConstraints.BOTH;
@@ -59,31 +51,46 @@ public class Startup {
 		gbc.gridy = 0;
 		gbc.weightx = 0.1;
 		gbc.weighty = 1;
-		frame.add(projectListPanel, gbc);
+		projectListPanel = new ProjectList();
+		add(projectListPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.weightx = 0.1;
 		gbc.weighty = 1;
-		frame.add(taskListPanel, gbc);
+		taskListPanel = new TaskList();
+		add(taskListPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.weightx = 0.8;
 		gbc.weighty = 1;
-		frame.add(taskPanel, gbc);
+		taskPanel = new TaskPanel();
+		add(taskPanel, gbc);
 		
 		// Start maximized
-		frame.setExtendedState( frame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+		setExtendedState(getExtendedState()|JFrame.MAXIMIZED_BOTH );
 		
 		// Display the window.
-		frame.pack();
-		frame.setVisible(true);
+		pack();
+		setVisible(true);
 		
 		// Display login dialog
 		loginDialog.setVisible(true);
-
+		
+		// Start current session as null
+		currentSession = null;
 	}
+
+	public static void main(String args[]) {
+
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new Startup("The Dream Tasker");
+			}
+		});
+	}
+
 
 	private static void initLookAndFeel() {
 		String lookAndFeel = null;
