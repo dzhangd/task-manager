@@ -32,6 +32,7 @@ public class Task {
             }
             task = null;
             s.close();
+            con.close();
             return tasks;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,6 +65,7 @@ public class Task {
 
             ps.executeUpdate();
             ps.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -81,6 +83,7 @@ public class Task {
             }
 
             s.close();
+            con.close();
             return maxTid;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,12 +109,10 @@ public class Task {
 
             ps.executeUpdate();
             ps.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        task = new Object[10];
-        setTask(tid, title, description, submittedDate, estimatedDate, completed, priority, d_id, m_id, pid);
-        tasks.add(task);
     }
 
     public void deleteTask(int tid) {
@@ -122,14 +123,9 @@ public class Task {
 
             ps.executeUpdate();
             ps.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        for (int i=0; i<tasks.size(); i++) {
-            if ((Integer) tasks.get(i)[0] == tid) {
-                tasks.remove(i);
-                return;
-            }
         }
     }
 }

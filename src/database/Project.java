@@ -30,6 +30,7 @@ public class Project {
             }
             project = null;
             s.close();
+            con.close();
             return projects;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -53,6 +54,7 @@ public class Project {
 
             ps.executeUpdate();
             ps.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,6 +71,7 @@ public class Project {
             }
 
             s.close();
+            con.close();
             return maxPid;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -86,12 +89,10 @@ public class Project {
 
             ps.executeUpdate();
             ps.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        project = new Object[3];
-        setProject(pid,name,description);
-        projects.add(project);
     }
 
     public void deleteProject(int pid) {
@@ -102,14 +103,9 @@ public class Project {
 
             ps.executeUpdate();
             ps.close();
+            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        for (int i=0; i<projects.size(); i++) {
-            if ((Integer) projects.get(i)[0] == pid) {
-                projects.remove(i);
-                return;
-            }
         }
     }
 }
