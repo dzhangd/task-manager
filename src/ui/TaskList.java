@@ -155,12 +155,20 @@ public class TaskList extends JPanel {
 				System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
 
 				// TODO: change stuff when users are available, but for now:
-				int tid = (Integer) newTaskList.get(selectedIndex)[0];
-				System.out.println("Task tid to edit is " + tid);
-				task.editTask(tid, newTaskName.getText(), newTaskDescription.getText(), newPriorityCombo.getSelectedIndex());
+				System.out.println("Task tid to edit is " + currentTid);
+				if (newTaskDescription.getText().isEmpty()) {
+					task.editTask(currentTid, newTaskName.getText(), null, newPriorityCombo.getSelectedIndex());
+				} else {
+					task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), newPriorityCombo.getSelectedIndex());
+				}
 				listModel.set(selectedIndex,newTaskName.getText());
 				taskPanel.title.setText(newTaskName.getText());
-				taskPanel.descriptionArea.setText(newTaskDescription.getText());
+				if (newTaskDescription.getText().isEmpty()) {
+					taskPanel.descriptionArea.setText("");
+				} else {
+					taskPanel.descriptionArea.setText(newTaskDescription.getText());
+				}
+				tasks = task.getTasks();
 
 			}
 		});
@@ -192,12 +200,23 @@ public class TaskList extends JPanel {
 
 				int tid = task.getMaxTid() + 1;
 				System.out.println("tid is " + tid);
-				int pid = currentPid;
 				java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
 				java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, priorityCombo.getSelectedIndex(), 1031, 1033, pid);
-				String title = (String) tasks.get(tasks.size()-1)[1];
-				listModel.addElement(title.trim());
+				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, priorityCombo.getSelectedIndex(), 1031, 1033, currentPid);
+
+				tasks = task.getTasks();
+				ArrayList<Object[]> temp = new ArrayList<Object[]>();
+				for (int i=0; i<tasks.size();i++) {
+					if (currentPid==(Integer) tasks.get(i)[9]) {
+						temp.add(tasks.get(i));
+					}
+				}
+				newTaskList = temp;
+				listModel.addElement("");
+				for (int i=0; i<newTaskList.size(); i++) {
+					String title = (String) newTaskList.get(i)[1];
+					listModel.set(i,title.trim());
+				}
 			}
 		});
 		removeTaskButton.addActionListener(new ActionListener()
@@ -221,9 +240,13 @@ public class TaskList extends JPanel {
 				if (optionChosen != 0) {
 					return;
 				}
-				int tid = (Integer) newTaskList.get(selectedIndex)[0];
-				task.deleteTask(tid);
-				listModel.remove(selectedIndex);
+				task.deleteTask(currentTid);
+				for (int i=0; i<newTaskList.size();i++) {
+					if (currentTid == (Integer) newTaskList.get(i)[0]) {
+						listModel.remove(i);
+						break;
+					}
+				}
 			}
 		});
 
@@ -252,6 +275,7 @@ public class TaskList extends JPanel {
 
 	private int selectedIndex;
 	ListSelectionModel lsm;
+	static int currentTid = 0;
 
 	class TaskListListener implements ListSelectionListener
 	{
@@ -270,18 +294,23 @@ public class TaskList extends JPanel {
 			+ " " + assignedToByAttributeBox.isSelected() + " " + managedByAttributeBox.isSelected() + " " + createdOntributeBox.isSelected()
 			+ " " + estimatedAttributeBox.isSelected() + " " + completedAttributeBox.isSelected());
 
-			if (!newTaskList.contains(tasks.get(tasks.size() - 1))) {
-				newTaskList.add(tasks.get(tasks.size() - 1));
-			}
+			currentTid = (Integer) newTaskList.get(selectedIndex)[0];
+			System.out.println("Current tid selected is " + currentTid);
 
 			if (taskPanel != null && selectedIndex >= 0) {
-				String title = (String) newTaskList.get(selectedIndex)[1];
+				String title = "";
+				String description = "";
+				for (int i=0; i<tasks.size();i++) {
+					if (currentTid == (Integer) tasks.get(i)[0]) {
+						title = (String) tasks.get(i)[1];
+						if (tasks.get(i)[2] != null) {
+							description = (String) tasks.get(i)[2];
+						}
+						break;
+					}
+				}
 				taskPanel.title.setText(title.trim());
-
-				String description = (String) newTaskList.get(selectedIndex)[2];
-				description = description.replace("’","\\'");
 				taskPanel.descriptionArea.setText(description.trim());
-				System.out.println("description is: " + description);
 
 				// TODO: CHANGE USER, ASSIGNED TO, MANAGER WHEN AVAILABLE
 

@@ -109,11 +109,25 @@ public class ProjectList extends JPanel {
                     return;
                 }
                 System.out.println("New project name is " + newProjectName.getText() + " new project description is " + newProjectDescription.getText());
-                int pid = (Integer) projects.get(selectedIndex)[0];
-                System.out.println("Project pid to edit is " + pid);
-                project.editProject(pid, newProjectName.getText(), newProjectDescription.getText());
-                listModel.set(selectedIndex, newProjectName.getText().trim());
-                projectDescription.setText(newProjectDescription.getText().trim());
+                System.out.println("Project pid to edit is " + currentPid);
+                if (newProjectDescription.getText().isEmpty()) {
+                    project.editProject(currentPid, newProjectName.getText(), null);
+                } else {
+                    project.editProject(currentPid, newProjectName.getText(), newProjectDescription.getText());
+                }
+                projects = project.getProjects();
+                for (int i=0; i< projects.size();i++) {
+                    if (currentPid == (Integer) projects.get(i)[0]) {
+                        String name = (String) projects.get(i)[1];
+                        String description = "";
+                        if (projects.get(i)[2] != null) {
+                            description = (String) projects.get(i)[2];
+                        }
+                        listModel.set(i,name.trim());
+                        projectDescription.setText(description.trim());
+                        return;
+                    }
+                }
             }
         });
         addProjectButton.addActionListener(new ActionListener()
@@ -137,8 +151,12 @@ public class ProjectList extends JPanel {
                 int maxPid = project.getMaxPid() + 1;
                 System.out.println("pid is " + maxPid);
                 project.addProject(maxPid, projectName.getText(), projectDescription.getText());
-                String name = (String) projects.get(projects.size() - 1)[1];
-                listModel.addElement(name.trim());
+                projects = project.getProjects();
+                listModel.addElement("");
+                for (int i=0; i<projects.size();i++) {
+                    String name = (String) projects.get(i)[1];
+                    listModel.set(i,name.trim());
+                }
             }
         });
         removeProjectButton.addActionListener(new ActionListener()
@@ -146,6 +164,7 @@ public class ProjectList extends JPanel {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 System.out.println("Remove Project Button Clicked");
+                System.out.println("Pid to remove is " + currentPid);
                 Object[] options = {"Yes",
                         "No",
                 };
@@ -162,9 +181,13 @@ public class ProjectList extends JPanel {
                 if (optionChosen != 0) {
                     return;
                 }
-                int pid = (Integer) projects.get(selectedIndex)[0];
-                project.deleteProject(pid);
-                listModel.remove(selectedIndex);
+                project.deleteProject(currentPid);
+                for (int i=0; i<projects.size();i++) {
+                    if (currentPid == (Integer) projects.get(i)[0]) {
+                        listModel.remove(i);
+                        break;
+                    }
+                }
             }
         });
 
@@ -205,6 +228,7 @@ public class ProjectList extends JPanel {
             if (e.getValueIsAdjusting()) {
                 return;
             }
+            projects = project.getProjects();
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             int firstIndex = e.getFirstIndex();
             int lastIndex = e.getLastIndex();
@@ -212,16 +236,21 @@ public class ProjectList extends JPanel {
             System.out.println("Project selected is: " + selectedIndex);
 
             currentPid = (Integer) projects.get(selectedIndex)[0];
-            String description = (String) projects.get(selectedIndex)[2];
+            System.out.println("Pid selected is " + currentPid);
+            String description = "";
+            for (int i=0; i<projects.size(); i++) {
+                if (currentPid == (Integer) projects.get(i)[0] && projects.get(i)[2] != null) {
+                    description = (String) projects.get(i)[2];
+                }
+            }
             projectDescription.setText(description.trim());
 
             taskListPanel.listModel.clear();
             tasks = task.getTasks();
             newTaskList = new ArrayList<Object[]>();
-            int pid = (Integer) projects.get(selectedIndex)[0];
             for (int i=0; i<tasks.size(); i++) {
                 int pid2 = (Integer) tasks.get(i)[9];
-                if (pid == pid2) {
+                if (currentPid == pid2) {
                     String title = (String) tasks.get(i)[1];
                     taskListPanel.listModel.addElement(title.trim());
                     newTaskList.add(tasks.get(i));
