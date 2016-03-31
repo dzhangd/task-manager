@@ -10,7 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
-
+import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
+import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
+import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -47,7 +49,7 @@ public class TaskList extends JPanel {
 	JCheckBox createdOntributeBox;
 	JCheckBox estimatedAttributeBox;
 	JCheckBox completedAttributeBox;
-	
+	JDatePickerImpl datePicker;
 	public TaskList()
 	{
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -183,6 +185,8 @@ public class TaskList extends JPanel {
 				JComboBox typeCombo = new JComboBox(type);
 				Object[] priority = {"1", "2", "3", "4", "5"};
 				JComboBox priorityCombo = new JComboBox(priority);
+				JLabel estimatedDate=new JLabel("DATE :");
+                                estimatedDate.setBounds(100,350,100,20);
 				Object[] message = {
 						"Task name:", taskName,
 						"Task Description:", taskDescription,
@@ -202,7 +206,8 @@ public class TaskList extends JPanel {
 				System.out.println("tid is " + tid);
 				java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
 				java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, priorityCombo.getSelectedIndex(), 1031, 1033, currentPid);
+				
+				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, estimatedDate,false, priorityCombo.getSelectedIndex(), 1031, 1033, currentPid);
 
 				tasks = task.getTasks();
 				ArrayList<Object[]> temp = new ArrayList<Object[]>();
