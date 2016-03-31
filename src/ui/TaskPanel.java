@@ -19,6 +19,7 @@ public class TaskPanel extends JPanel{
 	JLabel createdByLabel;
 	JLabel assignedToLabel;
 	JLabel mangedByLabel;
+	JLabel priorityLabel;
 	JLabel createdDate;
 	JLabel estimatedDate;
 	JLabel completedDate;
@@ -38,6 +39,8 @@ public class TaskPanel extends JPanel{
 		assignedToLabel.setOpaque(true);
 		mangedByLabel = new JLabel("MANAGED BY: ");
 		mangedByLabel.setOpaque(true);
+		priorityLabel = new JLabel("PRIORITY: ");
+		priorityLabel.setOpaque(true);
 		createdDate = new JLabel("CREATED: ");
 		createdDate.setOpaque(true);
 		estimatedDate = new JLabel("ESTIMATED: ");
@@ -58,7 +61,7 @@ public class TaskPanel extends JPanel{
 		gbc.gridy = 1;
 		gbc.weightx = 0.8;
 		gbc.weighty = 0.95;
-		gbc.gridheight = 7;
+		gbc.gridheight = 8;
 		this.add(descriptionScrollPane, gbc);
 
 
@@ -80,13 +83,17 @@ public class TaskPanel extends JPanel{
 		gbc.gridx = 1;
 		gbc.gridy = 4;
 		gbc.weightx = 0.2;
-		this.add(createdDate, gbc);
+		this.add(priorityLabel, gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 5;
 		gbc.weightx = 0.2;
-		this.add(estimatedDate, gbc);
+		this.add(createdDate, gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 6;
+		gbc.weightx = 0.2;
+		this.add(estimatedDate, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 7;
 		gbc.weightx = 0.2;
 		this.add(completedDate, gbc);
 	}
