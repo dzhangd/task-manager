@@ -8,6 +8,10 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,6 +19,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import connection.DatabaseConnection;
 import connection.Session;
 import database.Project;
 import database.Task;
@@ -156,13 +161,15 @@ public class TaskList extends JPanel {
 
 				// TODO: change stuff when users are available, but for now:
 				System.out.println("Task tid to edit is " + currentTid);
+				int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
 				if (newTaskDescription.getText().isEmpty()) {
-					task.editTask(currentTid, newTaskName.getText(), null, newPriorityCombo.getSelectedIndex());
+					task.editTask(currentTid, newTaskName.getText(), null, pri);
 				} else {
-					task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), newPriorityCombo.getSelectedIndex());
+					task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri);
 				}
 				listModel.set(selectedIndex,newTaskName.getText());
 				taskPanel.title.setText(newTaskName.getText());
+				taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(newPriorityCombo.getSelectedItem()));
 				if (newTaskDescription.getText().isEmpty()) {
 					taskPanel.descriptionArea.setText("");
 				} else {
@@ -202,7 +209,7 @@ public class TaskList extends JPanel {
 				System.out.println("tid is " + tid);
 				java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
 				java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, priorityCombo.getSelectedIndex(), 1031, 1033, currentPid);
+				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, (Integer) priorityCombo.getSelectedItem(), 1031, 1033, currentPid);
 
 				tasks = task.getTasks();
 				ArrayList<Object[]> temp = new ArrayList<Object[]>();
@@ -297,31 +304,107 @@ public class TaskList extends JPanel {
 			currentTid = (Integer) newTaskList.get(selectedIndex)[0];
 			System.out.println("Current tid selected is " + currentTid);
 
-			if (taskPanel != null && selectedIndex >= 0) {
-				String title = "";
-				String description = "";
-				for (int i=0; i<tasks.size();i++) {
-					if (currentTid == (Integer) tasks.get(i)[0]) {
-						title = (String) tasks.get(i)[1];
-						if (tasks.get(i)[2] != null) {
-							description = (String) tasks.get(i)[2];
-						}
-						break;
-					}
-				}
-				taskPanel.title.setText(title.trim());
-				taskPanel.descriptionArea.setText(description.trim());
-
-				// TODO: CHANGE USER, ASSIGNED TO, MANAGER WHEN AVAILABLE
-
-				Date subDate = (Date) newTaskList.get(selectedIndex)[3];
-				taskPanel.createdDate.setText("CREATED: " + String.valueOf(subDate));
-
-				Date comDate = (Date) newTaskList.get(selectedIndex)[4];
-				taskPanel.estimatedDate.setText("ESTIMATED: " + String.valueOf(comDate));
-
-
+			int count = 1;
+			String title,description,subDate,estDate,completed,priority,d_id,m_id;
+			title = description = subDate = estDate = completed = priority = d_id = m_id = "";
+			if (nameAttributeBox.isSelected()) {
+				title = "title, ";
+				count++;
 			}
+			if (descriptionAttributeBox.isSelected()) {
+				description = "description, ";
+				count ++;
+			}
+			if (createdOntributeBox.isSelected()) {
+				subDate = "submitted_date, ";
+				count++;
+			}
+			if (estimatedAttributeBox.isSelected()) {
+				estDate = "estimated_date, ";
+				count++;
+			}
+			if (completedAttributeBox.isSelected()) {
+				completed = "completed, ";
+				count ++;
+			}
+			if (priorityAttributeBox.isSelected()) {
+				priority = "priority, ";
+				count++;
+			}
+			if (assignedToByAttributeBox.isSelected()) {
+				d_id = "d_id, ";
+				count++;
+			}
+			if (managedByAttributeBox.isSelected()) {
+				m_id = "m_id, ";
+				count++;
+			}
+			String sqlQuery = "SELECT tid, " + title + description +
+					subDate + estDate + completed + priority + d_id + m_id + "pid " +
+					"FROM Task WHERE tid = " + String.valueOf(currentTid);
+
+
+
+
+			Connection con = DatabaseConnection.getConnection();
+			try {
+				Statement s = con.createStatement();
+				ResultSet rs = s.executeQuery(sqlQuery);
+				if (rs.next()) {
+					if (managedByAttributeBox.isSelected()) taskPanel.mangedByLabel.setText("MANAGED BY: " + rs.getString(count).trim());
+					else taskPanel.mangedByLabel.setText("MANAGED BY: ");
+					if (assignedToByAttributeBox.isSelected()) taskPanel.assignedToLabel.setText("ASSIGNED TO: " + rs.getString(--count).trim());
+					else taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
+					if (priorityAttributeBox.isSelected()) taskPanel.priorityLabel.setText("PRIORITY: " + rs.getString(--count).trim());
+					else taskPanel.priorityLabel.setText("PRIORITY: ");
+					if (completedAttributeBox.isSelected()) taskPanel.completedDate.setText("COMPLETED: " + rs.getString(--count).trim());
+					else taskPanel.completedDate.setText("COMPLETED: ");
+					if (estimatedAttributeBox.isSelected()) taskPanel.estimatedDate.setText("ESTIMATED: " + String.valueOf(rs.getDate(--count)).trim());
+					else taskPanel.estimatedDate.setText("ESTIMATED: ");
+					if (createdOntributeBox.isSelected()) taskPanel.createdDate.setText("CREATED: " + String.valueOf(rs.getDate(--count)).trim());
+					else taskPanel.createdDate.setText("CREATED: ");
+					if (descriptionAttributeBox.isSelected()) taskPanel.descriptionArea.setText(rs.getString(--count).trim());
+					else taskPanel.descriptionArea.setText("");
+					if (nameAttributeBox.isSelected()) taskPanel.title.setText(rs.getString(--count).trim());
+					else taskPanel.title.setText("TITLE");
+				}
+				s.close();
+				con.close();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+
+//			if (taskPanel != null && selectedIndex >= 0) {
+//				String title = "";
+//				String description = "";
+//				Date subDate = null;
+//				Date comDate = null;
+//				int priority = 0;
+//				for (int i=0; i<tasks.size();i++) {
+//					if (currentTid == (Integer) tasks.get(i)[0]) {
+//						title = (String) tasks.get(i)[1];
+//						if (tasks.get(i)[2] != null) {
+//							description = (String) tasks.get(i)[2];
+//						}
+//						subDate = (Date) tasks.get(i)[3];
+//						comDate = (Date) tasks.get(i)[4];
+//						priority = (Integer) tasks.get(i)[6];
+//						break;
+//					}
+//				}
+//
+//				taskPanel.title.setText(title.trim());
+//
+//				taskPanel.descriptionArea.setText(description.trim());
+//
+//				// TODO: CHANGE USER, ASSIGNED TO, MANAGER WHEN AVAILABLE
+//
+//				taskPanel.createdDate.setText("CREATED: " + String.valueOf(subDate));
+//				taskPanel.estimatedDate.setText("ESTIMATED: " + String.valueOf(comDate));
+//
+//				taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(priority));
+//
+//			}
 		}
 	}
 	
