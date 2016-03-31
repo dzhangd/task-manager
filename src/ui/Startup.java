@@ -11,7 +11,7 @@ public class Startup extends JFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3909146540187316216L;
+
 	private final static String LOOKANDFEEL = null;
 	private JPanel mainPane;
 	private ProjectList projectListPanel;
@@ -75,11 +75,15 @@ public class Startup extends JFrame {
 		pack();
 		setVisible(true);
 		
-		// Display login dialog
-		loginDialog.setVisible(true);
-		
 		// Start current session as null
 		currentSession = null;
+		
+		// Display login dialog
+		loginDialog.setVisible(true);
+	}
+	
+	public void setSession(Session s) {
+		this.currentSession = s;
 	}
 
 	public static void main(String args[]) {

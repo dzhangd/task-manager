@@ -2,27 +2,33 @@ package ui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.*;
 
+import connection.DatabaseConnection;
+import database.TeamMember;
+
 public class LoginDialog extends JDialog {
-	private JTextField tfUsername;
+	private JTextField tfEmail;
 	private JPasswordField pfPassword;
-	private JLabel lbUsername;
+	private JLabel lbEmail;
 	private JLabel lbPassword;
 	private JButton btnLogin;
 	private JButton btnExit;
 	
-	public LoginDialog(Frame parent) {
+	public LoginDialog(Startup parent) {
 		super(parent, "Login", true);
 		
 		JPanel panel = new JPanel(new FlowLayout());
 		
-		lbUsername = new JLabel("E-mail ");
-		panel.add(lbUsername);
+		lbEmail = new JLabel("E-mail ");
+		panel.add(lbEmail);
 		
-		tfUsername = new JTextField();
-		panel.add(tfUsername);
+		tfEmail = new JTextField();
+		panel.add(tfEmail);
 		
 		lbPassword = new JLabel("Password ");
 		panel.add(lbPassword);
@@ -31,9 +37,29 @@ public class LoginDialog extends JDialog {
 		panel.add(pfPassword);
 		
 		btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String email = tfEmail.getText();
+				String password = String.copyValueOf(pfPassword.getPassword());
+				if(validate(email, password)) {
+					ResultSet rs = TeamMember.findTeamMemberByEmail(email);
+			
+					try {
+						String name = rs.getString("name");
+						int id = rs.getInt("tmid");
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					
+				}
+				
+			}
+			
+		});
 		panel.add(btnLogin);
 		
-		// login listener here...
 		
 		btnExit = new JButton("Exit");
 		btnExit.addActionListener(new ActionListener() {
@@ -75,6 +101,11 @@ public class LoginDialog extends JDialog {
 		
 		setContentPane(panel);
 		
+	}
+
+	private boolean validate(String email, String password) {
+		
+		return false;
 	}
 	
 }

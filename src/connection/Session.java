@@ -1,11 +1,13 @@
 package connection;
 
+import database.TeamMemberType;
+
 public class Session {
 	private int id;
 	private String name;
-	private String type;	
+	TeamMemberType type;;	
 	
-	public Session(String name, int id, String type) {
+	public Session(String name, int id, TeamMemberType type) {
 		this.name = name;
 		this.id = id;
 		this.type = type;
@@ -19,7 +21,7 @@ public class Session {
 		return id;
 	}
 	
-	public String getType() {
+	public TeamMemberType getType() {
 		return type;
 	}
 }
