@@ -11,21 +11,22 @@ public class DatabaseConnection {
 
     private static Connection connection;
 
-    public DatabaseConnection() {
-        try {
-            connection = DriverManager.getConnection("jdbc:oracle:thin:@dbhost.ugrad.cs.ubc.ca:1521:ug", "ora_d8z9a", "a53033149");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public static Connection getConnection() {
-        try {
-            if (!connection.isClosed()) {
-                return connection;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } return null;
-    }
+	public static Connection getConnection() {
+		if (connection == null) {
+			try {
+				DriverManager
+						.registerDriver(new oracle.jdbc.driver.OracleDriver());
+				connection = DriverManager.getConnection(
+						"jdbc:oracle:thin:@localhost:1522:ug", "ora_v8a9",
+						"a31149131");
+				if (!connection.isClosed()) {
+					return connection;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return connection;
+	}
 }

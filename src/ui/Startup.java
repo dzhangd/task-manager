@@ -96,7 +96,7 @@ public class Startup extends JFrame {
 	}
 
 
-	private static void initLookAndFeel() {
+	private void initLookAndFeel() {
 		String lookAndFeel = null;
 
 		if (LOOKANDFEEL != null) {

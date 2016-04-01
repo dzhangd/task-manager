@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 import connection.DatabaseConnection;
+import connection.Session;
 import database.TeamMember;
+import database.TeamMemberType;
 
 public class LoginDialog extends JDialog {
 	private JTextField tfEmail;
@@ -22,18 +24,22 @@ public class LoginDialog extends JDialog {
 	public LoginDialog(Startup parent) {
 		super(parent, "Login", true);
 		
+
+		
 		JPanel panel = new JPanel(new FlowLayout());
 		
 		lbEmail = new JLabel("E-mail ");
 		panel.add(lbEmail);
 		
 		tfEmail = new JTextField();
+		tfEmail.setColumns(10);
 		panel.add(tfEmail);
 		
 		lbPassword = new JLabel("Password ");
 		panel.add(lbPassword);
 		
 		pfPassword = new JPasswordField();
+		pfPassword.setColumns(10);
 		panel.add(pfPassword);
 		
 		btnLogin = new JButton("Login");
@@ -43,18 +49,28 @@ public class LoginDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				String email = tfEmail.getText();
 				String password = String.copyValueOf(pfPassword.getPassword());
-				if(validate(email, password)) {
+				if(TeamMember.validate(email, password)) {
 					ResultSet rs = TeamMember.findTeamMemberByEmail(email);
 			
 					try {
 						String name = rs.getString("name");
 						int id = rs.getInt("tmid");
+						TeamMemberType type = TeamMember.findTypeById(id);
+						parent.setSession(new Session(name, id, type));
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
-					
+					dispose();
 				}
-				
+				else {
+					JOptionPane.showMessageDialog(LoginDialog.this,
+                            "Invalid email or password",
+                            "Login",
+                            JOptionPane.ERROR_MESSAGE);
+                    // reset email and password
+                    tfEmail.setText("");
+                    pfPassword.setText("");
+				}
 			}
 			
 		});
@@ -100,12 +116,12 @@ public class LoginDialog extends JDialog {
 		panel.add(btnExit);
 		
 		setContentPane(panel);
+		setLocationRelativeTo(parent);
+		setSize(new Dimension(400, 100));
+		setResizable(false);
+		
 		
 	}
 
-	private boolean validate(String email, String password) {
-		
-		return false;
-	}
 	
 }
