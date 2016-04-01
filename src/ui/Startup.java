@@ -6,60 +6,39 @@ import javax.swing.*;
 
 import connection.Session;
 
-public class Startup {
+public class Startup extends JFrame {
+	private final static String LOOKANDFEEL = null;
+	private JPanel mainPane;
+	private ProjectList projectListPanel;
+	private static TaskList taskListPanel;
+	private static TaskPanel taskPanel;
+	private LoginDialog loginDialog;
+	private static Session currentSession;
 
-
-	static JFrame frame;
-	final static String LOOKANDFEEL = null;
-	JPanel mainPane = new JPanel();
-	static ProjectList projectListPanel;
-	static TaskPanel taskPanel;
-	static TaskList taskListPanel;
-	static Session session;
-	
-	
-	public Startup() {
-		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
-	}
-
-	public static void main(String args[]) {
-
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				createAndShowGUI();
-			}
-		});
-	}
-
-	protected static void createAndShowGUI() {
-		
-		// Hacky session solution until actual login
-		// TODO Delete this later
-		session = new Session("PaRappa the Rapper", 42, Session.UserType.superUser);
-		
-		projectListPanel = new ProjectList();
-		taskListPanel = new TaskList();
-		taskPanel = new TaskPanel();
-		
+	public Startup(String name) {
+		super(name);
 		GridBagConstraints gbc = new GridBagConstraints();
 		
 		// Set the look and feel.
 		initLookAndFeel();
 
 		// Create and set up the window.
-		frame = new JFrame("The Dream Tasker");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		// Create and set up the content pane.
-		Startup startup = new Startup();
-		startup.mainPane.setOpaque(true); // content panes must be opaque
-		frame.setContentPane(startup.mainPane);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		frame.setJMenuBar(new ui.MenuBar());
-		frame.setPreferredSize(new Dimension(1200, 800));
+		// Create login dialog
+		loginDialog = new LoginDialog(this);
+		
+		// Create and set up the content pane.
+		mainPane = new JPanel();
+		mainPane.setOpaque(true); // content panes must be opaque
+		setContentPane(mainPane);
+		mainPane.setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		setJMenuBar(new ui.MenuBar());
+		setPreferredSize(new Dimension(1200, 800));
 		
 		// Set layout
-		frame.setLayout(new GridBagLayout());
+		setLayout(new GridBagLayout());
 		
 		// Add panels
 		gbc.fill = GridBagConstraints.BOTH;
@@ -67,30 +46,63 @@ public class Startup {
 		gbc.gridy = 0;
 		gbc.weightx = 0.1;
 		gbc.weighty = 1;
-		frame.add(projectListPanel, gbc);
+		projectListPanel = new ProjectList();
+		add(projectListPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.weightx = 0.1;
 		gbc.weighty = 1;
-		frame.add(taskListPanel, gbc);
+		taskListPanel = new TaskList();
+		add(taskListPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.weightx = 0.8;
 		gbc.weighty = 1;
-		frame.add(taskPanel, gbc);
+		taskPanel = new TaskPanel();
+		add(taskPanel, gbc);
 		
 		// Start maximized
-		frame.setExtendedState( frame.getExtendedState()|JFrame.MAXIMIZED_BOTH );
+		setExtendedState(getExtendedState()|JFrame.MAXIMIZED_BOTH );
 		
 		// Display the window.
-		frame.pack();
-		frame.setVisible(true);
-
+		pack();
+		setVisible(true);
+		
+		// Start current session as null
+		currentSession = null;
+		
+		// Display login dialog
+		loginDialog.setVisible(true);
+	}
+	
+	public void setSession(Session s) {
+		currentSession = s;
+	}
+	
+	public static Session getSession() {
+		return currentSession;
+	}
+	
+	public static TaskList getTaskListPanel() {
+		return taskListPanel;
+	}
+	
+	public static TaskPanel getTaskPanel() {
+		return taskPanel;
 	}
 
-	private static void initLookAndFeel() {
+	public static void main(String args[]) {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new Startup("The Dream Tasker");
+			}
+		});
+	}
+
+
+	private void initLookAndFeel() {
 		String lookAndFeel = null;
 
 		if (LOOKANDFEEL != null) {

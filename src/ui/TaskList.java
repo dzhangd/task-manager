@@ -23,11 +23,10 @@ import connection.DatabaseConnection;
 import connection.Session;
 import database.Project;
 import database.Task;
+import database.TeamMemberType;
 import ui.ProjectList.ProjectListListener;
-
 import static ui.ProjectList.currentPid;
 import static ui.ProjectList.newTaskList;
-import static ui.Startup.taskPanel;
 
 
 public class TaskList extends JPanel {
@@ -53,8 +52,14 @@ public class TaskList extends JPanel {
 	JCheckBox estimatedAttributeBox;
 	JCheckBox completedAttributeBox;
 	
+	private TaskPanel taskPanel;
+	private Session currentSession;
+	
 	public TaskList()
 	{
+		taskPanel = Startup.getTaskPanel();
+		currentSession = Startup.getSession();
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		this.setBackground(Color.CYAN);
 
@@ -410,31 +415,26 @@ public class TaskList extends JPanel {
 	
 	public void UserChanged()
 	{
-		if(Startup.session.getType() == Session.UserType.superUser)
-		{
-			editTaskButton.setEnabled(true);
-			addTaskButton.setEnabled(true);
-			removeTaskButton.setEnabled(true);
-		}
-		else if(Startup.session.getType() == Session.UserType.qa)
+
+		if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
 		{
 			editTaskButton.setEnabled(true);
 			addTaskButton.setEnabled(true);
 			removeTaskButton.setEnabled(false);
 		}
-		else if(Startup.session.getType() == Session.UserType.client)
+		else if(currentSession.getType() == TeamMemberType.CLIENT)
 		{
 			editTaskButton.setEnabled(true);
 			addTaskButton.setEnabled(true);
 			removeTaskButton.setEnabled(false);
 		}
-		else if(Startup.session.getType() == Session.UserType.manager)
+		else if(currentSession.getType() == TeamMemberType.MANAGER)
 		{
 			editTaskButton.setEnabled(true);
 			addTaskButton.setEnabled(false);
 			removeTaskButton.setEnabled(true);
 		}
-		else if(Startup.session.getType() == Session.UserType.developer)
+		else if(currentSession.getType() == TeamMemberType.DEVELOPER)
 		{
 			editTaskButton.setEnabled(true);
 			addTaskButton.setEnabled(false);

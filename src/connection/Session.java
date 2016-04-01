@@ -1,15 +1,13 @@
 package connection;
 
+import database.TeamMemberType;
+
 public class Session {
 	private int id;
 	private String name;
-	public enum UserType
-	{
-		superUser, manager, developer, qa, client
-	}
-	private UserType type;
+	TeamMemberType type;;	
 	
-	public Session(String name, int id, UserType type) {
+	public Session(String name, int id, TeamMemberType type) {
 		this.name = name;
 		this.id = id;
 		this.type = type;
@@ -23,7 +21,9 @@ public class Session {
 		return id;
 	}
 	
-	public UserType getType() {
+
+	public TeamMemberType getType() {
 		return type;
 	}
 }
+

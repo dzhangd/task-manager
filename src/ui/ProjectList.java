@@ -2,6 +2,7 @@ package ui;
 
 import database.Project;
 import database.Task;
+import database.TeamMemberType;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,8 +28,6 @@ import javax.swing.event.ListSelectionListener;
 
 import connection.Session;
 
-import static ui.Startup.taskListPanel;
-
 public class ProjectList extends JPanel {
 
 	JTextArea projectDescription = new JTextArea("Project Description");
@@ -36,6 +35,8 @@ public class ProjectList extends JPanel {
     ArrayList<Object[]> projects = project.getProjects();
     Task task = new Task();
     ArrayList<Object[]> tasks;
+    private TaskList taskListPanel;
+    private Session currentSession;
     
     JButton editProjectButton;
     JButton addProjectButton;
@@ -44,6 +45,8 @@ public class ProjectList extends JPanel {
 
     public ProjectList()
     {
+    	taskListPanel = Startup.getTaskListPanel();
+    	
         GridBagConstraints gbc = new GridBagConstraints();
         this.setPreferredSize(new Dimension(100, 0));
         this.setBackground(Color.WHITE);
@@ -261,31 +264,25 @@ public class ProjectList extends JPanel {
     
 	public void UserChanged()
 	{
-		if(Startup.session.getType() == Session.UserType.superUser)
-		{
-		    editProjectButton.setEnabled(true);
-		    addProjectButton.setEnabled(true);
-		    removeProjectButton.setEnabled(true);
-		}
-		else if(Startup.session.getType() == Session.UserType.qa)
+		if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
 		{
 		    editProjectButton.setEnabled(false);
 		    addProjectButton.setEnabled(false);
 		    removeProjectButton.setEnabled(false);
 		}
-		else if(Startup.session.getType() == Session.UserType.client)
+		else if(currentSession.getType() == TeamMemberType.CLIENT)
 		{
 		    editProjectButton.setEnabled(false);
 		    addProjectButton.setEnabled(false);
 		    removeProjectButton.setEnabled(false);
 		}
-		else if(Startup.session.getType() == Session.UserType.manager)
+		else if(currentSession.getType() == TeamMemberType.MANAGER)
 		{
 		    editProjectButton.setEnabled(true);
 		    addProjectButton.setEnabled(true);
 		    removeProjectButton.setEnabled(true);
 		}
-		else if(Startup.session.getType() == Session.UserType.developer)
+		else if(currentSession.getType() == TeamMemberType.DEVELOPER)
 		{
 		    editProjectButton.setEnabled(false);
 		    addProjectButton.setEnabled(false);
