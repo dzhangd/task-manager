@@ -129,5 +129,10 @@ public class LoginDialog extends JDialog {
 		
 	}
 
+	public void clearFields() {
+		tfEmail.setText("");
+		pfPassword.setText("");
+	}
+
 	
 }

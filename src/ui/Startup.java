@@ -12,7 +12,7 @@ public class Startup extends JFrame {
 	private ProjectList projectListPanel;
 	private static TaskList taskListPanel;
 	private static TaskPanel taskPanel;
-	private LoginDialog loginDialog;
+	private static LoginDialog loginDialog;
 	private static Session currentSession;
 
 	public Startup(String name) {
@@ -74,10 +74,15 @@ public class Startup extends JFrame {
 		currentSession = null;
 		
 		// Display login dialog
+		showLoginDialog();
+	}
+
+	public static void showLoginDialog() {
 		loginDialog.setVisible(true);
+		loginDialog.clearFields();
 	}
 	
-	public void setSession(Session s) {
+	public static void setSession(Session s) {
 		currentSession = s;
 	}
 	
@@ -92,6 +97,7 @@ public class Startup extends JFrame {
 	public static TaskPanel getTaskPanel() {
 		return taskPanel;
 	}
+
 
 	public static void main(String args[]) {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
