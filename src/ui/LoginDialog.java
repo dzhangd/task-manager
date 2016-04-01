@@ -53,10 +53,16 @@ public class LoginDialog extends JDialog {
 					ResultSet rs = TeamMember.findTeamMemberByEmail(email);
 			
 					try {
+						rs.next();
 						String name = rs.getString("name");
+						name = name.trim();
 						int id = rs.getInt("tmid");
 						TeamMemberType type = TeamMember.findTypeById(id);
 						parent.setSession(new Session(name, id, type));
+						JOptionPane.showMessageDialog(LoginDialog.this,
+								"Welcome " + name + ".",
+								"Login",
+								JOptionPane.INFORMATION_MESSAGE);
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}

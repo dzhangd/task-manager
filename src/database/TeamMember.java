@@ -12,13 +12,12 @@ public class TeamMember {
 	static Connection con = DatabaseConnection.getConnection();
 	
 	public static ResultSet findTeamMemberByEmail(String email) {
-		PreparedStatement stmt;
+		String query = "SELECT * "
+				     + "FROM TeamMember "
+				     + "WHERE email = \'" + email + "\'";
 		try {
-			stmt = con.prepareStatement("SELECT * " +
-					   					"FROM TeamMember " +
-					 					"WHERE email = ?");
-			stmt.setString(1, email);
-			return stmt.executeQuery();
+			Statement stmt = con.createStatement();
+			return stmt.executeQuery(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -35,6 +34,7 @@ public class TeamMember {
 					                    "WHERE tmid = ?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
+			rs.next();
 			if(rs.getInt(1) == 1)
 				return TeamMemberType.QUALITY_ASSURANCE;
 			
@@ -44,6 +44,7 @@ public class TeamMember {
 					                    "WHERE tmid = ?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
+			rs.next();
 			if(rs.getInt(1) == 1)
 				return TeamMemberType.DEVELOPER;
 			
@@ -53,6 +54,7 @@ public class TeamMember {
                                         "WHERE tmid = ?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
+			rs.next();
 			if(rs.getInt(1) == 1)
 				return TeamMemberType.MANAGER;
 			
@@ -62,6 +64,7 @@ public class TeamMember {
                     "WHERE tmid = ?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
+			rs.next();
 			if(rs.getInt(1) == 1)
 				return TeamMemberType.CLIENT;
 			
