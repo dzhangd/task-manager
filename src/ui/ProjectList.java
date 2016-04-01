@@ -264,30 +264,25 @@ public class ProjectList extends JPanel {
     
 	public void UserChanged()
 	{
-		if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
-		{
-		    editProjectButton.setEnabled(false);
-		    addProjectButton.setEnabled(false);
-		    removeProjectButton.setEnabled(false);
-		}
-		else if(currentSession.getType() == TeamMemberType.CLIENT)
-		{
-		    editProjectButton.setEnabled(false);
-		    addProjectButton.setEnabled(false);
-		    removeProjectButton.setEnabled(false);
-		}
-		else if(currentSession.getType() == TeamMemberType.MANAGER)
-		{
-		    editProjectButton.setEnabled(true);
-		    addProjectButton.setEnabled(true);
-		    removeProjectButton.setEnabled(true);
-		}
-		else if(currentSession.getType() == TeamMemberType.DEVELOPER)
-		{
-		    editProjectButton.setEnabled(false);
-		    addProjectButton.setEnabled(false);
-		    removeProjectButton.setEnabled(false);
-		}
+        if(currentSession != null) {
+            if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE) {
+                editProjectButton.setEnabled(false);
+                addProjectButton.setEnabled(false);
+                removeProjectButton.setEnabled(false);
+            } else if (currentSession.getType() == TeamMemberType.CLIENT) {
+                editProjectButton.setEnabled(false);
+                addProjectButton.setEnabled(false);
+                removeProjectButton.setEnabled(false);
+            } else if (currentSession.getType() == TeamMemberType.MANAGER) {
+                editProjectButton.setEnabled(true);
+                addProjectButton.setEnabled(true);
+                removeProjectButton.setEnabled(true);
+            } else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
+                editProjectButton.setEnabled(false);
+                addProjectButton.setEnabled(false);
+                removeProjectButton.setEnabled(false);
+            }
+        }
 	}
     
 }

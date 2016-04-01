@@ -415,30 +415,24 @@ public class TaskList extends JPanel {
 	
 	public void UserChanged()
 	{
-
-		if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
-		{
-			editTaskButton.setEnabled(true);
-			addTaskButton.setEnabled(true);
-			removeTaskButton.setEnabled(false);
-		}
-		else if(currentSession.getType() == TeamMemberType.CLIENT)
-		{
-			editTaskButton.setEnabled(true);
-			addTaskButton.setEnabled(true);
-			removeTaskButton.setEnabled(false);
-		}
-		else if(currentSession.getType() == TeamMemberType.MANAGER)
-		{
-			editTaskButton.setEnabled(true);
-			addTaskButton.setEnabled(false);
-			removeTaskButton.setEnabled(true);
-		}
-		else if(currentSession.getType() == TeamMemberType.DEVELOPER)
-		{
-			editTaskButton.setEnabled(true);
-			addTaskButton.setEnabled(false);
-			removeTaskButton.setEnabled(false);
+		if(currentSession != null) {
+			if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE) {
+				editTaskButton.setEnabled(true);
+				addTaskButton.setEnabled(true);
+				removeTaskButton.setEnabled(false);
+			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
+				editTaskButton.setEnabled(true);
+				addTaskButton.setEnabled(true);
+				removeTaskButton.setEnabled(false);
+			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
+				editTaskButton.setEnabled(true);
+				addTaskButton.setEnabled(false);
+				removeTaskButton.setEnabled(true);
+			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
+				editTaskButton.setEnabled(true);
+				addTaskButton.setEnabled(false);
+				removeTaskButton.setEnabled(false);
+			}
 		}
 	}
 
