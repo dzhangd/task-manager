@@ -60,8 +60,8 @@ public class TeamMember {
 			
 			// Check for Client
 			stmt = con.prepareStatement("SELECT COUNT(tmid) " +
-					"FROM Manager " + 
-                    "WHERE tmid = ?");
+										"FROM Client " + 
+                    					"WHERE tmid = ?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			rs.next();
