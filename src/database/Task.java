@@ -26,7 +26,7 @@ public class Task {
             ResultSet rs = s.executeQuery("SELECT * FROM Task");
             while (rs.next()) {
                 task = new Object[10];
-                setTask(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5),
+                setTask(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5),
                         rs.getBoolean(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10));
                 tasks.add(task);
             }
@@ -40,7 +40,7 @@ public class Task {
         return null;
     }
 
-    public void setTask(int tid, String title, String description, Date submittedDate, Date estimatedDate,
+    public void setTask(int tid, String title, String description, Date submittedDate, String estimatedDate,
                         Boolean completed, int priority, int d_id, int m_id, int pid) {
         task[0] = tid;
         task[1] = title;
@@ -91,7 +91,7 @@ public class Task {
         return 0;
     }
 
-    public void addTask(int tid, String title, String description, Date submittedDate, Date estimatedDate,
+    public void addTask(int tid, String title, String description, Date submittedDate, String estimatedDate,
                         Boolean completed, int priority, int d_id, int m_id, int pid) {
         con = DatabaseConnection.getConnection();
         try {
@@ -100,7 +100,7 @@ public class Task {
             ps.setString(2, title);
             ps.setString(3, description);
             ps.setDate(4, submittedDate);
-            ps.setDate(5, estimatedDate);
+            ps.setString(5, estimatedDate);
             ps.setBoolean(6, completed);
             ps.setInt(7, priority);
             ps.setInt(8, d_id);
