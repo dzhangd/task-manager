@@ -272,6 +272,7 @@ public class ProjectList extends JPanel {
     
 	public void UserChanged()
 	{
+		currentSession = Startup.getSession();
         if(currentSession != null) {
             if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE) {
                 editProjectButton.setEnabled(false);

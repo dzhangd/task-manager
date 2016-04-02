@@ -416,6 +416,7 @@ public class TaskList extends JPanel {
 	public void UserChanged()
 	{
 		System.out.println("USER CHANGED TASK LIST");
+		currentSession = Startup.getSession();
 		if(currentSession != null) {
 			if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE) {
 				editTaskButton.setEnabled(true);

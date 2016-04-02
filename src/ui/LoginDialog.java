@@ -65,6 +65,7 @@ public class LoginDialog extends JDialog {
 								"Welcome " + name + ".",
 								"Login",
 								JOptionPane.INFORMATION_MESSAGE);
+						parent.UserChanged();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
