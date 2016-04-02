@@ -56,7 +56,15 @@ public class ProjectList extends JPanel {
         final DefaultListModel listModel = new DefaultListModel();
         for (int i=0; i<projects.size(); i++) {
             String temp = (String) projects.get(i)[1];
-            listModel.addElement(temp.trim());
+            System.out.println(temp);
+            if(temp != null)
+            {
+                listModel.addElement(temp.trim());
+            }
+            else
+            {
+                listModel.addElement("ERROR NULL PLZ FIX");	
+            }
         }
 
         JList projectJList = new JList(listModel);

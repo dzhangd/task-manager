@@ -151,4 +151,11 @@ public class Startup extends JFrame {
 		}
 
 	}
+	
+	// Call all the stuff that needs to be called when user change
+	public void UserChanged()
+	{
+		taskListPanel.UserChanged();
+		projectListPanel.UserChanged();
+	}
 }
