@@ -141,44 +141,54 @@ public class TaskList extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Edit Task Button Clicked");
-				JTextField newTaskName = new JTextField();
-				JTextField newTaskDescription = new JTextField();
-				Object[] type = {"Bug", "Feature"};
-				JComboBox<?> newTypeCombo = new JComboBox<Object>(type);
-				Object[] priority = {"1", "2", "3", "4", "5"};
-				JComboBox<?> newPriorityCombo = new JComboBox<Object>(priority);
-				Object[] message = {
-						"Task name:", newTaskName,
-						"Task Description:", newTaskDescription,
-						"Type:", newTypeCombo,
-						"Priority:", newPriorityCombo
-				};
-				
-				int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-				if(editTaskSelection != 0)
+				currentSession = Startup.getSession();
+				if(currentSession != null)
 				{
-					return;
+					JTextField newTaskName = new JTextField();
+					JTextField newTaskDescription = new JTextField();
+					Object[] type = {"should not see this"};
+					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
+					{
+						type = new Object[]{"Bug"};
+					}
+					else if (currentSession.getType() == TeamMemberType.CLIENT)
+					{
+						type = new Object[]{"Feature"};
+					}
+					JComboBox newTypeCombo = new JComboBox(type);
+					Object[] priority = {"1", "2", "3", "4", "5"};
+					JComboBox newPriorityCombo = new JComboBox(priority);
+					Object[] message = {
+							"Task name:", newTaskName,
+							"Task Description:", newTaskDescription,
+							"Type:", newTypeCombo,
+							"Priority:", newPriorityCombo
+					};
+					int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+					if(editTaskSelection != 0)
+					{
+						return;
+					}
+					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
+	
+					// TODO: change stuff when users are available, but for now:
+					System.out.println("Task tid to edit is " + currentTid);
+					int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
+					if (newTaskDescription.getText().isEmpty()) {
+						task.editTask(currentTid, newTaskName.getText(), null, pri);
+					} else {
+						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri);
+					}
+					listModel.set(selectedIndex,newTaskName.getText());
+					taskPanel.title.setText(newTaskName.getText());
+					taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(newPriorityCombo.getSelectedItem()));
+					if (newTaskDescription.getText().isEmpty()) {
+						taskPanel.descriptionArea.setText("");
+					} else {
+						taskPanel.descriptionArea.setText(newTaskDescription.getText());
+					}
+					tasks = task.getTasks();
 				}
-				System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
-
-				// TODO: change stuff when users are available, but for now:
-				System.out.println("Task tid to edit is " + currentTid);
-				int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
-				if (newTaskDescription.getText().isEmpty()) {
-					task.editTask(currentTid, newTaskName.getText(), null, pri);
-				} else {
-					task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri);
-				}
-				listModel.set(selectedIndex,newTaskName.getText());
-				taskPanel.title.setText(newTaskName.getText());
-				taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(newPriorityCombo.getSelectedItem()));
-				if (newTaskDescription.getText().isEmpty()) {
-					taskPanel.descriptionArea.setText("");
-				} else {
-					taskPanel.descriptionArea.setText(newTaskDescription.getText());
-				}
-				tasks = task.getTasks();
-
 			}
 		});
 		addTaskButton.addActionListener(new ActionListener()
@@ -186,50 +196,60 @@ public class TaskList extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Add Task Button Clicked");
-				JTextField taskName = new JTextField();
-				JTextField taskDescription = new JTextField();
-				Object[] type = {"Bug", "Feature"};
-				JComboBox<?> typeCombo = new JComboBox<Object>(type);
-				Object[] priority = {"1", "2", "3", "4", "5"};
-				JComboBox<?> priorityCombo = new JComboBox<Object>(priority);
-				JTextField expectedDate= new JTextField();
-				expectedDate.setText("dd/mm/yy");
-				
-				
-				Object[] message = {
-						"Task name:", taskName,
-						"Task Description:", taskDescription,
-						"Type:", typeCombo,
-						"Priority:", priorityCombo,
-						//"expectedDate(Enter in the format dd/mm/yy:", expectedDate
-				};
-				int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-				if(addTaskSelection != 0)
+				currentSession = Startup.getSession();
+				if(currentSession != null)
 				{
-					return;
-				}
-
-				// TODO: change later when available!
-				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
-
-				int tid = task.getMaxTid() + 1;
-				System.out.println("tid is " + tid);
-				java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
-				java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, (Integer) priorityCombo.getSelectedItem(),1031, 1033, currentPid);
-
-				tasks = task.getTasks();
-				ArrayList<Object[]> temp = new ArrayList<Object[]>();
-				for (int i=0; i<tasks.size();i++) {
-					if (currentPid==(Integer) tasks.get(i)[9]) {
-						temp.add(tasks.get(i));
+					JTextField taskName = new JTextField();
+					JTextField taskDescription = new JTextField();
+					Object[] type = {"should not see this"};
+					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
+					{
+						type = new Object[]{"Bug"};
 					}
-				}
-				newTaskList = temp;
-				listModel.addElement("");
-				for (int i=0; i<newTaskList.size(); i++) {
-					String title = (String) newTaskList.get(i)[1];
-					listModel.set(i,title.trim());
+					else if (currentSession.getType() == TeamMemberType.CLIENT)
+					{
+						type = new Object[]{"Feature"};
+					}
+					JComboBox typeCombo = new JComboBox(type);
+					Object[] priority = {"1", "2", "3", "4", "5"};
+					JComboBox priorityCombo = new JComboBox(priority);
+					JTextField estimatedDate = new JTextField();
+					estimatedDate.setText("Enter yyyy/mm/dd");
+					Object[] message = {
+							"Task name:", taskName,
+							"Task Description:", taskDescription,
+							"Type:", typeCombo,
+							"Priority:", priorityCombo,
+							"estimatedDate", estimatedDate
+					};
+					int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+					if(addTaskSelection != 0)
+					{
+						return;
+					}
+	
+					// TODO: change later when available!
+					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex()+ "estimatedDate is "+estimatedDate.getText());
+	
+					int tid = task.getMaxTid() + 1;
+					System.out.println("tid is " + tid);
+					java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
+					//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), false, (Integer) priorityCombo.getSelectedItem(), 1031, 1033, currentPid);
+	
+					tasks = task.getTasks();
+					ArrayList<Object[]> temp = new ArrayList<Object[]>();
+					for (int i=0; i<tasks.size();i++) {
+						if (currentPid==(Integer) tasks.get(i)[9]) {
+							temp.add(tasks.get(i));
+						}
+					}
+					newTaskList = temp;
+					listModel.addElement("");
+					for (int i=0; i<newTaskList.size(); i++) {
+						String title = (String) newTaskList.get(i)[1];
+						listModel.set(i,title.trim());
+					}
 				}
 			}
 		});
