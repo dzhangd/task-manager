@@ -195,7 +195,7 @@ public class TaskList extends JPanel {
 				}
 			}
 		});
-		addTaskButton.addActionListener(new ActionListener()
+	addTaskButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -217,11 +217,14 @@ public class TaskList extends JPanel {
 					JComboBox typeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
 					JComboBox priorityCombo = new JComboBox(priority);
+					JTextField estimatedDate = new JTextField();
+					estimatedDate.setText("Enter yyyy/mm/dd");
 					Object[] message = {
 							"Task name:", taskName,
 							"Task Description:", taskDescription,
 							"Type:", typeCombo,
-							"Priority:", priorityCombo
+							"Priority:", priorityCombo,
+							"estimatedDate", estimatedDate
 					};
 					int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 					if(addTaskSelection != 0)
@@ -230,13 +233,13 @@ public class TaskList extends JPanel {
 					}
 	
 					// TODO: change later when available!
-					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex()+ "estimatedDate is "+estimatedDate.getText());
 	
 					int tid = task.getMaxTid() + 1;
 					System.out.println("tid is " + tid);
 					java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
-					java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, (Integer) priorityCombo.getSelectedItem(), 1031, 1033, currentPid);
+					//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), false, (Integer) priorityCombo.getSelectedItem(), 1031, 1033, currentPid);
 	
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
