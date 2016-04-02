@@ -40,27 +40,29 @@ public class Startup extends JFrame {
 		// Set layout
 		setLayout(new GridBagLayout());
 		
+		// Create Panels
+		taskPanel = new TaskPanel();
+		taskListPanel = new TaskList();
+		projectListPanel = new ProjectList();
+		
 		// Add panels
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.weightx = 0.1;
 		gbc.weighty = 1;
-		projectListPanel = new ProjectList();
 		add(projectListPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.weightx = 0.1;
 		gbc.weighty = 1;
-		taskListPanel = new TaskList();
 		add(taskListPanel, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		gbc.weightx = 0.8;
 		gbc.weighty = 1;
-		taskPanel = new TaskPanel();
 		add(taskPanel, gbc);
 		
 		// Start maximized
