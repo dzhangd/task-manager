@@ -263,7 +263,14 @@ public class ProjectList extends JPanel {
                 int pid2 = (Integer) tasks.get(i)[9];
                 if (currentPid == pid2) {
                     String title = (String) tasks.get(i)[1];
-                    taskListPanel.listModel.addElement(title.trim());
+                    if(title != null)
+                    {
+                    	taskListPanel.listModel.addElement(title.trim());
+                    }
+                    else
+                    {
+                    	taskListPanel.listModel.addElement("Should not see this plz fix");
+                    }
                     newTaskList.add(tasks.get(i));
                 }
             }

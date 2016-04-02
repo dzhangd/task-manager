@@ -189,45 +189,57 @@ public class TaskList extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Add Task Button Clicked");
-				JTextField taskName = new JTextField();
-				JTextField taskDescription = new JTextField();
-				Object[] type = {"Bug", "Feature"};
-				JComboBox typeCombo = new JComboBox(type);
-				Object[] priority = {"1", "2", "3", "4", "5"};
-				JComboBox priorityCombo = new JComboBox(priority);
-				Object[] message = {
-						"Task name:", taskName,
-						"Task Description:", taskDescription,
-						"Type:", typeCombo,
-						"Priority:", priorityCombo
-				};
-				int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-				if(addTaskSelection != 0)
+				currentSession = Startup.getSession();
+				if(currentSession != null)
 				{
-					return;
-				}
-
-				// TODO: change later when available!
-				System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
-
-				int tid = task.getMaxTid() + 1;
-				System.out.println("tid is " + tid);
-				java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
-				java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, (Integer) priorityCombo.getSelectedItem(), 1031, 1033, currentPid);
-
-				tasks = task.getTasks();
-				ArrayList<Object[]> temp = new ArrayList<Object[]>();
-				for (int i=0; i<tasks.size();i++) {
-					if (currentPid==(Integer) tasks.get(i)[9]) {
-						temp.add(tasks.get(i));
+					JTextField taskName = new JTextField();
+					JTextField taskDescription = new JTextField();
+					Object[] type = {"should not see this"};
+					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
+					{
+						type = new Object[]{"Bug"};
 					}
-				}
-				newTaskList = temp;
-				listModel.addElement("");
-				for (int i=0; i<newTaskList.size(); i++) {
-					String title = (String) newTaskList.get(i)[1];
-					listModel.set(i,title.trim());
+					else if (currentSession.getType() == TeamMemberType.CLIENT)
+					{
+						type = new Object[]{"Feature"};
+					}
+					JComboBox typeCombo = new JComboBox(type);
+					Object[] priority = {"1", "2", "3", "4", "5"};
+					JComboBox priorityCombo = new JComboBox(priority);
+					Object[] message = {
+							"Task name:", taskName,
+							"Task Description:", taskDescription,
+							"Type:", typeCombo,
+							"Priority:", priorityCombo
+					};
+					int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+					if(addTaskSelection != 0)
+					{
+						return;
+					}
+	
+					// TODO: change later when available!
+					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+	
+					int tid = task.getMaxTid() + 1;
+					System.out.println("tid is " + tid);
+					java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
+					java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, comDate, false, (Integer) priorityCombo.getSelectedItem(), 1031, 1033, currentPid);
+	
+					tasks = task.getTasks();
+					ArrayList<Object[]> temp = new ArrayList<Object[]>();
+					for (int i=0; i<tasks.size();i++) {
+						if (currentPid==(Integer) tasks.get(i)[9]) {
+							temp.add(tasks.get(i));
+						}
+					}
+					newTaskList = temp;
+					listModel.addElement("");
+					for (int i=0; i<newTaskList.size(); i++) {
+						String title = (String) newTaskList.get(i)[1];
+						listModel.set(i,title.trim());
+					}
 				}
 			}
 		});
@@ -356,22 +368,112 @@ public class TaskList extends JPanel {
 				Statement s = con.createStatement();
 				ResultSet rs = s.executeQuery(sqlQuery);
 				if (rs.next()) {
-					if (managedByAttributeBox.isSelected()) taskPanel.mangedByLabel.setText("MANAGED BY: " + rs.getString(count).trim());
-					else taskPanel.mangedByLabel.setText("MANAGED BY: ");
-					if (assignedToByAttributeBox.isSelected()) taskPanel.assignedToLabel.setText("ASSIGNED TO: " + rs.getString(--count).trim());
-					else taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
-					if (priorityAttributeBox.isSelected()) taskPanel.priorityLabel.setText("PRIORITY: " + rs.getString(--count).trim());
-					else taskPanel.priorityLabel.setText("PRIORITY: ");
-					if (completedAttributeBox.isSelected()) taskPanel.completedDate.setText("COMPLETED: " + rs.getString(--count).trim());
-					else taskPanel.completedDate.setText("COMPLETED: ");
-					if (estimatedAttributeBox.isSelected()) taskPanel.estimatedDate.setText("ESTIMATED: " + String.valueOf(rs.getDate(--count)).trim());
-					else taskPanel.estimatedDate.setText("ESTIMATED: ");
-					if (createdOntributeBox.isSelected()) taskPanel.createdDate.setText("CREATED: " + String.valueOf(rs.getDate(--count)).trim());
-					else taskPanel.createdDate.setText("CREATED: ");
-					if (descriptionAttributeBox.isSelected()) taskPanel.descriptionArea.setText(rs.getString(--count).trim());
-					else taskPanel.descriptionArea.setText("");
-					if (nameAttributeBox.isSelected()) taskPanel.title.setText(rs.getString(--count).trim());
-					else taskPanel.title.setText("TITLE");
+					
+					String tempString;
+					
+					if (managedByAttributeBox.isSelected())
+					{
+						tempString = rs.getString(count);
+						if(tempString != null)
+						{
+							taskPanel.mangedByLabel.setText("MANAGED BY: " + tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.mangedByLabel.setText("MANAGED BY: ");
+					}
+					
+					if (assignedToByAttributeBox.isSelected())
+					{
+						tempString = rs.getString(--count);
+						if(tempString != null)
+						{
+							taskPanel.mangedByLabel.setText("MANAGED BY: " + tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.mangedByLabel.setText("MANAGED BY: ");
+					}
+					
+					if (priorityAttributeBox.isSelected())
+					{
+						tempString = rs.getString(--count);
+						if(tempString != null)
+						{
+							taskPanel.priorityLabel.setText("PRIORITY: " + tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.priorityLabel.setText("PRIORITY: ");
+					}
+					
+					if (completedAttributeBox.isSelected())
+					{
+						tempString = rs.getString(--count);
+						if(tempString != null)
+						{
+							taskPanel.completedDate.setText("COMPLETED: " + tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.completedDate.setText("COMPLETED: ");
+					}
+					
+					if (estimatedAttributeBox.isSelected())
+					{
+						tempString = rs.getString(--count);
+						if(tempString != null)
+						{
+							taskPanel.estimatedDate.setText("ESTIMATED: " + tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.estimatedDate.setText("ESTIMATED: ");
+					}
+					
+					if (createdOntributeBox.isSelected())
+					{
+						tempString = rs.getString(--count);
+						if(tempString != null)
+						{
+							taskPanel.createdDate.setText("CREATED: " + tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.createdDate.setText("CREATED: ");
+					}
+					
+					if (descriptionAttributeBox.isSelected())
+					{
+						tempString = rs.getString(--count);
+						if(tempString != null)
+						{
+							taskPanel.descriptionArea.setText(tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.descriptionArea.setText("MANAGED BY: ");
+					}
+					
+					if (nameAttributeBox.isSelected())
+					{
+						tempString = rs.getString(--count);
+						if(tempString != null)
+						{
+							taskPanel.title.setText(tempString.trim());	
+						}
+					}
+					else 
+					{
+						taskPanel.title.setText("TITLE");
+					}
 				}
 				s.close();
 				con.close();
