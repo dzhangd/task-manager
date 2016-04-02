@@ -145,43 +145,54 @@ public class TaskList extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Edit Task Button Clicked");
-				JTextField newTaskName = new JTextField();
-				JTextField newTaskDescription = new JTextField();
-				Object[] type = {"Bug", "Feature"};
-				JComboBox newTypeCombo = new JComboBox(type);
-				Object[] priority = {"1", "2", "3", "4", "5"};
-				JComboBox newPriorityCombo = new JComboBox(priority);
-				Object[] message = {
-						"Task name:", newTaskName,
-						"Task Description:", newTaskDescription,
-						"Type:", newTypeCombo,
-						"Priority:", newPriorityCombo
-				};
-				int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-				if(editTaskSelection != 0)
+				currentSession = Startup.getSession();
+				if(currentSession != null)
 				{
-					return;
+					JTextField newTaskName = new JTextField();
+					JTextField newTaskDescription = new JTextField();
+					Object[] type = {"should not see this"};
+					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
+					{
+						type = new Object[]{"Bug"};
+					}
+					else if (currentSession.getType() == TeamMemberType.CLIENT)
+					{
+						type = new Object[]{"Feature"};
+					}
+					JComboBox newTypeCombo = new JComboBox(type);
+					Object[] priority = {"1", "2", "3", "4", "5"};
+					JComboBox newPriorityCombo = new JComboBox(priority);
+					Object[] message = {
+							"Task name:", newTaskName,
+							"Task Description:", newTaskDescription,
+							"Type:", newTypeCombo,
+							"Priority:", newPriorityCombo
+					};
+					int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+					if(editTaskSelection != 0)
+					{
+						return;
+					}
+					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
+	
+					// TODO: change stuff when users are available, but for now:
+					System.out.println("Task tid to edit is " + currentTid);
+					int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
+					if (newTaskDescription.getText().isEmpty()) {
+						task.editTask(currentTid, newTaskName.getText(), null, pri);
+					} else {
+						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri);
+					}
+					listModel.set(selectedIndex,newTaskName.getText());
+					taskPanel.title.setText(newTaskName.getText());
+					taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(newPriorityCombo.getSelectedItem()));
+					if (newTaskDescription.getText().isEmpty()) {
+						taskPanel.descriptionArea.setText("");
+					} else {
+						taskPanel.descriptionArea.setText(newTaskDescription.getText());
+					}
+					tasks = task.getTasks();
 				}
-				System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
-
-				// TODO: change stuff when users are available, but for now:
-				System.out.println("Task tid to edit is " + currentTid);
-				int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
-				if (newTaskDescription.getText().isEmpty()) {
-					task.editTask(currentTid, newTaskName.getText(), null, pri);
-				} else {
-					task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri);
-				}
-				listModel.set(selectedIndex,newTaskName.getText());
-				taskPanel.title.setText(newTaskName.getText());
-				taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(newPriorityCombo.getSelectedItem()));
-				if (newTaskDescription.getText().isEmpty()) {
-					taskPanel.descriptionArea.setText("");
-				} else {
-					taskPanel.descriptionArea.setText(newTaskDescription.getText());
-				}
-				tasks = task.getTasks();
-
 			}
 		});
 		addTaskButton.addActionListener(new ActionListener()
