@@ -486,7 +486,7 @@ public class TaskList extends JPanel {
 						Timestamp tempTimestamp = rs.getTimestamp(--count);
 						if(tempTimestamp != null)
 						{
-							taskPanel.completedDate.setText("COMPLETED: " + tempTimestamp.toString().trim());	
+							taskPanel.completedDate.setText("COMPLETED: " + tempTimestamp.toString().substring(0, tempTimestamp.toString().lastIndexOf(":")));	
 						}
 					}
 					else 
@@ -499,7 +499,7 @@ public class TaskList extends JPanel {
 						Timestamp tempTimestamp = rs.getTimestamp(--count);
 						if(tempTimestamp != null)
 						{
-							taskPanel.estimatedDate.setText("ESTIMATED: " + tempTimestamp.toString().trim());	
+							taskPanel.estimatedDate.setText("ESTIMATED: " + tempTimestamp.toString().substring(0, tempTimestamp.toString().lastIndexOf(":")));	
 						}
 					}
 					else 
@@ -512,7 +512,7 @@ public class TaskList extends JPanel {
 						Timestamp tempTimestamp = rs.getTimestamp(--count);
 						if(tempTimestamp != null)
 						{
-							taskPanel.createdDate.setText("CREATED: " + tempTimestamp.toString().trim());	
+							taskPanel.createdDate.setText("CREATED: " + tempTimestamp.toString().substring(0, tempTimestamp.toString().lastIndexOf(":")));	
 						}
 					}
 					else 
