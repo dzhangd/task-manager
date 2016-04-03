@@ -218,7 +218,6 @@ public class TaskList extends JPanel {
 					{
 						type = new Object[]{"Feature"};
 					}
-					JComboBox newTypeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
 					JComboBox newPriorityCombo = new JComboBox(priority);
 					JTextField setEstimatedDate = new JTextField();
@@ -247,11 +246,15 @@ public class TaskList extends JPanel {
                     	setCompleted.setEnabled(false);
 					}
 					
-					
+                    newTaskName.setText(taskPanel.title.getText());
+                    newTaskDescription.setText(taskPanel.descriptionArea.getText());
+                    newPriorityCombo.setSelectedIndex(Integer.parseInt(taskPanel.priorityLabel.getText().substring(taskPanel.priorityLabel.getText().length()-1, taskPanel.priorityLabel.getText().length())) - 1);
+                    setEstimatedDate.setText(taskPanel.estimatedDate.getText().replace("ESTIMATED: ", ""));
+                    setCompletedDate.setText(taskPanel.completedDate.getText().replace("COMPLETED: ", ""));
+                    
 					Object[] message = {
 							"Task name:", newTaskName,
 							"Task Description:", newTaskDescription,
-							"Type:", newTypeCombo,
 							"Priority:", newPriorityCombo,
 							"Estimated Date (yyyy-MM-dd HH:mm):", setEstimatedDate,
 							"Completed (yyyy-MM-dd HH:mm):", setCompletedDate,
@@ -290,7 +293,7 @@ public class TaskList extends JPanel {
 					}
 					
 					
-					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
+					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " Priority index is " + newPriorityCombo.getSelectedIndex());
 	
 					// TODO: change stuff when users are available, but for now:
 					System.out.println("Task tid to edit is " + currentTid);
