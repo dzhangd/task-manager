@@ -12,6 +12,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -54,8 +56,7 @@ public class TaskList extends JPanel {
 	JCheckBox createdOntributeBox;
 	JCheckBox estimatedAttributeBox;
 	JCheckBox completedAttributeBox;
-	JCheckBox setCompletenessAttributeBox;
-	JCheckBox SetEstimatedAttributeBox;
+	
 	private TaskPanel taskPanel;
 	private Session currentSession;
 	
@@ -102,8 +103,6 @@ public class TaskList extends JPanel {
 		createdOntributeBox = new JCheckBox("created");
 		estimatedAttributeBox = new JCheckBox("estimated");
 		completedAttributeBox = new JCheckBox("completed");
-		SetEstimatedAttributeBox = new JCheckBox("estimated");
-	    setCompletenessAttributeBox = new JCheckBox("completed");
 		
 		nameAttributeBox.setSelected(true);
 		descriptionAttributeBox.setSelected(true);
@@ -115,8 +114,6 @@ public class TaskList extends JPanel {
 		createdOntributeBox.setSelected(true);
 		estimatedAttributeBox.setSelected(true);
 		completedAttributeBox.setSelected(true);
-		SetEstimatedAttributeBox.setSelected(true);
-		setCompletenessAttributeBox.setSelected(true);
 		
 		
 		taskAttributeButtonPanel.add(nameAttributeBox);
@@ -129,7 +126,6 @@ public class TaskList extends JPanel {
 		taskAttributeButtonPanel.add(createdOntributeBox);
 		taskAttributeButtonPanel.add(estimatedAttributeBox);
 		taskAttributeButtonPanel.add(completedAttributeBox);
-		
 		
 		
 		
@@ -211,6 +207,8 @@ public class TaskList extends JPanel {
 				{
 					JTextField newTaskName = new JTextField();
 					JTextField newTaskDescription = new JTextField();
+				
+					
 					Object[] type = {"should not see this"};
 					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
 					{
@@ -220,10 +218,11 @@ public class TaskList extends JPanel {
 					{
 						type = new Object[]{"Feature"};
 					}
-                    if(currentSession.getType()== TeamMemberType.DEVELOPER){
-                    	setCompletenessAttributeBox.setEnabled(true);
+                    if(currentSession.getType()!= TeamMemberType.DEVELOPER){
+                    	
 					}
 					JComboBox newTypeCombo = new JComboBox(type);
+				
 					Object[] priority = {"1", "2", "3", "4", "5"};
 					JComboBox newPriorityCombo = new JComboBox(priority);
 					Object[] message = {
@@ -231,9 +230,10 @@ public class TaskList extends JPanel {
 							"Task Description:", newTaskDescription,
 							"Type:", newTypeCombo,
 							"Priority:", newPriorityCombo,
-							"EstimatedDate", SetEstimatedAttributeBox,
-							"Completed", setCompletenessAttributeBox
+							
+							
 					};
+					newTaskName.setText(task.getTaskName(currentTid));
 					int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 					if(editTaskSelection != 0)
 					{
@@ -246,9 +246,9 @@ public class TaskList extends JPanel {
 					int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
 					
 					if (newTaskDescription.getText().isEmpty()) {
-						task.editTask(currentTid, newTaskName.getText(), null, pri, setCompletenessAttributeBox.isSelected());
+						task.editTask(currentTid, newTaskName.getText(), null, pri, null, null);
 					} else {
-						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri,setCompletenessAttributeBox.isSelected());
+						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri,null, null);
 					}
 					listModel.set(selectedIndex,newTaskName.getText());
 					taskPanel.title.setText(newTaskName.getText());
@@ -271,7 +271,9 @@ public class TaskList extends JPanel {
 				if(currentSession != null)
 				{
 					JTextField taskName = new JTextField();
+					
 					JTextField taskDescription = new JTextField();
+					//taskDescription.setText(getDescription()));
 					Object[] type = {"should not see this"};
 					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
 					{
@@ -285,14 +287,14 @@ public class TaskList extends JPanel {
 					JComboBox typeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
 					JComboBox priorityCombo = new JComboBox(priority);
-					JTextField estimatedDate = new JTextField();
-					estimatedDate.setText("Enter yyyy/mm/dd");
 					Object[] message = {
 							"Task name:", taskName,
 							"Task Description:", taskDescription,
 							"Type:", typeCombo,
+
 							"Priority:", priorityCombo,
 							
+
 					};
 					int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 					if(addTaskSelection != 0)
@@ -301,14 +303,22 @@ public class TaskList extends JPanel {
 					}
 	
 					// TODO: change later when available!
-					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex()+ "estimatedDate is "+estimatedDate.getText());
+					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
 	
 					int tid = task.getMaxTid() + 1;
 					System.out.println("tid is " + tid);
-					java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
+
 					//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
-	
+					//task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
+					//String p = (String) priorityCombo.getSelectedItem();
+					 //int pri = Integer.parseInt(p);
+					 				//task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, estimatedDate.getText(), subDate, pri, 1031, 1033, currentPid);
+
+					java.sql.Timestamp subTime = new java.sql.Timestamp(new java.util.Date().getTime());
+					String p = (String) priorityCombo.getSelectedItem();
+					int pri = Integer.parseInt(p);
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, pri, 1031, 1033, currentPid);	
+
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
 					for (int i=0; i<tasks.size();i++) {
@@ -391,6 +401,7 @@ public class TaskList extends JPanel {
 			if (!e.getValueIsAdjusting()) {
 				return;
 			}
+			clearLabels();
 			lsm = (ListSelectionModel)e.getSource();
 			int firstIndex = e.getFirstIndex();
 			int lastIndex = e.getLastIndex();
@@ -471,12 +482,12 @@ public class TaskList extends JPanel {
 						tempString = rs.getString(--count);
 						if(tempString != null)
 						{
-							taskPanel.mangedByLabel.setText("MANAGED BY: " + tempString.trim());	
+							taskPanel.assignedToLabel.setText("ASSIGNED TO: " + tempString.trim());	
 						}
 					}
 					else 
 					{
-						taskPanel.mangedByLabel.setText("MANAGED BY: ");
+						taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
 					}
 					
 					if (priorityAttributeBox.isSelected())
@@ -494,10 +505,10 @@ public class TaskList extends JPanel {
 					
 					if (completedAttributeBox.isSelected())
 					{
-						tempString = rs.getString(--count);
-						if(tempString != null)
+						Timestamp tempTimestamp = rs.getTimestamp(--count);
+						if(tempTimestamp != null)
 						{
-							taskPanel.completedDate.setText("COMPLETED: " + tempString.trim());	
+							taskPanel.completedDate.setText("COMPLETED: " + tempTimestamp.toString().substring(0, tempTimestamp.toString().lastIndexOf(":")));	
 						}
 					}
 					else 
@@ -507,10 +518,10 @@ public class TaskList extends JPanel {
 					
 					if (estimatedAttributeBox.isSelected())
 					{
-						tempString = rs.getString(--count);
-						if(tempString != null)
+						Timestamp tempTimestamp = rs.getTimestamp(--count);
+						if(tempTimestamp != null)
 						{
-							taskPanel.estimatedDate.setText("ESTIMATED: " + tempString.trim());	
+							taskPanel.estimatedDate.setText("ESTIMATED: " + tempTimestamp.toString().substring(0, tempTimestamp.toString().lastIndexOf(":")));	
 						}
 					}
 					else 
@@ -520,10 +531,10 @@ public class TaskList extends JPanel {
 					
 					if (createdOntributeBox.isSelected())
 					{
-						tempString = rs.getString(--count);
-						if(tempString != null)
+						Timestamp tempTimestamp = rs.getTimestamp(--count);
+						if(tempTimestamp != null)
 						{
-							taskPanel.createdDate.setText("CREATED: " + tempString.trim());	
+							taskPanel.createdDate.setText("CREATED: " + tempTimestamp.toString().substring(0, tempTimestamp.toString().lastIndexOf(":")));	
 						}
 					}
 					else 
@@ -541,7 +552,7 @@ public class TaskList extends JPanel {
 					}
 					else 
 					{
-						taskPanel.descriptionArea.setText("MANAGED BY: ");
+						taskPanel.descriptionArea.setText("");
 					}
 					
 					if (nameAttributeBox.isSelected())
@@ -574,30 +585,39 @@ public class TaskList extends JPanel {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
-				setCompletenessAttributeBox.setEnabled(false);
-			//	estimatedAttributeBox.setEnabled(false);
+				
 			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
 			
-				setCompletenessAttributeBox.setEnabled(false);
-				estimatedAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(true);
-				setCompletenessAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(false);
-				setCompletenessAttributeBox.setEnabled(true);
-			//	estimatedAttributeBox.setEnabled(true);
+			
 			}
 		}
+	}
+	
+	public void clearLabels()
+	{
+		taskPanel.title.setText("TITLE");
+		taskPanel.descriptionArea.setText("");
+		taskPanel.createdDate.setText("CREATED: ");
+		taskPanel.estimatedDate.setText("ESTIMATED: ");
+		taskPanel.completedDate.setText("COMPLETED: ");
+		taskPanel.priorityLabel.setText("PRIORITY: ");
+		taskPanel.mangedByLabel.setText("MANAGED BY: ");
+		taskPanel.createdByLabel.setText("CREATED BY: ");
+		taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
+		
 	}
 
 }
