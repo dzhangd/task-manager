@@ -54,7 +54,8 @@ public class TaskList extends JPanel {
 	JCheckBox createdOntributeBox;
 	JCheckBox estimatedAttributeBox;
 	JCheckBox completedAttributeBox;
-	
+	JCheckBox setCompletenessAttributeBox;
+	JCheckBox SetEstimatedAttributeBox;
 	private TaskPanel taskPanel;
 	private Session currentSession;
 	
@@ -101,6 +102,8 @@ public class TaskList extends JPanel {
 		createdOntributeBox = new JCheckBox("created");
 		estimatedAttributeBox = new JCheckBox("estimated");
 		completedAttributeBox = new JCheckBox("completed");
+		SetEstimatedAttributeBox = new JCheckBox("estimated");
+	    setCompletenessAttributeBox = new JCheckBox("completed");
 		
 		nameAttributeBox.setSelected(true);
 		descriptionAttributeBox.setSelected(true);
@@ -112,6 +115,8 @@ public class TaskList extends JPanel {
 		createdOntributeBox.setSelected(true);
 		estimatedAttributeBox.setSelected(true);
 		completedAttributeBox.setSelected(true);
+		SetEstimatedAttributeBox.setSelected(true);
+		setCompletenessAttributeBox.setSelected(true);
 		
 		
 		taskAttributeButtonPanel.add(nameAttributeBox);
@@ -215,6 +220,9 @@ public class TaskList extends JPanel {
 					{
 						type = new Object[]{"Feature"};
 					}
+                    if(currentSession.getType()== TeamMemberType.DEVELOPER){
+                    	setCompletenessAttributeBox.setEnabled(true);
+					}
 					JComboBox newTypeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
 					JComboBox newPriorityCombo = new JComboBox(priority);
@@ -222,7 +230,9 @@ public class TaskList extends JPanel {
 							"Task name:", newTaskName,
 							"Task Description:", newTaskDescription,
 							"Type:", newTypeCombo,
-							"Priority:", newPriorityCombo
+							"Priority:", newPriorityCombo,
+							"EstimatedDate", SetEstimatedAttributeBox,
+							"Completed", setCompletenessAttributeBox
 					};
 					int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 					if(editTaskSelection != 0)
@@ -234,10 +244,11 @@ public class TaskList extends JPanel {
 					// TODO: change stuff when users are available, but for now:
 					System.out.println("Task tid to edit is " + currentTid);
 					int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
+					
 					if (newTaskDescription.getText().isEmpty()) {
-						task.editTask(currentTid, newTaskName.getText(), null, pri);
+						task.editTask(currentTid, newTaskName.getText(), null, pri, setCompletenessAttributeBox.isSelected());
 					} else {
-						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri);
+						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri,setCompletenessAttributeBox.isSelected());
 					}
 					listModel.set(selectedIndex,newTaskName.getText());
 					taskPanel.title.setText(newTaskName.getText());
@@ -270,6 +281,7 @@ public class TaskList extends JPanel {
 					{
 						type = new Object[]{"Feature"};
 					}
+					
 					JComboBox typeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
 					JComboBox priorityCombo = new JComboBox(priority);
@@ -280,7 +292,7 @@ public class TaskList extends JPanel {
 							"Task Description:", taskDescription,
 							"Type:", typeCombo,
 							"Priority:", priorityCombo,
-							"estimatedDate", estimatedDate
+							
 					};
 					int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 					if(addTaskSelection != 0)
@@ -295,8 +307,10 @@ public class TaskList extends JPanel {
 					System.out.println("tid is " + tid);
 					java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
 					//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
-	
+					//task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
+					String p = (String) priorityCombo.getSelectedItem();
+					 				int pri = Integer.parseInt(p);
+					 				task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, pri, 1031, 1033, currentPid);
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
 					for (int i=0; i<tasks.size();i++) {
@@ -562,18 +576,28 @@ public class TaskList extends JPanel {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
+				setCompletenessAttributeBox.setEnabled(false);
+			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
+			
+				setCompletenessAttributeBox.setEnabled(false);
+				
+			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(true);
+				setCompletenessAttributeBox.setEnabled(false);
+			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(false);
+				setCompletenessAttributeBox.setEnabled(true);
+			
 			}
 		}
 	}

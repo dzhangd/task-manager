@@ -247,6 +247,7 @@ public class ProjectList extends JPanel {
             System.out.println("Project selected is: " + selectedIndex);
 
             currentPid = (Integer) projects.get(selectedIndex)[0];
+            
             System.out.println("Pid selected is " + currentPid);
             String description = "";
             for (int i=0; i<projects.size(); i++) {
@@ -259,6 +260,21 @@ public class ProjectList extends JPanel {
             taskListPanel.listModel.clear();
             tasks = task.getTasks();
             newTaskList = new ArrayList<Object[]>();
+            if(currentPid==255){
+            	for (int i=0; i<tasks.size(); i++) {
+            		String title = (String) tasks.get(i)[1];
+                    if(title != null)
+                    {
+                    	taskListPanel.listModel.addElement(title.trim());
+                    }
+                    else
+                    {
+                    	taskListPanel.listModel.addElement("Should not see this plz fix");
+                    }
+                    newTaskList.add(tasks.get(i));
+                }
+            	}
+            
             for (int i=0; i<tasks.size(); i++) {
                 int pid2 = (Integer) tasks.get(i)[9];
                 if (currentPid == pid2) {
