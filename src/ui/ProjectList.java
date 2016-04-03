@@ -2,6 +2,7 @@ package ui;
 
 import database.Project;
 import database.Task;
+import database.Task.TaskType;
 import database.TeamMemberType;
 
 import java.awt.BorderLayout;
@@ -281,6 +282,17 @@ public class ProjectList extends JPanel {
                     String title = (String) tasks.get(i)[1];
                     if(title != null)
                     {
+                    	if(currentSession != null)
+                    	{
+                        	if(currentSession.getType() == TeamMemberType.CLIENT && task.getType((int)tasks.get(i)[0]) == TaskType.BUG)
+                        	{
+                        		continue;
+                        	}
+                        	else if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE && task.getType((int)tasks.get(i)[0]) == TaskType.FEATURE)
+                        	{
+                        		continue;
+                        	}	
+                    	}
                     	taskListPanel.listModel.addElement(title.trim());
                     }
                     else

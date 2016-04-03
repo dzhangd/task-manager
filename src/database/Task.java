@@ -14,7 +14,12 @@ public class Task {
     Connection con;
     Object[] task;
     ArrayList<Object[]> tasks;
-
+    public enum TaskType
+    {
+    	BUG,
+    	FEATURE
+    }
+    
     public Task() {
     }
 
@@ -91,17 +96,17 @@ public class Task {
         return 0;
     }
 
-    public void addTask(int tid, String title, String description, Date submittedDate, String estimatedDate,
-                        Date completedDate, int priority, int d_id, int m_id, int pid) {
+    public void addTask(int tid, String title, String description, Timestamp submittedDate, Timestamp estimatedDate,
+    		Timestamp completedDate, int priority, int d_id, int m_id, int pid) {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("INSERT INTO Task (tid, title, description, submitted_date, estimated_date, completed_date, priority, d_id, m_id, pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, tid);
             ps.setString(2, title);
             ps.setString(3, description);
-            ps.setDate(4, submittedDate);
-            ps.setString(5, estimatedDate);
-            ps.setDate(6, completedDate);
+            ps.setTimestamp(4, submittedDate);
+            ps.setTimestamp(5, estimatedDate);
+            ps.setTimestamp(6, completedDate);
             ps.setInt(7, priority);
             ps.setInt(8, d_id);
             ps.setInt(9, m_id);
@@ -127,5 +132,40 @@ public class Task {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public TaskType getType(int tid)
+    {
+    	System.out.println("GETTING TYPE TID IS " + tid);
+    	con = DatabaseConnection.getConnection();
+		PreparedStatement stmt;
+		ResultSet rs;
+		try {			
+			System.out.println("IS IN TRY");
+			
+			// Check for bug
+			stmt = con.prepareStatement("SELECT COUNT(tid) " +
+										"FROM Bug " + 
+					                    "WHERE tid = ?");
+			stmt.setInt(1, tid);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt(1) == 1)
+				return TaskType.BUG;
+			
+			// Check for feature
+			stmt = con.prepareStatement("SELECT COUNT(tid) " +
+										"FROM Feature " + 
+					                    "WHERE tid = ?");
+			stmt.setInt(1, tid);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt(1) == 1)
+				return TaskType.FEATURE;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
     }
 }
