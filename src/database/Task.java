@@ -14,7 +14,12 @@ public class Task {
     Connection con;
     Object[] task;
     ArrayList<Object[]> tasks;
-
+    public enum TaskType
+    {
+    	BUG,
+    	FEATURE
+    }
+    
     public Task() {
     }
 
@@ -127,5 +132,40 @@ public class Task {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    public TaskType getType(int tid)
+    {
+    	System.out.println("GETTING TYPE TID IS " + tid);
+    	con = DatabaseConnection.getConnection();
+		PreparedStatement stmt;
+		ResultSet rs;
+		try {			
+			System.out.println("IS IN TRY");
+			
+			// Check for bug
+			stmt = con.prepareStatement("SELECT COUNT(tid) " +
+										"FROM Bug " + 
+					                    "WHERE tid = ?");
+			stmt.setInt(1, tid);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt(1) == 1)
+				return TaskType.BUG;
+			
+			// Check for feature
+			stmt = con.prepareStatement("SELECT COUNT(tid) " +
+										"FROM Feature " + 
+					                    "WHERE tid = ?");
+			stmt.setInt(1, tid);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt(1) == 1)
+				return TaskType.FEATURE;
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
     }
 }
