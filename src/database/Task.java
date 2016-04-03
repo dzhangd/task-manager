@@ -1,12 +1,15 @@
 package database;
 
 import connection.DatabaseConnection;
+import ui.Startup;
 
+import javax.swing.JOptionPane;
 import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.*;
 import java.sql.Date;
-
+import java.sql.Time;
+import java.sql.Timestamp;
 /**
  * Created by Kwangsoo on 2016-03-27.
  */
@@ -14,7 +17,12 @@ public class Task {
     Connection con;
     Object[] task;
     ArrayList<Object[]> tasks;
-
+    public enum TaskType
+    {
+    	BUG,
+    	FEATURE
+    }
+    
     public Task() {
     }
 
@@ -35,6 +43,7 @@ public class Task {
             con.close();
             return tasks;
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return null;
@@ -54,7 +63,7 @@ public class Task {
         task[9] = pid;
     }
 
-    public void editTask(int tid, String title, String description, int priority, boolean completed) {
+    public void editTask(int tid, String title, String description, int priority, Timestamp completedDate, Timestamp estimatedDate) {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ?, description = ?, priority = ? WHERE tid = ?");
@@ -62,11 +71,11 @@ public class Task {
             ps.setString(2, description);
             ps.setInt(3, priority);
             ps.setInt(4, tid);
-            ps.setBoolean(5, completed);
             ps.executeUpdate();
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -86,22 +95,42 @@ public class Task {
             con.close();
             return maxTid;
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return 0;
     }
-
-    public void addTask(int tid, String title, String description, Date submittedDate, String estimatedDate,
-                        Date completedDate, int priority, int d_id, int m_id, int pid) {
+  
+   public String getTaskName(int currentTid){
+	   con= DatabaseConnection.getConnection();
+	   ResultSet rs;
+       try {
+           Statement s = con.createStatement();
+         
+         rs= s.executeQuery("SELECT title"+" FROM Task"+" WHERE tid = currentTid");
+         String result= rs.getString(0);
+          
+           s.close();
+           con.close();
+           return result;
+       } catch (SQLException e) {
+       	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
+          e.printStackTrace();
+       }
+     return null;
+   }
+    public void addTask(int tid, String title, String description, Timestamp submittedDate, Timestamp estimatedDate,
+    		Timestamp completedDate, int priority, int d_id, int m_id, int pid) {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("INSERT INTO Task (tid, title, description, submitted_date, estimated_date, completed_date, priority, d_id, m_id, pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, tid);
             ps.setString(2, title);
             ps.setString(3, description);
-            ps.setDate(4, submittedDate);
-            ps.setString(5, estimatedDate);
-            ps.setDate(6, completedDate);
+            ps.setTimestamp(4, submittedDate);
+            ps.setTimestamp(5, estimatedDate);
+            ps.setTimestamp(6, completedDate);
+            
             ps.setInt(7, priority);
             ps.setInt(8, d_id);
             ps.setInt(9, m_id);
@@ -111,6 +140,7 @@ public class Task {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -125,7 +155,44 @@ public class Task {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
+    }
+    
+    public TaskType getType(int tid)
+    {
+    	System.out.println("GETTING TYPE TID IS " + tid);
+    	con = DatabaseConnection.getConnection();
+		PreparedStatement stmt;
+		ResultSet rs;
+		try {			
+			System.out.println("IS IN TRY");
+			
+			// Check for bug
+			stmt = con.prepareStatement("SELECT COUNT(tid) " +
+										"FROM Bug " + 
+					                    "WHERE tid = ?");
+			stmt.setInt(1, tid);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt(1) == 1)
+				return TaskType.BUG;
+			
+			// Check for feature
+			stmt = con.prepareStatement("SELECT COUNT(tid) " +
+										"FROM Feature " + 
+					                    "WHERE tid = ?");
+			stmt.setInt(1, tid);
+			rs = stmt.executeQuery();
+			rs.next();
+			if(rs.getInt(1) == 1)
+				return TaskType.FEATURE;
+			
+		} catch(SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+		return null;
     }
 }
