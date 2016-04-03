@@ -26,8 +26,8 @@ public class Task {
             ResultSet rs = s.executeQuery("SELECT * FROM Task");
             while (rs.next()) {
                 task = new Object[10];
-                setTask(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5),
-                        rs.getBoolean(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10));
+                setTask(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5),
+                        rs.getDate(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10));
                 tasks.add(task);
             }
             task = null;
@@ -40,21 +40,21 @@ public class Task {
         return null;
     }
 
-    public void setTask(int tid, String title, String description, Date submittedDate, Date estimatedDate,
-                        Boolean completed, int priority, int d_id, int m_id, int pid) {
+    public void setTask(int tid, String title, String description, Date submittedDate, String estimatedDate,
+                        Date completedDate, int priority, int d_id, int m_id, int pid) {
         task[0] = tid;
         task[1] = title;
         task[2] = description;
         task[3] = submittedDate;
         task[4] = estimatedDate;
-        task[5] = completed;
+        task[5] = completedDate;
         task[6] = priority;
         task[7] = d_id;
         task[8] = m_id;
         task[9] = pid;
     }
 
-    public void editTask(int tid, String title, String description, int priority) {
+    public void editTask(int tid, String title, String description, int priority, boolean completed) {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ?, description = ?, priority = ? WHERE tid = ?");
@@ -62,7 +62,7 @@ public class Task {
             ps.setString(2, description);
             ps.setInt(3, priority);
             ps.setInt(4, tid);
-
+            ps.setBoolean(5, completed);
             ps.executeUpdate();
             ps.close();
             con.close();
@@ -91,17 +91,17 @@ public class Task {
         return 0;
     }
 
-    public void addTask(int tid, String title, String description, Date submittedDate, Date estimatedDate,
-                        Boolean completed, int priority, int d_id, int m_id, int pid) {
+    public void addTask(int tid, String title, String description, Date submittedDate, String estimatedDate,
+                        Date completedDate, int priority, int d_id, int m_id, int pid) {
         con = DatabaseConnection.getConnection();
         try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO Task (tid, title, description, submitted_date, estimated_date, completed, priority, d_id, m_id, pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = con.prepareStatement("INSERT INTO Task (tid, title, description, submitted_date, estimated_date, completed_date, priority, d_id, m_id, pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, tid);
             ps.setString(2, title);
             ps.setString(3, description);
             ps.setDate(4, submittedDate);
-            ps.setDate(5, estimatedDate);
-            ps.setBoolean(6, completed);
+            ps.setString(5, estimatedDate);
+            ps.setDate(6, completedDate);
             ps.setInt(7, priority);
             ps.setInt(8, d_id);
             ps.setInt(9, m_id);
