@@ -295,7 +295,7 @@ public class TaskList extends JPanel {
 					System.out.println("tid is " + tid);
 					java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
 					//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), false, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
 	
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
@@ -411,7 +411,7 @@ public class TaskList extends JPanel {
 				count++;
 			}
 			if (completedAttributeBox.isSelected()) {
-				completed = "completed, ";
+				completed = "completed_date, ";
 				count ++;
 			}
 			if (priorityAttributeBox.isSelected()) {
@@ -550,38 +550,6 @@ public class TaskList extends JPanel {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-
-//			if (taskPanel != null && selectedIndex >= 0) {
-//				String title = "";
-//				String description = "";
-//				Date subDate = null;
-//				Date comDate = null;
-//				int priority = 0;
-//				for (int i=0; i<tasks.size();i++) {
-//					if (currentTid == (Integer) tasks.get(i)[0]) {
-//						title = (String) tasks.get(i)[1];
-//						if (tasks.get(i)[2] != null) {
-//							description = (String) tasks.get(i)[2];
-//						}
-//						subDate = (Date) tasks.get(i)[3];
-//						comDate = (Date) tasks.get(i)[4];
-//						priority = (Integer) tasks.get(i)[6];
-//						break;
-//					}
-//				}
-//
-//				taskPanel.title.setText(title.trim());
-//
-//				taskPanel.descriptionArea.setText(description.trim());
-//
-//				// TODO: CHANGE USER, ASSIGNED TO, MANAGER WHEN AVAILABLE
-//
-//				taskPanel.createdDate.setText("CREATED: " + String.valueOf(subDate));
-//				taskPanel.estimatedDate.setText("ESTIMATED: " + String.valueOf(comDate));
-//
-//				taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(priority));
-//
-//			}
 		}
 	}
 	
