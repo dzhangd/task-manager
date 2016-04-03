@@ -295,7 +295,7 @@ public class TaskList extends JPanel {
 					System.out.println("tid is " + tid);
 					java.sql.Date subDate = new java.sql.Date(new java.util.Date().getTime());
 					//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), false, (Integer) priorityCombo.getSelectedItem(), 1031, 1033, currentPid);
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), false, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
 	
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
