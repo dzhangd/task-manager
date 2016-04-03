@@ -320,7 +320,7 @@ public class TaskList extends JPanel {
 					java.sql.Timestamp subTime = new java.sql.Timestamp(new java.util.Date().getTime());
 					String p = (String) priorityCombo.getSelectedItem();
 					int pri = Integer.parseInt(p);
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, pri, 1031, 1033, currentPid);
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, pri, 1031, 1033, currentPid);	
 
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
