@@ -100,7 +100,25 @@ public class Task {
         }
         return 0;
     }
-
+  
+   public String getTaskName(int currentTid){
+	   con= DatabaseConnection.getConnection();
+	   ResultSet rs;
+       try {
+           Statement s = con.createStatement();
+         
+         rs= s.executeQuery("SELECT title"+" FROM Task"+" WHERE tid = currentTid");
+         String result= rs.getString(0);
+          
+           s.close();
+           con.close();
+           return result;
+       } catch (SQLException e) {
+       	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
+          e.printStackTrace();
+       }
+     return null;
+   }
     public void addTask(int tid, String title, String description, Timestamp submittedDate, Timestamp estimatedDate,
     		Timestamp completedDate, int priority, int d_id, int m_id, int pid) {
         con = DatabaseConnection.getConnection();
