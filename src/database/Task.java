@@ -1,7 +1,9 @@
 package database;
 
 import connection.DatabaseConnection;
+import ui.Startup;
 
+import javax.swing.JOptionPane;
 import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.*;
@@ -119,6 +121,7 @@ public class Task {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
