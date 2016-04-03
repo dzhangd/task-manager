@@ -59,7 +59,7 @@ public class Task {
         task[9] = pid;
     }
 
-    public void editTask(int tid, String title, String description, int priority) {
+    public void editTask(int tid, String title, String description, int priority, boolean completed) {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ?, description = ?, priority = ? WHERE tid = ?");
@@ -67,7 +67,7 @@ public class Task {
             ps.setString(2, description);
             ps.setInt(3, priority);
             ps.setInt(4, tid);
-
+            ps.setBoolean(5, completed);
             ps.executeUpdate();
             ps.close();
             con.close();
