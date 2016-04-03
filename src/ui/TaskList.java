@@ -27,6 +27,7 @@ import connection.DatabaseConnection;
 import connection.Session;
 import database.Project;
 import database.Task;
+import database.Task.TaskType;
 import database.TeamMemberType;
 import ui.ProjectList.ProjectListListener;
 import static ui.ProjectList.currentPid;
@@ -375,6 +376,16 @@ public class TaskList extends JPanel {
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
 					for (int i=0; i<tasks.size();i++) {
 						if (currentPid==(Integer) tasks.get(i)[9]) {
+							
+                        	if(currentSession.getType() == TeamMemberType.CLIENT && task.getType((int)tasks.get(i)[0]) == TaskType.BUG)
+                        	{
+                        		continue;
+                        	}
+                        	else if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE && task.getType((int)tasks.get(i)[0]) == TaskType.FEATURE)
+                        	{
+                        		continue;
+                        	}
+							
 							temp.add(tasks.get(i));
 						}
 					}
