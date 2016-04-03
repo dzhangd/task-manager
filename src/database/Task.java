@@ -6,7 +6,8 @@ import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.*;
 import java.sql.Date;
-
+import java.sql.Time;
+import java.sql.Timestamp;
 /**
  * Created by Kwangsoo on 2016-03-27.
  */
@@ -59,7 +60,7 @@ public class Task {
         task[9] = pid;
     }
 
-    public void editTask(int tid, String title, String description, int priority, boolean completed) {
+    public void editTask(int tid, String title, String description, int priority, Timestamp completedDate, Timestamp estimatedDate) {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ?, description = ?, priority = ? WHERE tid = ?");
@@ -67,7 +68,8 @@ public class Task {
             ps.setString(2, description);
             ps.setInt(3, priority);
             ps.setInt(4, tid);
-            ps.setBoolean(5, completed);
+            ps.setTimestamp(5, completedDate);
+            ps.setTimestamp(6, estimatedDate);
             ps.executeUpdate();
             ps.close();
             con.close();
@@ -107,6 +109,7 @@ public class Task {
             ps.setTimestamp(4, submittedDate);
             ps.setTimestamp(5, estimatedDate);
             ps.setTimestamp(6, completedDate);
+            
             ps.setInt(7, priority);
             ps.setInt(8, d_id);
             ps.setInt(9, m_id);
