@@ -71,8 +71,6 @@ public class Task {
             ps.setString(2, description);
             ps.setInt(3, priority);
             ps.setInt(4, tid);
-            ps.setTimestamp(5, completedDate);
-            ps.setTimestamp(6, estimatedDate);
             ps.executeUpdate();
             ps.close();
             con.close();
