@@ -23,7 +23,7 @@ public class TaskPanel extends JPanel{
 	JLabel createdDate;
 	JLabel estimatedDate;
 	JLabel completedDate;
-
+    JLabel completeness;
 	public TaskPanel()
 	{
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -47,7 +47,9 @@ public class TaskPanel extends JPanel{
 		estimatedDate.setOpaque(true);
 		completedDate = new JLabel("COMPLETED: ");
 		completedDate.setOpaque(true);
-
+		
+        completeness= new JLabel("IS COMPLETED: ");
+        completeness.setOpaque(true);
 		setLayout(new GridBagLayout());
 
 		gbc.fill = GridBagConstraints.BOTH;
@@ -96,6 +98,10 @@ public class TaskPanel extends JPanel{
 		gbc.gridy = 7;
 		gbc.weightx = 0.2;
 		this.add(completedDate, gbc);
+		gbc.gridx = 1;
+		gbc.gridy = 7;
+		gbc.weightx = 0.2;
+		this.add(completeness, gbc);
 	}
 
 }

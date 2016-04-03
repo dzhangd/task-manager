@@ -131,6 +131,8 @@ public class TaskList extends JPanel {
 		taskAttributeButtonPanel.add(createdOntributeBox);
 		taskAttributeButtonPanel.add(estimatedAttributeBox);
 		taskAttributeButtonPanel.add(completedAttributeBox);
+		taskAttributeButtonPanel.add(SetEstimatedAttributeBox);
+		taskAttributeButtonPanel.add(setCompletenessAttributeBox);
 		
 		
 		
@@ -222,8 +224,9 @@ public class TaskList extends JPanel {
 					{
 						type = new Object[]{"Feature"};
 					}
-                    if(currentSession.getType()== TeamMemberType.DEVELOPER){
-                    	setCompletenessAttributeBox.setEnabled(true);
+                    if(currentSession.getType()!= TeamMemberType.DEVELOPER){
+                    	setCompletenessAttributeBox.setEnabled(false);
+                    	SetEstimatedAttributeBox.setEnabled(false);
 					}
 					JComboBox newTypeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
@@ -248,9 +251,9 @@ public class TaskList extends JPanel {
 					int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
 					
 					if (newTaskDescription.getText().isEmpty()) {
-						task.editTask(currentTid, newTaskName.getText(), null, pri, setCompletenessAttributeBox.isSelected());
+						task.editTask(currentTid, newTaskName.getText(), null, pri, null, null);
 					} else {
-						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri,setCompletenessAttributeBox.isSelected());
+						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri,null, null);
 					}
 					listModel.set(selectedIndex,newTaskName.getText());
 					taskPanel.title.setText(newTaskName.getText());
@@ -586,26 +589,28 @@ public class TaskList extends JPanel {
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
 				setCompletenessAttributeBox.setEnabled(false);
-			//	estimatedAttributeBox.setEnabled(false);
+				SetEstimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
 			
 				setCompletenessAttributeBox.setEnabled(false);
-				
+				SetEstimatedAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(true);
 				setCompletenessAttributeBox.setEnabled(false);
+				SetEstimatedAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(false);
 				setCompletenessAttributeBox.setEnabled(true);
+				SetEstimatedAttributeBox.setEnabled(true);
 			
 			}
 		}
@@ -622,6 +627,7 @@ public class TaskList extends JPanel {
 		taskPanel.mangedByLabel.setText("MANAGED BY: ");
 		taskPanel.createdByLabel.setText("CREATED BY: ");
 		taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
+		
 	}
 
 }
