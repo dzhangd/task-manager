@@ -152,61 +152,71 @@ insert into task values
 	(10000, 'ER-diagram', 'Make ER Diagram of the database', 
 		TO_DATE('14/02/2016 16:33', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('14/02/2016 20:00', 'dd/mm/yyyy hh24:mi'), 
-		0, 4, 1005, 1020, 100);
+		NULL, 
+		4, 1005, 1020, 100);
 
 insert into task values
 	(10001, 'Create table schema', 'Make schema for all the tables',
 		TO_DATE('13/02/2016 13:30', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('13/02/2016 16:00', 'dd/mm/yyyy hh24:mi'),
-		1, 3, 1005, 1020, 100);
+		TO_DATE('14/02/2016 12:00', 'dd/mm/yyyy hh24:mi'), 
+		3, 1005, 1020, 100);
 
 insert into task values
 	(10003, 'Submit milestone', 'Submit the second part of the project for mark',
 		TO_DATE('10/02/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('15/02/2016 18:00', 'dd/mm/yyyy hh24:mi'),
-		0, 5, 1029, 1036, 100);
+		NULL, 
+		5, 1029, 1036, 100);
 
 insert into task values
 	(10004, 'Create github', 'Create github repository for team members',
 		TO_DATE('18/01/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('19/01/2016 10:00', 'dd/mm/yyyy hh24:mi'),
-		1, 5, 1030, 1035, 101);
+		TO_DATE('19/01/2016 15:00', 'dd/mm/yyyy hh24:mi'),
+		5, 1030, 1035, 101);
 
 insert into task values
 	(10008, 'Android app crashing at start', 'App crashing at the start when using galaxy 4',
 		TO_DATE('20/01/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('22/1/2016 10:00', 'dd/mm/yyyy hh24:mi'),
-		1, 3, 1030, 1034, 108);
+		NULL, 
+		3, 1030, 1034, 108);
 
 insert into task values
 	(10010, 'Add user options', 'Add user options to configure  android app settings',
 		TO_DATE('20/1/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('22/1/2016 10:00', 'dd/mm/yyyy hh24:mi'),
-		1, 2, 1030, 1033, 108);
+		TO_DATE('22/1/2016 11:00', 'dd/mm/yyyy hh24:mi'), 
+		2, 1030, 1033, 108);
 
 insert into task values
 	(10011, 'Cant insert to database', 'Can’t insert new data tuple to Project database',
 		TO_DATE('10/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('22/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
-		0, 3, 1031, 1033, 100);
+		NULL, 
+		3, 1031, 1033, 100);
 
 insert into task values
 	(10012, 'Cant delete database data', 'Can’t delete any tuple from Project database',
 		TO_DATE('10/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('22/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
-		0, 3, 1032, 1034, 100);
+		TO_DATE('22/2/2016 10:00', 'dd/mm/yyyy hh24:mi'), 
+		3, 1032, 1034, 100);
 
 insert into task values
 	(10013, 'Test bug report', 'Test bug report description',
 		TO_DATE('12/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('21/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
-		0, 1, 1005, 1020, 103);
+		NULL, 
+		1, 1005, 1020, 103);
 
 insert into task values
 	(10014, 'History not saving', 'User preference history is not saving for development tools',
 		TO_DATE('10/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
 		TO_DATE('10/2/2016 10:00', 'dd/mm/yyyy hh24:mi'),
-		1, 3, 1029, 1036, 109);
+		TO_DATE('10/2/2016 11:00', 'dd/mm/yyyy hh24:mi'), 
+		3, 1029, 1036, 109);
 
 insert into bug values
 	(10008, 1000);

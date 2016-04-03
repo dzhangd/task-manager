@@ -13,7 +13,7 @@ drop table Project;
 CREATE TABLE Project
 (
 	pid INTEGER,
-	name CHAR(50),
+	name CHAR(50) NOT NULL,
 	description CHAR(255),	
 	PRIMARY KEY (pid)
 );
@@ -23,7 +23,7 @@ CREATE TABLE TeamMember
 	tmid INTEGER,
 	email CHAR(50) NOT NULL,
 	password CHAR(24) NOT NULL,
-	name CHAR(50),
+	name CHAR(50) NOT NULL,
 	phone_number INTEGER,
 	PRIMARY KEY (tmid),
 	UNIQUE (email)
@@ -71,12 +71,12 @@ CREATE TABLE Client
 CREATE TABLE Task
 (
 	tid INTEGER,
-	title CHAR(255),
+	title CHAR(255) NOT NULL,
 	description CHAR(255),
-	submitted_date DATE,
-	estimated_date DATE,
-	completed NUMBER(1) NOT NULL CHECK (completed IN (1,0)),
-	priority INTEGER,
+	submitted_date DATE NOT NULL,
+	estimated_date DATE NOT NULL,
+	completed_date DATE,
+	priority INTEGER NOT NULL,
 	d_id INTEGER,
 	m_id INTEGER,
 	pid INTEGER,
@@ -90,7 +90,7 @@ CREATE TABLE Task
 CREATE TABLE Bug
 (
 	tid INTEGER,
-	qa_id INTEGER,
+	qa_id INTEGER NOT NULL,
 	PRIMARY KEY (tid),
 	FOREIGN KEY (tid) REFERENCES Task(tid) ON DELETE CASCADE,
 	FOREIGN KEY (qa_id) REFERENCES QualityAssurance(tmid) ON DELETE SET NULL
@@ -99,7 +99,7 @@ CREATE TABLE Bug
 CREATE TABLE Feature
 (
 	tid INTEGER,
-	client_id INTEGER,
+	client_id INTEGER NOT NULL,
 	PRIMARY KEY (tid),
 	FOREIGN KEY (tid) REFERENCES Task(tid) ON DELETE CASCADE,
 	FOREIGN KEY (client_id) REFERENCES Client(tmid) ON DELETE SET NULL
