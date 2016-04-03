@@ -13,13 +13,22 @@ public class Project {
     private Connection con;
     public Object[] project;
     ArrayList<Object[]> projects;
+    public Object[] projectAll;
 
     public Project() {
+    	projectAll= new Object[3];
+        projectAll[0]= 255;
+        projectAll[1]="All tasks";
+        projectAll[2]="Display all tasks";
     }
 
     public ArrayList getProjects() {
         con = DatabaseConnection.getConnection();
         projects = new ArrayList<Object[]>();
+        
+        projects.add(projectAll);
+        
+        
         try {
             Statement s = con.createStatement();
             ResultSet rs = s.executeQuery("SELECT * FROM Project");
@@ -83,6 +92,7 @@ public class Project {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("INSERT INTO Project (pid, name, description) VALUES (?, ?, ?)");
+            
             ps.setInt(1,pid);
             ps.setString(2,name);
             ps.setString(3,description);
