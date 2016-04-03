@@ -56,8 +56,7 @@ public class TaskList extends JPanel {
 	JCheckBox createdOntributeBox;
 	JCheckBox estimatedAttributeBox;
 	JCheckBox completedAttributeBox;
-	JCheckBox setCompletenessAttributeBox;
-	JCheckBox SetEstimatedAttributeBox;
+	
 	private TaskPanel taskPanel;
 	private Session currentSession;
 	
@@ -104,8 +103,6 @@ public class TaskList extends JPanel {
 		createdOntributeBox = new JCheckBox("created");
 		estimatedAttributeBox = new JCheckBox("estimated");
 		completedAttributeBox = new JCheckBox("completed");
-		SetEstimatedAttributeBox = new JCheckBox("estimated");
-	    setCompletenessAttributeBox = new JCheckBox("completed");
 		
 		nameAttributeBox.setSelected(true);
 		descriptionAttributeBox.setSelected(true);
@@ -117,8 +114,6 @@ public class TaskList extends JPanel {
 		createdOntributeBox.setSelected(true);
 		estimatedAttributeBox.setSelected(true);
 		completedAttributeBox.setSelected(true);
-		SetEstimatedAttributeBox.setSelected(true);
-		setCompletenessAttributeBox.setSelected(true);
 		
 		
 		taskAttributeButtonPanel.add(nameAttributeBox);
@@ -131,9 +126,6 @@ public class TaskList extends JPanel {
 		taskAttributeButtonPanel.add(createdOntributeBox);
 		taskAttributeButtonPanel.add(estimatedAttributeBox);
 		taskAttributeButtonPanel.add(completedAttributeBox);
-		taskAttributeButtonPanel.add(SetEstimatedAttributeBox);
-		taskAttributeButtonPanel.add(setCompletenessAttributeBox);
-		
 		
 		
 		
@@ -225,8 +217,7 @@ public class TaskList extends JPanel {
 						type = new Object[]{"Feature"};
 					}
                     if(currentSession.getType()!= TeamMemberType.DEVELOPER){
-                    	setCompletenessAttributeBox.setEnabled(false);
-                    	SetEstimatedAttributeBox.setEnabled(false);
+                    	
 					}
 					JComboBox newTypeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
@@ -236,8 +227,6 @@ public class TaskList extends JPanel {
 							"Task Description:", newTaskDescription,
 							"Type:", newTypeCombo,
 							"Priority:", newPriorityCombo,
-							"EstimatedDate", SetEstimatedAttributeBox,
-							"Completed", setCompletenessAttributeBox
 					};
 					int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 					if(editTaskSelection != 0)
@@ -588,29 +577,22 @@ public class TaskList extends JPanel {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
-				setCompletenessAttributeBox.setEnabled(false);
-				SetEstimatedAttributeBox.setEnabled(false);
+				
 			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
 			
-				setCompletenessAttributeBox.setEnabled(false);
-				SetEstimatedAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(true);
-				setCompletenessAttributeBox.setEnabled(false);
-				SetEstimatedAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(false);
-				setCompletenessAttributeBox.setEnabled(true);
-				SetEstimatedAttributeBox.setEnabled(true);
 			
 			}
 		}
