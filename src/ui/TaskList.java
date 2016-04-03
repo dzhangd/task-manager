@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -56,8 +58,7 @@ public class TaskList extends JPanel {
 	JCheckBox createdOntributeBox;
 	JCheckBox estimatedAttributeBox;
 	JCheckBox completedAttributeBox;
-	JCheckBox setCompletenessAttributeBox;
-	JCheckBox SetEstimatedAttributeBox;
+	
 	private TaskPanel taskPanel;
 	private Session currentSession;
 	
@@ -104,8 +105,6 @@ public class TaskList extends JPanel {
 		createdOntributeBox = new JCheckBox("created");
 		estimatedAttributeBox = new JCheckBox("estimated");
 		completedAttributeBox = new JCheckBox("completed");
-		SetEstimatedAttributeBox = new JCheckBox("estimated");
-	    setCompletenessAttributeBox = new JCheckBox("completed");
 		
 		nameAttributeBox.setSelected(true);
 		descriptionAttributeBox.setSelected(true);
@@ -117,8 +116,6 @@ public class TaskList extends JPanel {
 		createdOntributeBox.setSelected(true);
 		estimatedAttributeBox.setSelected(true);
 		completedAttributeBox.setSelected(true);
-		SetEstimatedAttributeBox.setSelected(true);
-		setCompletenessAttributeBox.setSelected(true);
 		
 		
 		taskAttributeButtonPanel.add(nameAttributeBox);
@@ -131,9 +128,6 @@ public class TaskList extends JPanel {
 		taskAttributeButtonPanel.add(createdOntributeBox);
 		taskAttributeButtonPanel.add(estimatedAttributeBox);
 		taskAttributeButtonPanel.add(completedAttributeBox);
-		taskAttributeButtonPanel.add(SetEstimatedAttributeBox);
-		taskAttributeButtonPanel.add(setCompletenessAttributeBox);
-		
 		
 		
 		
@@ -224,36 +218,91 @@ public class TaskList extends JPanel {
 					{
 						type = new Object[]{"Feature"};
 					}
-                    if(currentSession.getType()!= TeamMemberType.DEVELOPER){
-                    	setCompletenessAttributeBox.setEnabled(false);
-                    	SetEstimatedAttributeBox.setEnabled(false);
-					}
-					JComboBox newTypeCombo = new JComboBox(type);
 					Object[] priority = {"1", "2", "3", "4", "5"};
 					JComboBox newPriorityCombo = new JComboBox(priority);
+					JTextField setEstimatedDate = new JTextField();
+					JTextField setCompletedDate = new JTextField();
+					JButton setCompleted = new JButton();
+					setCompleted.setPreferredSize(new Dimension(50, 50));
+					setCompleted.setText("Set completed to now");
+					SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");;
+					setCompleted.addActionListener(new ActionListener()
+							{
+
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									
+								    Date now = new Date();
+								    String strDate = sdfDate.format(now);
+									
+									setCompletedDate.setText(strDate);
+								}
+						
+							});
+                    if(currentSession.getType()!= TeamMemberType.DEVELOPER)
+                    {
+                    	setCompletedDate.setEnabled(false);
+                    	setEstimatedDate.setEnabled(false);
+                    	setCompleted.setEnabled(false);
+					}
+					
+                    newTaskName.setText(taskPanel.title.getText());
+                    newTaskDescription.setText(taskPanel.descriptionArea.getText());
+                    newPriorityCombo.setSelectedIndex(Integer.parseInt(taskPanel.priorityLabel.getText().substring(taskPanel.priorityLabel.getText().length()-1, taskPanel.priorityLabel.getText().length())) - 1);
+                    setEstimatedDate.setText(taskPanel.estimatedDate.getText().replace("ESTIMATED: ", ""));
+                    setCompletedDate.setText(taskPanel.completedDate.getText().replace("COMPLETED: ", ""));
+                    
 					Object[] message = {
 							"Task name:", newTaskName,
 							"Task Description:", newTaskDescription,
-							"Type:", newTypeCombo,
 							"Priority:", newPriorityCombo,
-							"EstimatedDate", SetEstimatedAttributeBox,
-							"Completed", setCompletenessAttributeBox
+							"Estimated Date (yyyy-MM-dd HH:mm):", setEstimatedDate,
+							"Completed (yyyy-MM-dd HH:mm):", setCompletedDate,
+							"Set completed to now", setCompleted
 					};
 					int editTaskSelection = JOptionPane.showConfirmDialog(null, message, "Edit Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
 					if(editTaskSelection != 0)
 					{
 						return;
 					}
-					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() + " Priority index is " + newPriorityCombo.getSelectedIndex());
+					java.sql.Timestamp estimatedTimestamp = null;
+					java.sql.Timestamp completedTimestamp = null;
+					
+					if(setEstimatedDate.getText() != null && !setEstimatedDate.getText().isEmpty())
+					{
+						try {
+							Date estimatedDate = sdfDate.parse(setEstimatedDate.getText());
+							estimatedTimestamp = new java.sql.Timestamp(estimatedDate.getTime());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, "Estimated date format is incorrect, please use yyyy-MM-dd HH:mm", "Date format error", JOptionPane.ERROR_MESSAGE);
+							e.printStackTrace();
+						}
+					}
+					
+					if(setCompletedDate.getText() != null && !setCompletedDate.getText().isEmpty())
+					{
+						try {
+							Date completedDate = sdfDate.parse(setCompletedDate.getText());
+							completedTimestamp = new java.sql.Timestamp(completedDate.getTime());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, "Completed date format is incorrect, please use yyyy-MM-dd HH:mm", "Date format error", JOptionPane.ERROR_MESSAGE);
+							e.printStackTrace();
+						}
+					}
+					
+					
+					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " Priority index is " + newPriorityCombo.getSelectedIndex());
 	
 					// TODO: change stuff when users are available, but for now:
 					System.out.println("Task tid to edit is " + currentTid);
 					int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
 					
 					if (newTaskDescription.getText().isEmpty()) {
-						task.editTask(currentTid, newTaskName.getText(), null, pri, null, null);
+						task.editTask(currentTid, newTaskName.getText(), null, pri, completedTimestamp, estimatedTimestamp);
 					} else {
-						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri,null, null);
+						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri, completedTimestamp, estimatedTimestamp);
 					}
 					listModel.set(selectedIndex,newTaskName.getText());
 					taskPanel.title.setText(newTaskName.getText());
@@ -596,29 +645,22 @@ public class TaskList extends JPanel {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
-				setCompletenessAttributeBox.setEnabled(false);
-				SetEstimatedAttributeBox.setEnabled(false);
+				
 			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
 			
-				setCompletenessAttributeBox.setEnabled(false);
-				SetEstimatedAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(true);
-				setCompletenessAttributeBox.setEnabled(false);
-				SetEstimatedAttributeBox.setEnabled(false);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(false);
-				setCompletenessAttributeBox.setEnabled(true);
-				SetEstimatedAttributeBox.setEnabled(true);
 			
 			}
 		}

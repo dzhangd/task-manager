@@ -92,13 +92,13 @@ public class Task {
     public void editTask(int tid, String title, String description, int priority, Timestamp completedDate, Timestamp estimatedDate) {
         con = DatabaseConnection.getConnection();
         try {
-            PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ?, description = ?, priority = ? WHERE tid = ?");
+            PreparedStatement ps = con.prepareStatement("UPDATE Task SET title = ?, description = ?, priority = ?, estimated_date = ?, completed_date = ? WHERE tid = ?");
             ps.setString(1, title);
             ps.setString(2, description);
             ps.setInt(3, priority);
-            ps.setInt(4, tid);
+            ps.setTimestamp(4, estimatedDate);
             ps.setTimestamp(5, completedDate);
-            ps.setTimestamp(6, estimatedDate);
+            ps.setInt(6, tid);
             ps.executeUpdate();
             ps.close();
             con.close();
