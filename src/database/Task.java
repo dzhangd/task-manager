@@ -43,6 +43,7 @@ public class Task {
             con.close();
             return tasks;
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return null;
@@ -76,6 +77,7 @@ public class Task {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -95,6 +97,7 @@ public class Task {
             con.close();
             return maxTid;
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return 0;
@@ -136,6 +139,7 @@ public class Task {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -170,6 +174,7 @@ public class Task {
 				return TaskType.FEATURE;
 			
 		} catch(SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
 		}
 		return null;

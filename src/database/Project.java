@@ -6,6 +6,8 @@ import connection.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 /**
  * Created by Kwangsoo on 2016-03-19.
  */
@@ -42,6 +44,7 @@ public class Project {
             con.close();
             return projects;
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return null;
@@ -65,6 +68,7 @@ public class Project {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -83,6 +87,7 @@ public class Project {
             con.close();
             return maxPid;
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
         return 0;
@@ -101,6 +106,7 @@ public class Project {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -115,6 +121,7 @@ public class Project {
             ps.close();
             con.close();
         } catch (SQLException e) {
+        	JOptionPane.showMessageDialog(null, e.toString(), "SQL Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }
