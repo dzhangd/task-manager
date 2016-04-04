@@ -362,83 +362,91 @@ public class TaskList extends JPanel {
 				currentSession = Startup.getSession();
 				if(currentSession != null)
 				{
-					JTextField taskName = new JTextField();
-					JTextField taskDescription = new JTextField();
-					JTextField priorityTextField = new JTextField();
-					int priority = -1;
-
-					Object[] type = {"should not see this"};
-					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
+					if(ProjectList.currentPid < 0)
 					{
-						type = new Object[]{"Bug"};
+						JOptionPane.showMessageDialog(null, "Please select a project first");
+						
 					}
-					else if (currentSession.getType() == TeamMemberType.CLIENT)
+					else
 					{
-						type = new Object[]{"Feature"};
-					}
-					
-					JComboBox typeCombo = new JComboBox(type);
-//					Object[] priority = {"1", "2", "3", "4", "5"};
-//					JComboBox priorityCombo = new JComboBox(priority);
-					Object[] message = {
-							"Task name:", taskName,
-							"Task Description:", taskDescription,
-							"Type:", typeCombo,
+						JTextField taskName = new JTextField();
+						JTextField taskDescription = new JTextField();
+						JTextField priorityTextField = new JTextField();
+						int priority = -1;
 
-							"Priority:", priorityTextField,
-							
-
-					};
-					int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-					if(addTaskSelection != 0)
-					{
-						return;
-					}
-	
-					// TODO: change later when available!
-//					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
-	
-					int tid = task.getMaxTid() + 1;
-					System.out.println("tid is " + tid);
-
-					//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
-					//task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
-					//String p = (String) priorityCombo.getSelectedItem();
-					 //int pri = Integer.parseInt(p);
-					 				//task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, estimatedDate.getText(), subDate, pri, 1031, 1033, currentPid);
-
-					java.sql.Timestamp subTime = new java.sql.Timestamp(new java.util.Date().getTime());
-
-
-					// Get priority input and check if it is a number, then set it as priority
-					String priorityString = priorityTextField.getText();
-					if(isNumber(priorityString))
-						priority = Integer.parseInt(priorityString);
-
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, priority, 1031, 1033, currentPid, currentSession.getId(), currentSession.getType());
-
-					tasks = task.getTasks();
-					ArrayList<Object[]> temp = new ArrayList<Object[]>();
-					for (int i=0; i<tasks.size();i++) {
-						if (currentPid==(Integer) tasks.get(i)[9]) {
-							
-                        	if(currentSession.getType() == TeamMemberType.CLIENT && task.getType((int)tasks.get(i)[0]) == TaskType.BUG)
-                        	{
-                        		continue;
-                        	}
-                        	else if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE && task.getType((int)tasks.get(i)[0]) == TaskType.FEATURE)
-                        	{
-                        		continue;
-                        	}
-							
-							temp.add(tasks.get(i));
+						Object[] type = {"should not see this"};
+						if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
+						{
+							type = new Object[]{"Bug"};
 						}
-					}
-					newTaskList = temp;
-					listModel.addElement("");
-					for (int i=0; i<newTaskList.size(); i++) {
-						String title = (String) newTaskList.get(i)[1];
-						listModel.set(i,title.trim());
+						else if (currentSession.getType() == TeamMemberType.CLIENT)
+						{
+							type = new Object[]{"Feature"};
+						}
+						
+						JComboBox typeCombo = new JComboBox(type);
+//						Object[] priority = {"1", "2", "3", "4", "5"};
+//						JComboBox priorityCombo = new JComboBox(priority);
+						Object[] message = {
+								"Task name:", taskName,
+								"Task Description:", taskDescription,
+								"Type:", typeCombo,
+
+								"Priority:", priorityTextField,
+								
+
+						};
+						int addTaskSelection = JOptionPane.showConfirmDialog(null, message, "Add Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+						if(addTaskSelection != 0)
+						{
+							return;
+						}
+		
+						// TODO: change later when available!
+//						System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+		
+						int tid = task.getMaxTid() + 1;
+						System.out.println("tid is " + tid);
+
+						//java.sql.Date comDate = new java.sql.Date(new java.util.Date().getTime());
+						//task.addTask(tid, taskName.getText(), taskDescription.getText(), subDate, estimatedDate.getText(), subDate, priorityCombo.getSelectedIndex() + 1, 1031, 1033, currentPid);
+						//String p = (String) priorityCombo.getSelectedItem();
+						 //int pri = Integer.parseInt(p);
+						 				//task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, estimatedDate.getText(), subDate, pri, 1031, 1033, currentPid);
+
+						java.sql.Timestamp subTime = new java.sql.Timestamp(new java.util.Date().getTime());
+
+
+						// Get priority input and check if it is a number, then set it as priority
+						String priorityString = priorityTextField.getText();
+						if(isNumber(priorityString))
+							priority = Integer.parseInt(priorityString);
+
+						task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, priority, 1031, 1033, currentPid, currentSession.getId(), currentSession.getType());
+
+						tasks = task.getTasks();
+						ArrayList<Object[]> temp = new ArrayList<Object[]>();
+						for (int i=0; i<tasks.size();i++) {
+							if (currentPid==(Integer) tasks.get(i)[9]) {
+								
+	                        	if(currentSession.getType() == TeamMemberType.CLIENT && task.getType((int)tasks.get(i)[0]) == TaskType.BUG)
+	                        	{
+	                        		continue;
+	                        	}
+	                        	else if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE && task.getType((int)tasks.get(i)[0]) == TaskType.FEATURE)
+	                        	{
+	                        		continue;
+	                        	}
+								
+								temp.add(tasks.get(i));
+							}
+						}
+						newTaskList = temp;
+						listModel.addElement("");
+						for (int i=0; i<newTaskList.size(); i++) {
+							String title = (String) newTaskList.get(i)[1];
+							listModel.set(i,title.trim());
+						}
 					}
 				}
 			}
@@ -701,23 +709,26 @@ public class TaskList extends JPanel {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
+				assignTaskButton.setEnabled(false);
 				
 			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
+				assignTaskButton.setEnabled(false);
 			
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(true);
+				assignTaskButton.setEnabled(true);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(false);
-			
+				assignTaskButton.setEnabled(false);
 			}
 		}
 	}

@@ -19,7 +19,7 @@ public class Project {
 
     public Project() {
     	projectAll= new Object[3];
-        projectAll[0]= 255;
+        projectAll[0]= -10;
         projectAll[1]="All tasks";
         projectAll[2]="Display all tasks";
     }

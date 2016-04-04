@@ -32,6 +32,7 @@ import connection.Session;
 public class ProjectList extends JPanel {
 
 	JTextArea projectDescription = new JTextArea("Project Description");
+	JTextArea numberTasks = new JTextArea("count number of tasks");
     Project project = new Project();
     ArrayList<Object[]> projects = project.getProjects();
     Task task = new Task();
@@ -49,6 +50,7 @@ public class ProjectList extends JPanel {
     	taskListPanel = Startup.getTaskListPanel();
     	
         GridBagConstraints gbc = new GridBagConstraints();
+       // GridBagConstraints gbc1 = new GridBagConstraints();
         this.setPreferredSize(new Dimension(100, 0));
         this.setBackground(Color.WHITE);
 
@@ -69,6 +71,7 @@ public class ProjectList extends JPanel {
         }
 
         JList projectJList = new JList(listModel);
+       
         ListSelectionModel listSelectionModel = projectJList.getSelectionModel();
         listSelectionModel.addListSelectionListener(new ProjectListListener());
         projectJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -84,18 +87,27 @@ public class ProjectList extends JPanel {
         gbc.weighty = 0.73;
         this.add(projectScrollPane, gbc);
 
-        
-        projectDescription.setPreferredSize(new Dimension(100, 50));
+        gbc.fill = GridBagConstraints.BOTH;
+        projectDescription.setPreferredSize(new Dimension(50, 30));
         projectDescription.setLineWrap(true);
         projectDescription.setEditable(false);
         
-        gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1;
         gbc.weighty = 0.10;
         this.add(projectDescription, gbc);
-
+        gbc.fill = GridBagConstraints.BOTH;
+        numberTasks.setPreferredSize(new Dimension(50, 20));
+        numberTasks.setLineWrap(true);
+        numberTasks.setEditable(false);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1;
+        gbc.weighty = 0.05;
+        this.add(numberTasks, gbc);
+        
         editProjectButton = new JButton("Edit Project");
         addProjectButton = new JButton("Create Project");
         removeProjectButton = new JButton("Delete Project");
@@ -113,7 +125,8 @@ public class ProjectList extends JPanel {
                 JTextField newProjectDescription = new JTextField();
                 Object[] message = {
                         "Project name:", newProjectName,
-                        "Project Description:", newProjectDescription
+                        "Project Description:", newProjectDescription,
+                       // "Number OF Tasks", numberOfTasks
                 };
                 int editProjectSelection = JOptionPane.showConfirmDialog(null, message, "Edit Project", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
                 if(editProjectSelection != 0)
@@ -137,6 +150,7 @@ public class ProjectList extends JPanel {
                         }
                         listModel.set(i,name.trim());
                         projectDescription.setText(description.trim());
+                       
                         return;
                     }
                 }
@@ -205,21 +219,22 @@ public class ProjectList extends JPanel {
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 1;
-        gbc.weighty = 0.05;
-        this.add(editProjectButton, gbc);
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 1;
-        gbc.weighty = 0.05;
-        this.add(addProjectButton, gbc);
+        gbc.weighty = 0.03;
+        this.add(editProjectButton, gbc);
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.weightx = 1;
-        gbc.weighty = 0.05;
+        gbc.weighty = 0.03;
+        this.add(addProjectButton, gbc);
+      
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.weightx = 1;
+        gbc.weighty = 0.03;
         this.add(removeProjectButton, gbc);
         
         UserChanged();
@@ -240,6 +255,8 @@ public class ProjectList extends JPanel {
             if (e.getValueIsAdjusting()) {
                 return;
             }
+            int countAll=0;
+            int countSingle=0;
             projects = project.getProjects();
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             int firstIndex = e.getFirstIndex();
@@ -261,9 +278,10 @@ public class ProjectList extends JPanel {
             taskListPanel.listModel.clear();
             tasks = task.getTasks();
             newTaskList = new ArrayList<Object[]>();
-            if(currentPid==255){
+            if(currentPid== -10){
             	for (int i=0; i<tasks.size(); i++) {
             		String title = (String) tasks.get(i)[1];
+            		countAll++;
                     if(title != null)
                     {
                     	taskListPanel.listModel.addElement(title.trim());
@@ -274,18 +292,24 @@ public class ProjectList extends JPanel {
                     }
                     newTaskList.add(tasks.get(i));
                 }
+            	numberTasks.setText("["+"Number of Tasks:"+ countAll+"]");
             	}
-            
+            if(currentPid != -10){
             for (int i=0; i<tasks.size(); i++) {
                 int pid2 = (Integer) tasks.get(i)[9];
+                
                 if (currentPid == pid2) {
+                	
                     String title = (String) tasks.get(i)[1];
                     if(title != null)
                     {
+                    	
                     	if(currentSession != null)
                     	{
+                    		
                         	if(currentSession.getType() == TeamMemberType.CLIENT && task.getType((int)tasks.get(i)[0]) == TaskType.BUG)
                         	{
+                        		
                         		continue;
                         	}
                         	else if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE && task.getType((int)tasks.get(i)[0]) == TaskType.FEATURE)
@@ -300,8 +324,11 @@ public class ProjectList extends JPanel {
                     	taskListPanel.listModel.addElement("Should not see this plz fix");
                     }
                     newTaskList.add(tasks.get(i));
+                    countSingle++;
                 }
             }
+            numberTasks.setText("["+"Number Of Tasks:"+ countSingle+"]");
+        }
         }
     }
     
