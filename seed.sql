@@ -89,7 +89,58 @@ insert into ptmcontains values
 	(109, 1021);
 
 insert into ptmcontains values
+    (100, 1005);
+	
+insert into ptmcontains values
+    (100, 1020);
+	
+insert into ptmcontains values
+    (100, 1021);
+	
+insert into ptmcontains values
+    (100, 1022);
+	
+insert into ptmcontains values
+    (100, 1023);
+	
+insert into ptmcontains values
+    (100, 1024);
+	
+insert into ptmcontains values
+    (100, 1025);
+	
+insert into ptmcontains values
+    (100, 1026);
+	
+insert into ptmcontains values
+    (100, 1027);
+	
+insert into ptmcontains values
+    (100, 1028);
+	
+insert into ptmcontains values
     (100, 1029);
+	
+insert into ptmcontains values
+    (100, 1030);
+	
+insert into ptmcontains values
+    (100, 1031);
+	
+insert into ptmcontains values
+    (100, 1032);
+	
+insert into ptmcontains values
+    (100, 1033);
+	
+insert into ptmcontains values
+    (100, 1034);
+	
+insert into ptmcontains values
+    (100, 1035);
+	
+insert into ptmcontains values
+    (100, 1036);
 
 insert into qualityassurance values
 	(1000);
