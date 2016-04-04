@@ -601,7 +601,7 @@ public class TaskList extends JPanel {
 						taskPanel.createdByLabel.setText("CREATED BY: " + creator);
 					}
 					else {
-						taskPanel.createdByLabel.setText("CREATED BY: ");
+						taskPanel.createdByLabel.setText("");
 					}
 
 					if (managedByAttributeBox.isSelected())
@@ -615,7 +615,7 @@ public class TaskList extends JPanel {
 					}
 					else 
 					{
-						taskPanel.mangedByLabel.setText("MANAGED BY: ");
+						taskPanel.mangedByLabel.setText("");
 					}
 					
 					if (assignedToByAttributeBox.isSelected())
@@ -629,7 +629,7 @@ public class TaskList extends JPanel {
 					}
 					else 
 					{
-						taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
+						taskPanel.assignedToLabel.setText("");
 					}
 					
 					if (priorityAttributeBox.isSelected())
@@ -642,7 +642,7 @@ public class TaskList extends JPanel {
 					}
 					else 
 					{
-						taskPanel.priorityLabel.setText("PRIORITY: ");
+						taskPanel.priorityLabel.setText("");
 					}
 					
 					if (completedAttributeBox.isSelected())
@@ -655,7 +655,7 @@ public class TaskList extends JPanel {
 					}
 					else 
 					{
-						taskPanel.completedDate.setText("COMPLETED: ");
+						taskPanel.completedDate.setText("");
 					}
 					
 					if (estimatedAttributeBox.isSelected())
@@ -668,7 +668,7 @@ public class TaskList extends JPanel {
 					}
 					else 
 					{
-						taskPanel.estimatedDate.setText("ESTIMATED: ");
+						taskPanel.estimatedDate.setText("");
 					}
 					
 					if (createdOntributeBox.isSelected())
@@ -707,7 +707,7 @@ public class TaskList extends JPanel {
 					}
 					else 
 					{
-						taskPanel.title.setText("TITLE");
+						taskPanel.title.setText("");
 					}
 				}
 				s.close();
