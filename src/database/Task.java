@@ -43,6 +43,22 @@ public class Task {
         return creator.trim();
     }
 
+    public static int getProjectId(int currentTid) {
+        Connection con = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement statement = con.prepareStatement("SELECT pid " +
+                                 "FROM Task " +
+                                 "WHERE tid = ?");
+            statement.setInt(1, currentTid);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next())
+                return rs.getInt("pid");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     public enum TaskType
     {
     	BUG,

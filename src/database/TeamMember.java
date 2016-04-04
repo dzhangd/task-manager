@@ -92,5 +92,20 @@ public class TeamMember {
 		
 		return false;
 	}
-	
+
+	public static Object[] getTeamMembersByProject(int pid) {
+		try {
+			PreparedStatement statement = con.prepareStatement("SELECT TeamMember.name " +
+                                 "FROM Project " +
+                                 "INNER JOIN PTMContains ON Project.pid=PTMContains.pid " +
+                                 "INNER JOIN TeamMember ON PTMContains.tmid=TeamMember.tmid " +
+                                 "INNER JOIN Developer ON TeamMember.tmid=Developer.tmid " +
+                                 "WHERE Project.pid = ?");
+			statement.setInt(1, pid);
+			ResultSet rs =
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new Object[] {""};
+	}
 }

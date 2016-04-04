@@ -88,6 +88,9 @@ insert into ptmcontains values
 insert into ptmcontains values
 	(109, 1021);
 
+insert into ptmcontains values
+    (100, 1029);
+
 insert into qualityassurance values
 	(1000);
 

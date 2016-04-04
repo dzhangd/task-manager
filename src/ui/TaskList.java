@@ -28,6 +28,7 @@ import connection.Session;
 import database.Project;
 import database.Task;
 import database.Task.TaskType;
+import database.TeamMember;
 import database.TeamMemberType;
 import ui.ProjectList.ProjectListListener;
 import static ui.ProjectList.currentPid;
@@ -152,7 +153,8 @@ public class TaskList extends JPanel {
 				currentSession = Startup.getSession();
 				if(currentSession != null)
 				{
-					Object[] teamMembers = {"Spongebob(100)", "Patrick(105)", "Squidward(108)", "Mr.Krabs(110)"};
+					//int pid = Task.getProjectId(currentTid);
+					Object[] teamMembers = TeamMember.getTeamMembersByProject(currentPid);
 					JComboBox assignToCombo = new JComboBox(teamMembers);
 					Object[] message = {
 							"Type:", assignToCombo
