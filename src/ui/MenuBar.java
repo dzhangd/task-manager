@@ -86,13 +86,21 @@ public class MenuBar extends JMenuBar {
 				Connection con = DatabaseConnection.getConnection();
 				try {
 					Statement s = con.createStatement();
-					ResultSet rs = s.executeQuery("SELECT P.name " +
-							"FROM Project P " +
-							"WHERE NOT EXISTS (SELECT * " +
-										      "FROM Task T " +
-								              "WHERE NOT EXISTS (SELECT * " +
-															    "FROM Developer D, Manager M, Bug B, Feature F " +
-																"WHERE T.tid = B.tid and F.tid = T.tid and M.tmid = T.m_id and D.tmid = T.d_id))");
+
+					ResultSet rs = s.executeQuery("SELECT name " +
+						"FROM Project " +
+						"WHERE pid IN ( " +
+							"SELECT pid " +
+							"FROM PTMContains " +
+							"WHERE tmid IN ( "+
+							             "SELECT tmid " +
+							             "FROM TeamMember " +
+							           ") " +
+							"GROUP BY pid " +
+							"HAVING COUNT(*) = ( " + 
+							                    "SELECT COUNT (*) " +
+							                    "FROM TeamMember " +
+							                  "))");
 					while (rs.next()) {
 						members.add(rs.getString(1));
 					}
