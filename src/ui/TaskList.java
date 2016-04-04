@@ -259,6 +259,7 @@ public class TaskList extends JPanel {
 				{
 					JTextField newTaskName = new JTextField();
 					JTextField newTaskDescription = new JTextField();
+					JTextField newTaskPriority = new JTextField();
 					Object[] type = {"should not see this"};
 					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
 					{
@@ -268,8 +269,8 @@ public class TaskList extends JPanel {
 					{
 						type = new Object[]{"Feature"};
 					}
-					Object[] priority = {"1", "2", "3", "4", "5"};
-					JComboBox newPriorityCombo = new JComboBox(priority);
+//					Object[] priority = {"1", "2", "3", "4", "5"};
+//					JComboBox newPriorityCombo = new JComboBox(priority);
 					JTextField setEstimatedDate = new JTextField();
 					JTextField setCompletedDate = new JTextField();
 					JButton setCompleted = new JButton();
@@ -298,14 +299,14 @@ public class TaskList extends JPanel {
 					
                     newTaskName.setText(taskPanel.title.getText());
                     newTaskDescription.setText(taskPanel.descriptionArea.getText());
-                    newPriorityCombo.setSelectedIndex(Integer.parseInt(taskPanel.priorityLabel.getText().substring(taskPanel.priorityLabel.getText().length()-1, taskPanel.priorityLabel.getText().length())) - 1);
+//                    newPriorityCombo.setSelectedIndex(Integer.parseInt(taskPanel.priorityLabel.getText().substring(taskPanel.priorityLabel.getText().length()-1, taskPanel.priorityLabel.getText().length())) - 1);
                     setEstimatedDate.setText(taskPanel.estimatedDate.getText().replace("ESTIMATED: ", ""));
                     setCompletedDate.setText(taskPanel.completedDate.getText().replace("COMPLETED: ", ""));
                     
 					Object[] message = {
 							"Task name:", newTaskName,
 							"Task Description:", newTaskDescription,
-							"Priority:", newPriorityCombo,
+							"Priority:", newTaskPriority,
 							"Estimated Date (yyyy-MM-dd HH:mm):", setEstimatedDate,
 							"Completed (yyyy-MM-dd HH:mm):", setCompletedDate,
 							"Set completed to now", setCompleted
@@ -343,20 +344,23 @@ public class TaskList extends JPanel {
 					}
 					
 					
-					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " Priority index is " + newPriorityCombo.getSelectedIndex());
+//					System.out.println("Task name is " + newTaskName.getText() + " Task description is " + newTaskDescription.getText() + " Priority index is " + newPriorityCombo.getSelectedIndex());
 	
-					// TODO: change stuff when users are available, but for now:
-					System.out.println("Task tid to edit is " + currentTid);
-					int pri = Integer.parseInt((String) newPriorityCombo.getSelectedItem());
+//					System.out.println("Task tid to edit is " + currentTid);
+					int priority = -1;
+
+					String priorityString = newTaskPriority.getText();
+					if(isNumber(priorityString))
+						priority = Integer.parseInt(priorityString);
 					
 					if (newTaskDescription.getText().isEmpty()) {
-						task.editTask(currentTid, newTaskName.getText(), null, pri, completedTimestamp, estimatedTimestamp);
+						task.editTask(currentTid, newTaskName.getText(), null, priority, completedTimestamp, estimatedTimestamp);
 					} else {
-						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), pri, completedTimestamp, estimatedTimestamp);
+						task.editTask(currentTid, newTaskName.getText(), newTaskDescription.getText(), priority, completedTimestamp, estimatedTimestamp);
 					}
 					listModel.set(selectedIndex,newTaskName.getText());
 					taskPanel.title.setText(newTaskName.getText());
-					taskPanel.priorityLabel.setText("PRIORITY: " + String.valueOf(newPriorityCombo.getSelectedItem()));
+					taskPanel.priorityLabel.setText("PRIORITY: " + priority);
 					if (newTaskDescription.getText().isEmpty()) {
 						taskPanel.descriptionArea.setText("");
 					} else {
