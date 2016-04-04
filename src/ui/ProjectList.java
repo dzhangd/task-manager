@@ -278,7 +278,7 @@ public class ProjectList extends JPanel {
             taskListPanel.listModel.clear();
             tasks = task.getTasks();
             newTaskList = new ArrayList<Object[]>();
-            if(currentPid==255){
+            if(currentPid== -10){
             	for (int i=0; i<tasks.size(); i++) {
             		String title = (String) tasks.get(i)[1];
             		countAll++;
@@ -294,7 +294,7 @@ public class ProjectList extends JPanel {
                 }
             	numberTasks.setText("["+"Number of Tasks:"+ countAll+"]");
             	}
-            if(currentPid !=255){
+            if(currentPid != -10){
             for (int i=0; i<tasks.size(); i++) {
                 int pid2 = (Integer) tasks.get(i)[9];
                 
