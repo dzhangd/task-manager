@@ -14,9 +14,35 @@ import java.sql.Timestamp;
  * Created by Kwangsoo on 2016-03-27.
  */
 public class Task {
-    Connection con;
+    private Connection con;
     Object[] task;
     ArrayList<Object[]> tasks;
+
+    public static String findCreator(int tid) {
+        Connection con = DatabaseConnection.getConnection();
+        String query = "SELECT DISTINCT name " +
+                       "FROM (" +
+                           "SELECT * " +
+                           "FROM Bug INNER JOIN TeamMember ON Bug.qa_id = TeamMember.tmid " +
+                           "UNION " +
+                           "SELECT * " +
+                           "FROM Feature INNER JOIN TeamMember ON Feature.client_id = TeamMember.tmid) " +
+                       "WHERE tid = (?)";
+        String creator = "";
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, tid);
+            ResultSet rs = ps.executeQuery();
+//            Statement s = con.createStatement();
+//            ResultSet rs = s.executeQuery(query);
+            if(rs.next())
+                creator = rs.getString("name");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return creator.trim();
+    }
+
     public enum TaskType
     {
     	BUG,
@@ -122,7 +148,7 @@ public class Task {
      return null;
    }
     public void addTask(int tid, String title, String description, Timestamp submittedDate, Timestamp estimatedDate,
-    		Timestamp completedDate, int priority, int d_id, int m_id, int pid) {
+    		Timestamp completedDate, int priority, int d_id, int m_id, int pid, int creator_id, TeamMemberType creator_type) {
         con = DatabaseConnection.getConnection();
         try {
             PreparedStatement ps = con.prepareStatement("INSERT INTO Task (tid, title, description, submitted_date, estimated_date, completed_date, priority, d_id, m_id, pid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -139,6 +165,18 @@ public class Task {
             ps.setInt(10, pid);
 
             ps.executeUpdate();
+
+            // Also inserts into bug/feature
+            if(creator_type == TeamMemberType.CLIENT)
+                ps = con.prepareStatement("INSERT INTO Feature VALUES" +
+                                          "(?, ?)");
+            else if(creator_type == TeamMemberType.QUALITY_ASSURANCE)
+                ps = con.prepareStatement("INSERT INTO Bug VALUES" +
+                                          "(?, ?)");
+            ps.setInt(1, tid);
+            ps.setInt(2, creator_id);
+            ps.executeUpdate();
+
             ps.close();
             con.close();
         } catch (SQLException e) {

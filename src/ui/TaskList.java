@@ -27,6 +27,7 @@ import connection.DatabaseConnection;
 import connection.Session;
 import database.Project;
 import database.Task;
+import database.Task.TaskType;
 import database.TeamMemberType;
 import ui.ProjectList.ProjectListListener;
 import static ui.ProjectList.currentPid;
@@ -42,6 +43,7 @@ public class TaskList extends JPanel {
 	JPanel taskAttributeButtonPanel;
 	JScrollPane taskAttributeScrollPane;
 	
+	JButton assignTaskButton;
 	JButton filterButton;
 	
 	JButton editTaskButton;
@@ -139,6 +141,40 @@ public class TaskList extends JPanel {
 		gbc.weighty = 0.1;
 		this.add(taskAttributeScrollPane, gbc);
 		
+		
+		assignTaskButton = new JButton("Assign Task");
+		assignTaskButton.setPreferredSize(new Dimension(100, 20));
+		assignTaskButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Assign Button Clicked");
+				currentSession = Startup.getSession();
+				if(currentSession != null)
+				{
+					Object[] teamMembers = {"Spongebob(100)", "Patrick(105)", "Squidward(108)", "Mr.Krabs(110)"};
+					JComboBox assignToCombo = new JComboBox(teamMembers);
+					Object[] message = {
+							"Type:", assignToCombo
+					};
+					int filterTaskSelection = JOptionPane.showConfirmDialog(null, message, "Filter Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+					if(filterTaskSelection != 0)
+					{
+						return;
+					}
+				}
+			}
+		});
+		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(assignTaskButton, gbc);
+		
+		
+		
+		
 		filterButton = new JButton("Set Filter");
 		filterButton.setPreferredSize(new Dimension(100, 20));
 		filterButton.addActionListener(new ActionListener()
@@ -185,7 +221,7 @@ public class TaskList extends JPanel {
 		});
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(filterButton, gbc);
@@ -326,6 +362,9 @@ public class TaskList extends JPanel {
 				{
 					JTextField taskName = new JTextField();
 					JTextField taskDescription = new JTextField();
+					JTextField priorityTextField = new JTextField();
+					int priority = -1;
+
 					Object[] type = {"should not see this"};
 					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
 					{
@@ -337,14 +376,14 @@ public class TaskList extends JPanel {
 					}
 					
 					JComboBox typeCombo = new JComboBox(type);
-					Object[] priority = {"1", "2", "3", "4", "5"};
-					JComboBox priorityCombo = new JComboBox(priority);
+//					Object[] priority = {"1", "2", "3", "4", "5"};
+//					JComboBox priorityCombo = new JComboBox(priority);
 					Object[] message = {
 							"Task name:", taskName,
 							"Task Description:", taskDescription,
 							"Type:", typeCombo,
 
-							"Priority:", priorityCombo,
+							"Priority:", priorityTextField,
 							
 
 					};
@@ -355,7 +394,7 @@ public class TaskList extends JPanel {
 					}
 	
 					// TODO: change later when available!
-					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+//					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
 	
 					int tid = task.getMaxTid() + 1;
 					System.out.println("tid is " + tid);
@@ -367,14 +406,29 @@ public class TaskList extends JPanel {
 					 				//task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, estimatedDate.getText(), subDate, pri, 1031, 1033, currentPid);
 
 					java.sql.Timestamp subTime = new java.sql.Timestamp(new java.util.Date().getTime());
-					String p = (String) priorityCombo.getSelectedItem();
-					int pri = Integer.parseInt(p);
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, pri, 1031, 1033, currentPid);	
+
+
+					// Get priority input and check if it is a number, then set it as priority
+					String priorityString = priorityTextField.getText();
+					if(isNumber(priorityString))
+						priority = Integer.parseInt(priorityString);
+
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, priority, 1031, 1033, currentPid, currentSession.getId(), currentSession.getType());
 
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
 					for (int i=0; i<tasks.size();i++) {
 						if (currentPid==(Integer) tasks.get(i)[9]) {
+							
+                        	if(currentSession.getType() == TeamMemberType.CLIENT && task.getType((int)tasks.get(i)[0]) == TaskType.BUG)
+                        	{
+                        		continue;
+                        	}
+                        	else if(currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE && task.getType((int)tasks.get(i)[0]) == TaskType.FEATURE)
+                        	{
+                        		continue;
+                        	}
+							
 							temp.add(tasks.get(i));
 						}
 					}
@@ -421,19 +475,19 @@ public class TaskList extends JPanel {
 
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(editTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(addTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridy = 6;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(removeTaskButton, gbc);
@@ -515,7 +569,15 @@ public class TaskList extends JPanel {
 				if (rs.next()) {
 					
 					String tempString;
-					
+
+					if(createdByAttributeBox.isSelected()) {
+						String creator = Task.findCreator(currentTid);
+						taskPanel.createdByLabel.setText("CREATED BY: " + creator);
+					}
+					else {
+						taskPanel.createdByLabel.setText("CREATED BY: ");
+					}
+
 					if (managedByAttributeBox.isSelected())
 					{
 						tempString = rs.getString(count);
@@ -670,6 +732,18 @@ public class TaskList extends JPanel {
 		taskPanel.createdByLabel.setText("CREATED BY: ");
 		taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
 		
+	}
+
+	private boolean isNumber(String s) {
+		try
+		{
+			double d = Double.parseDouble(s);
+		}
+		catch(NumberFormatException nfe)
+		{
+			return false;
+		}
+		return true;
 	}
 
 }
