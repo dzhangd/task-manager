@@ -33,7 +33,7 @@ public class LoginDialog extends JDialog {
 		
 		tfEmail = new JTextField();
 		tfEmail.setColumns(10);
-		tfEmail.setText("Bobby123@someemail.com");
+		tfEmail.setText("");
 		panel.add(tfEmail);
 		
 		lbPassword = new JLabel("Password ");
@@ -41,7 +41,7 @@ public class LoginDialog extends JDialog {
 		
 		pfPassword = new JPasswordField();
 		pfPassword.setColumns(10);
-		pfPassword.setText("pass0");
+		pfPassword.setText("");
 		panel.add(pfPassword);
 		
 		btnLogin = new JButton("Login");

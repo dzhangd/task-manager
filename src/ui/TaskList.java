@@ -44,7 +44,6 @@ public class TaskList extends JPanel {
 	JScrollPane taskAttributeScrollPane;
 	
 	JButton assignTaskButton;
-	JButton filterButton;
 	
 	JButton editTaskButton;
 	JButton addTaskButton;
@@ -185,60 +184,6 @@ public class TaskList extends JPanel {
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(assignTaskButton, gbc);
-		
-		
-		
-		
-		filterButton = new JButton("Set Filter");
-		filterButton.setPreferredSize(new Dimension(100, 20));
-		filterButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Filter Button Clicked");
-				currentSession = Startup.getSession();
-				if(currentSession != null)
-				{
-					JTextField filterTaskName = new JTextField();
-					JTextField filterTaskDescription = new JTextField();
-					JTextField filterCreatedBy = new JTextField();
-					JTextField filterManagedBy = new JTextField();
-					JTextField filterAssignedTo = new JTextField();
-					Object[] type = {"All", "Bug", "Feature"};
-					JComboBox newTypeCombo = new JComboBox(type);
-					Object[] priority = {"1", "2", "3", "4", "5"};
-					JComboBox minPriorityCombo = new JComboBox(priority);
-					JComboBox maxPriorityCombo = new JComboBox(priority);
-					Object[] message = {
-							"Task name:", filterTaskName,
-							"Task Description:", filterTaskDescription,
-							"Created by:", filterCreatedBy,
-							"Managed by:", filterManagedBy,
-							"Assigned to:", filterAssignedTo,
-							"Type:", newTypeCombo,
-							"Min priority:", minPriorityCombo,
-							"Max priority:", maxPriorityCombo
-					};
-					int filterTaskSelection = JOptionPane.showConfirmDialog(null, message, "Filter Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
-					if(filterTaskSelection != 0)
-					{
-						return;
-					}
-					System.out.println("Filter name is " + filterTaskName.getText() + " Filter description is " +
-					filterTaskDescription.getText() + " type index is " + newTypeCombo.getSelectedIndex() +
-					" Min priority index is " + minPriorityCombo.getSelectedIndex() + " Max priority index is " +
-					maxPriorityCombo.getSelectedIndex() + " Created by is: " + filterCreatedBy.getText() + " Managed by is: " + filterManagedBy.getText() + " Assigned to is: " + filterAssignedTo.getText());
-	
-					// TODO: change stuff when users are available, but for now:
-				}
-			}
-		});
-		
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.weightx = 1;
-		gbc.weighty = 0.05;
-		this.add(filterButton, gbc);
 		
 		
 		
@@ -501,19 +446,19 @@ public class TaskList extends JPanel {
 
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 3;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(editTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridy = 4;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(addTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 6;
+		gbc.gridy = 5;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(removeTaskButton, gbc);
