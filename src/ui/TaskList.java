@@ -43,6 +43,7 @@ public class TaskList extends JPanel {
 	JPanel taskAttributeButtonPanel;
 	JScrollPane taskAttributeScrollPane;
 	
+	JButton assignTaskButton;
 	JButton filterButton;
 	
 	JButton editTaskButton;
@@ -140,6 +141,40 @@ public class TaskList extends JPanel {
 		gbc.weighty = 0.1;
 		this.add(taskAttributeScrollPane, gbc);
 		
+		
+		assignTaskButton = new JButton("Assign Task");
+		assignTaskButton.setPreferredSize(new Dimension(100, 20));
+		assignTaskButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Assign Button Clicked");
+				currentSession = Startup.getSession();
+				if(currentSession != null)
+				{
+					Object[] teamMembers = {"Spongebob(100)", "Patrick(105)", "Squidward(108)", "Mr.Krabs(110)"};
+					JComboBox assignToCombo = new JComboBox(teamMembers);
+					Object[] message = {
+							"Type:", assignToCombo
+					};
+					int filterTaskSelection = JOptionPane.showConfirmDialog(null, message, "Filter Task", JOptionPane.OK_CANCEL_OPTION, JOptionPane.DEFAULT_OPTION);
+					if(filterTaskSelection != 0)
+					{
+						return;
+					}
+				}
+			}
+		});
+		
+		gbc.gridx = 0;
+		gbc.gridy = 2;
+		gbc.weightx = 1;
+		gbc.weighty = 0.05;
+		this.add(assignTaskButton, gbc);
+		
+		
+		
+		
 		filterButton = new JButton("Set Filter");
 		filterButton.setPreferredSize(new Dimension(100, 20));
 		filterButton.addActionListener(new ActionListener()
@@ -186,7 +221,7 @@ public class TaskList extends JPanel {
 		});
 		
 		gbc.gridx = 0;
-		gbc.gridy = 2;
+		gbc.gridy = 3;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(filterButton, gbc);
@@ -440,19 +475,19 @@ public class TaskList extends JPanel {
 
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 4;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(editTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 4;
+		gbc.gridy = 5;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(addTaskButton, gbc);
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.gridx = 0;
-		gbc.gridy = 5;
+		gbc.gridy = 6;
 		gbc.weightx = 1;
 		gbc.weighty = 0.05;
 		this.add(removeTaskButton, gbc);
