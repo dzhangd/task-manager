@@ -14,7 +14,7 @@ CREATE TABLE Project
 (
 	pid INTEGER,
 	name CHAR(50) NOT NULL,
-	description CHAR(255),	
+	description CHAR(255),
 	PRIMARY KEY (pid)
 );
 
@@ -83,7 +83,8 @@ CREATE TABLE Task
 	PRIMARY KEY (tid),
 	FOREIGN KEY (d_id) REFERENCES Developer(tmid) ON DELETE SET NULL,
 	FOREIGN KEY (m_id) REFERENCES Manager(tmid) ON DELETE SET NULL,
-	FOREIGN KEY (pid) REFERENCES Project(pid) ON DELETE CASCADE
+	FOREIGN KEY (pid) REFERENCES Project(pid) ON DELETE CASCADE,
+	CONSTRAINT priority_check CHECK (priority BETWEEN 1 and 5)
 );
 
 
