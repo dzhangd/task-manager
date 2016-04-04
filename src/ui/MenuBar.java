@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class MenuBar extends JMenuBar {
 	
@@ -81,20 +82,32 @@ public class MenuBar extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String allTeamMembers = "";
+				ArrayList<String> members = new ArrayList<String>();
 				Connection con = DatabaseConnection.getConnection();
 				try {
 					Statement s = con.createStatement();
-					ResultSet rs = s.executeQuery("");
-					if (rs.next()) {
-						allTeamMembers = rs.getString(1);
+					ResultSet rs = s.executeQuery("SELECT P.name " +
+							"FROM Project P " +
+							"WHERE NOT EXISTS (SELECT * " +
+										      "FROM Task T " +
+								              "WHERE NOT EXISTS (SELECT * " +
+															    "FROM Developer D, Manager M, Bug B, Feature F " +
+																"WHERE T.tid = B.tid and F.tid = T.tid and M.tmid = T.m_id and D.tmid = T.d_id))");
+					while (rs.next()) {
+						members.add(rs.getString(1));
 					}
 					s.close();
 					con.close();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(null, allTeamMembers, "Lowest Completion Time Developer", JOptionPane.PLAIN_MESSAGE);
+				if (members.isEmpty()) {
+					JOptionPane.showMessageDialog(null, "No project is found", "Project", JOptionPane.PLAIN_MESSAGE);
+				} else {
+					for (int i = 0; i < members.size(); i++) {
+						JOptionPane.showMessageDialog(null, members.get(i), "Project", JOptionPane.PLAIN_MESSAGE);
+					}
+				}
 			}
 		});
 
