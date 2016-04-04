@@ -605,7 +605,8 @@ public class TaskList extends JPanel {
 						tempString = rs.getString(count);
 						if(tempString != null)
 						{
-							taskPanel.mangedByLabel.setText("MANAGED BY: " + tempString.trim());	
+							String manager = Task.findManager(currentTid);
+							taskPanel.mangedByLabel.setText("MANAGED BY: " + manager);
 						}
 					}
 					else 
@@ -618,7 +619,8 @@ public class TaskList extends JPanel {
 						tempString = rs.getString(--count);
 						if(tempString != null)
 						{
-							taskPanel.assignedToLabel.setText("ASSIGNED TO: " + tempString.trim());	
+							String assignedTo = Task.findAssignedTo(currentTid);
+							taskPanel.assignedToLabel.setText("ASSIGNED TO: " + assignedTo);
 						}
 					}
 					else 

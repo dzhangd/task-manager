@@ -33,8 +33,6 @@ public class Task {
             PreparedStatement ps = con.prepareStatement(query);
             ps.setInt(1, tid);
             ResultSet rs = ps.executeQuery();
-//            Statement s = con.createStatement();
-//            ResultSet rs = s.executeQuery(query);
             if(rs.next())
                 creator = rs.getString("name");
         } catch (SQLException e) {
@@ -73,6 +71,44 @@ public class Task {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static String findManager(int tid) {
+        Connection con = DatabaseConnection.getConnection();
+        String query = "SELECT name " +
+                "FROM  TeamMember INNER JOIN " +
+                "Task ON TeamMember.tmid=Task.m_id " +
+                "WHERE tid = ?";
+        String manager = "";
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, tid);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next() && rs.getString("name") != null)
+                manager = rs.getString("name");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return manager.trim();
+    }
+
+    public static String findAssignedTo(int tid) {
+        Connection con = DatabaseConnection.getConnection();
+        String query = "SELECT name " +
+                "FROM  TeamMember INNER JOIN " +
+                "Task ON TeamMember.tmid=Task.d_id " +
+                "WHERE tid = ?";
+        String assignedTo = "";
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, tid);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next() && rs.getString("name") != null)
+                assignedTo = rs.getString("name");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return assignedTo.trim();
     }
 
     public enum TaskType
