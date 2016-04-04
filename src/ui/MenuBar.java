@@ -42,11 +42,11 @@ public class MenuBar extends JMenuBar {
 				String temp = "";
 				String temp2 = "";
 				if (selection == 0) {
-					temp = "MIN";
+					temp = "MAX";
 					temp2 = "SLOWEST DEVELOPER";
 				}
 				if (selection == 1) {
-					temp = "MAX";
+					temp = "MIN";
 					temp2 = "FASTEST DEVELOPER";
 				}
 				if (selection == 2) {
