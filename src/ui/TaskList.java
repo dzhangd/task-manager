@@ -691,23 +691,26 @@ public class TaskList extends JPanel {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
+				assignTaskButton.setEnabled(false);
 				
 			} else if (currentSession.getType() == TeamMemberType.CLIENT) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(true);
 				removeTaskButton.setEnabled(false);
+				assignTaskButton.setEnabled(false);
 			
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.MANAGER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(true);
+				assignTaskButton.setEnabled(true);
 			//	estimatedAttributeBox.setEnabled(false);
 			} else if (currentSession.getType() == TeamMemberType.DEVELOPER) {
 				editTaskButton.setEnabled(true);
 				addTaskButton.setEnabled(false);
 				removeTaskButton.setEnabled(false);
-			
+				assignTaskButton.setEnabled(false);
 			}
 		}
 	}
