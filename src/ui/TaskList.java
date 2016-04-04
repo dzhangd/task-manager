@@ -362,6 +362,9 @@ public class TaskList extends JPanel {
 				{
 					JTextField taskName = new JTextField();
 					JTextField taskDescription = new JTextField();
+					JTextField priorityTextField = new JTextField();
+					int priority = -1;
+
 					Object[] type = {"should not see this"};
 					if (currentSession.getType() == TeamMemberType.QUALITY_ASSURANCE)
 					{
@@ -373,14 +376,14 @@ public class TaskList extends JPanel {
 					}
 					
 					JComboBox typeCombo = new JComboBox(type);
-					Object[] priority = {"1", "2", "3", "4", "5"};
-					JComboBox priorityCombo = new JComboBox(priority);
+//					Object[] priority = {"1", "2", "3", "4", "5"};
+//					JComboBox priorityCombo = new JComboBox(priority);
 					Object[] message = {
 							"Task name:", taskName,
 							"Task Description:", taskDescription,
 							"Type:", typeCombo,
 
-							"Priority:", priorityCombo,
+							"Priority:", priorityTextField,
 							
 
 					};
@@ -391,7 +394,7 @@ public class TaskList extends JPanel {
 					}
 	
 					// TODO: change later when available!
-					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
+//					System.out.println("Task name is " + taskName.getText() + " Task description is " + taskDescription.getText() + " type index is " + typeCombo.getSelectedIndex() + " Priority index is " + priorityCombo.getSelectedIndex());
 	
 					int tid = task.getMaxTid() + 1;
 					System.out.println("tid is " + tid);
@@ -403,9 +406,14 @@ public class TaskList extends JPanel {
 					 				//task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, estimatedDate.getText(), subDate, pri, 1031, 1033, currentPid);
 
 					java.sql.Timestamp subTime = new java.sql.Timestamp(new java.util.Date().getTime());
-					String p = (String) priorityCombo.getSelectedItem();
-					int pri = Integer.parseInt(p);
-					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, pri, 1031, 1033, currentPid, currentSession.getId(), currentSession.getType());
+
+
+					// Get priority input and check if it is a number, then set it as priority
+					String priorityString = priorityTextField.getText();
+					if(isNumber(priorityString))
+						priority = Integer.parseInt(priorityString);
+
+					task.addTask(tid, taskName.getText(), taskDescription.getText(), subTime, null, null, priority, 1031, 1033, currentPid, currentSession.getId(), currentSession.getType());
 
 					tasks = task.getTasks();
 					ArrayList<Object[]> temp = new ArrayList<Object[]>();
@@ -727,6 +735,18 @@ public class TaskList extends JPanel {
 		taskPanel.createdByLabel.setText("CREATED BY: ");
 		taskPanel.assignedToLabel.setText("ASSIGNED TO: ");
 		
+	}
+
+	private boolean isNumber(String s) {
+		try
+		{
+			double d = Double.parseDouble(s);
+		}
+		catch(NumberFormatException nfe)
+		{
+			return false;
+		}
+		return true;
 	}
 
 }
