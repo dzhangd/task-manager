@@ -59,6 +59,22 @@ public class Task {
         return -1;
     }
 
+    public static void assignTask(int tid, int m_id, int d_id) {
+        Connection con = DatabaseConnection.getConnection();
+        try {
+            PreparedStatement statement = con.prepareStatement("UPDATE Task " +
+                                                               "SET m_id = ?, " +
+                                                               "d_id = ? " +
+                                                               "WHERE tid = ?");
+            statement.setInt(1, m_id);
+            statement.setInt(2, d_id);
+            statement.setInt(3, tid);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public enum TaskType
     {
     	BUG,

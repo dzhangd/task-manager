@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -12,12 +11,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -25,12 +24,12 @@ import javax.swing.event.ListSelectionListener;
 
 import connection.DatabaseConnection;
 import connection.Session;
-import database.Project;
+import database.Pair;
 import database.Task;
 import database.Task.TaskType;
 import database.TeamMember;
 import database.TeamMemberType;
-import ui.ProjectList.ProjectListListener;
+
 import static ui.ProjectList.currentPid;
 import static ui.ProjectList.newTaskList;
 
@@ -154,8 +153,14 @@ public class TaskList extends JPanel {
 				if(currentSession != null)
 				{
 					//int pid = Task.getProjectId(currentTid);
-					Object[] teamMembers = TeamMember.getTeamMembersByProject(currentPid);
-					JComboBox assignToCombo = new JComboBox(teamMembers);
+					List<Pair<String, Integer>> teamMembers = TeamMember.getDevelopersByProject(currentPid);
+
+					// copy results into Object array to display in combo box
+					Object[] names = new Object[teamMembers.size()];
+					for(int i = 0; i < teamMembers.size(); i++)
+						names[i] = teamMembers.get(i).getL();
+
+					JComboBox assignToCombo = new JComboBox(names);
 					Object[] message = {
 							"Type:", assignToCombo
 					};
@@ -164,6 +169,13 @@ public class TaskList extends JPanel {
 					{
 						return;
 					}
+
+					// Update db with assignment
+					int tmid = teamMembers.get(assignToCombo.getSelectedIndex()).getR();
+					Task.assignTask(currentTid, currentSession.getId(), tmid);
+
+
+
 				}
 			}
 		});

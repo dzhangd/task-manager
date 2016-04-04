@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import connection.DatabaseConnection;
 
@@ -93,19 +95,24 @@ public class TeamMember {
 		return false;
 	}
 
-	public static Object[] getTeamMembersByProject(int pid) {
+	public static List<Pair<String, Integer>> getDevelopersByProject(int pid) {
+		List<Pair<String, Integer>> developerList = new ArrayList<>();
 		try {
-			PreparedStatement statement = con.prepareStatement("SELECT TeamMember.name " +
+			PreparedStatement statement = con.prepareStatement("SELECT TeamMember.name, TeamMember.tmid " +
                                  "FROM Project " +
                                  "INNER JOIN PTMContains ON Project.pid=PTMContains.pid " +
                                  "INNER JOIN TeamMember ON PTMContains.tmid=TeamMember.tmid " +
                                  "INNER JOIN Developer ON TeamMember.tmid=Developer.tmid " +
                                  "WHERE Project.pid = ?");
 			statement.setInt(1, pid);
-			ResultSet rs =
+			ResultSet rs = statement.executeQuery();
+			while(rs.next())
+				developerList.add(new Pair(rs.getString(1), new Integer(rs.getInt(2))));
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return new Object[] {""};
+
+		return developerList;
 	}
 }
